@@ -1,0 +1,65 @@
+{
+    "users": [
+        {
+            "username": "kyon",
+            "password": "jhsdd683huuS32",
+            "name": "b",
+            "firstname": "lily",
+            "email": "mail@mail.fr",
+            "tel": "0000000000"
+        }
+    ],
+
+    "admins": [
+        {
+            "username": "admin",
+            "password": "password"
+        }        
+    ],
+
+    "calendar": [
+        {
+            "DATEC": 1636379092265,
+            "visibility": true,
+            "commentary": "comm"
+        }
+    ],
+
+    "commands": [
+        {
+            "USERID": 9843563498560349,
+            "DATEC": 1636379092265,
+            "time": 1636379092265,
+            "paid": false,
+            "container": false,
+            "comment": "comm",
+            "total": 1233
+        }
+    ],
+    
+    "dishes": [
+        {
+            "DATEC": 1636379092265,
+            "name": "nom du plat",
+            "numberKitchen": 213,
+            "numberRemaining": 12,
+            "price": 5.99,
+            "description": "description du plat",
+            "type": "e"
+        }
+    ],
+
+    "commandList": [
+        {
+            "COMMANDID": 9831463182,
+            "DISHID": 1234567890,
+            "quantity": 12
+        }
+    ],
+
+    "params": [
+        {
+            "sentence": "mot"
+        }
+    ]
+}
