@@ -1,0 +1,173 @@
+// SIDE HEADER -----------------------------------------------------------
+
+.header {
+    left:0;
+    top:0;
+    bottom : 0;
+    width : 10rem;
+    height : 100vh;
+    background-color: rgb(24,24,24);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position : fixed;
+}
+
+// ----------------- TOP ---------------------------------
+
+.header__top {
+    width : 100%;
+    background-color : $color-secondary;
+    display : flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding : 1rem 0 2rem 0;
+
+    a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    span  {
+        color : white;
+        font-size: 16px;
+        font-weight: 600;
+    }
+}
+
+
+// ----------------- BODY ---------------------------------
+
+.header__body {
+    display : flex;
+    flex-direction : column;
+    text-align: center;
+
+    nav, nav * {
+        display:flex;
+        flex-direction: column;
+        color : rgb(124, 124, 124);
+        list-style: none;
+
+        *{
+            line-height: 50px;
+            border-top : 1px solid #282828;
+            transition :  color 0.2s;
+        }
+
+        *:last-child {
+            border-bottom: 1px solid #282828;
+        }
+
+        *:hover {
+            color : $color-primary;
+        }
+
+        .active-link {
+            color : $color-primary;
+        }
+        
+    }
+}
+
+// ----------------- FOOTER ---------------------------------
+
+.header__footer {
+    width : 100%;
+    height : 18vh;
+    padding : 1vh 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .social-media-list {
+        padding : 0 10px;
+        display : flex;
+        justify-content: space-around;
+    
+        * {
+            color : white;
+            transition : color 0.2s;
+        }
+    
+        *:hover {
+            color : $color-primary;
+        }
+
+        a:hover * {
+            color : $color-primary;
+        }
+    }
+    
+    .footer__cg {
+        align-self: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom : 15px;
+
+        * {
+            color : rgb(124, 124, 124);
+            font-size : 12px;
+            transition: color 0.2s;
+        }
+    
+        *:hover {
+            color : $color-primary;
+        }
+    }
+}
+
+// FULL SCREEN HEADER ----------------------------------------------------------
+
+.header__icon {
+
+    cursor : pointer;
+
+    svg {
+        padding : 4px 10px;
+        z-index : 101;
+        position : fixed;
+        top : 10px;
+        left : 10px;
+        color : rgb(235,235,235);
+        font-size : 50px;
+        transition : color 0.2s;
+    }
+    
+    &:hover svg {
+        color : $color-primary;
+    }
+}
+
+.icon--bg {
+    background-color : rgba(0, 0, 0, 0.233);
+}
+
+.full-screen-header {
+    position : fixed;
+    top : 0;
+    left : 0;
+    right : 0;
+    bottom : 0;
+    background-color : black;
+    z-index : 100;
+    display : flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .header__footer {
+        .social-media-list {
+            align-self: center;
+            width : 300px;
+        }
+    }
+}
+
+@media (max-height:540px) {
+    .full-screen-header {
+        bottom : unset;
+    }
+}

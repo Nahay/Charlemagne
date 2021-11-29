@@ -1,0 +1,27 @@
+/* Class for the displayed toast */
+.Toastify__toast { //
+    background: $color-black;
+}
+
+.Toastify__toast-body {
+    font-size: 14px;
+    color: white;
+}
+
+/* Class for the progress bar */
+.Toastify__progress-bar {
+    background: $color-primary;
+}
+
+/* Class for the close button. */
+.Toastify__close-button {
+    color: white;
+}
+
+.Toastify__progress-bar--success {
+    background: green;
+}
+
+.Toastify__progress-bar--error {
+    background: $color-primary;
+}

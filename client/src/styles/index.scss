@@ -1,0 +1,21 @@
+@import "./settings";
+@import "./components/pageNotFound";
+
+// avant les autres sinon changements spéciaux pas appliqués
+@import "./components/generics";
+
+@import "./components/header";
+@import "./components/home";
+@import "./components/contact";
+
+@import "./components/admin/adminIndex";
+
+@import "./components/order/order";
+@import "./components/order/calendar";
+@import "./components/order/list";
+@import "./components/order/dayDetails";
+
+@import "./components/toast";
+
+// à la fin sinon pas appliqué
+@import "./responsive";
