@@ -45,6 +45,7 @@ const AdminHome = () => {
     const resetValues = () => {
         setVisibility(false);
         setComment("");
+        setSelect("0");
         setNb(null);
         setDishList([]);
     }
@@ -57,7 +58,7 @@ const AdminHome = () => {
             resetValues();
         }
         else {
-            
+
         }
     }
 
@@ -129,9 +130,21 @@ const AdminHome = () => {
                     <form className="right__form__1" onSubmit={onDateSubmit}>
                         <div className="right__form__radio" onChange={handleVisibilityChange}>
                             <span>Visible ?</span>
-                            <input type="radio" value="Non" name="visibility" id="n" defaultChecked/>
+                            <input
+                                type="radio"
+                                value="Non"
+                                name="visibility"
+                                id="n"
+                                checked={visibility === false}
+                            />
                             <label htmlFor="n">Non</label>
-                            <input type="radio" value="Oui" name="visibility" id="y"/>
+                            <input
+                                type="radio" 
+                                value="Oui"
+                                name="visibility"
+                                id="y"
+                                checked={visibility === true}
+                            />
                             <label htmlFor="y">Oui</label>
                         </div>
                         <TextArea

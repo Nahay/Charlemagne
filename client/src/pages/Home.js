@@ -3,7 +3,7 @@ import Button from '../components/generic/Button';
 import Time from '../components/generic/Time';
 import BackgroundSlider from 'react-background-slider'
 
-import {getMess} from '../services/paramsService';
+import {getParam} from '../services/paramsService';
 
 
 const Home = () => {
@@ -26,7 +26,7 @@ const Home = () => {
     }, []);
     
     const getSetMess = async () => {
-        const mess = await getMess();
+        const mess = await getParam("welcome");
         setWelcomeMess(mess);
     }
 

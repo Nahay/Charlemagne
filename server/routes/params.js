@@ -5,9 +5,10 @@ const Param = require('../models/Param');
 
 // Create a param
 router.post('/', async (req, res) => {
-    const {sentence} = req.body;
+    const {sentence, type} = req.body;
     const param = new Param({
         sentence: sentence,
+        type: type
     });
 
     try {
@@ -19,10 +20,10 @@ router.post('/', async (req, res) => {
 });
 
 
-// Get param by id
-router.get("/:paramId", async (req, res) => {
+// Get param by type
+router.get("/:type", async (req, res) => {
     try {
-      const param = await Param.findById(req.params.paramId);
+      const param = await Param.findOne({type: req.params.type});
       res.json(param);
     } catch (err) {
       res.json({ error: err.message });
@@ -30,12 +31,12 @@ router.get("/:paramId", async (req, res) => {
 });
 
 
-// Update setence
-router.patch('/:paramId', async (req, res) => {
+// Update param
+router.patch('/:type', async (req, res) => {
     const { sentence } = req.body;
     try {
         const paramToUpdate = await Param.updateOne(
-            { _id: req.params.paramId }, { sentence: sentence }
+            { type: req.params.type }, { sentence: sentence }
         );
         res.json(paramToUpdate);
     } catch(err) {

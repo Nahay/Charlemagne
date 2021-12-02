@@ -4,47 +4,25 @@ import API_URL from '../app-config';
 
 
 
-const getMess = async () => {
+const getParam = async (type) => {
     try {
-        const { data } = await axios.get(API_URL + "/params/61a683aa114c5ac9ed7538be");
+        const { data } = await axios.get(API_URL + "/params/" +type);
         return data.sentence;
     } catch(err) {
         toast.error(err.message);
     }
 };
 
-const getOrderInfo = async () => {
-    try {
-        const { data } = await axios.get(API_URL + "/params/61a683b8114c5ac9ed7538c0");
-        return data.sentence;
-    } catch(err) {
-        toast.error(err.message);
-    }
-};
-
-const updateMess = async (mess) => {
+const updateParam = async (type, mess) => {
     try {
             await axios.patch(
-            API_URL + "/params/61a683aa114c5ac9ed7538be", {
+            API_URL + "/params/" +type, {
                 sentence : mess
             }
             );
-            toast.success("Le message de bienvenue a été mis à jour !");
-        }
 
-    catch(err) {
-        toast.error(err.message);
-    }
-}
-
-const updateOrderInfo = async (mess) => {
-    try {
-            await axios.patch(
-            API_URL + "/params/61a683b8114c5ac9ed7538c0", {
-                sentence : mess
-            }
-            );
-            toast.success("Les informations en bas de commande ont été mises à jour !");
+            if (type === "welcome") toast.success("Le message de bienvenue a été mis à jour !");
+            else if (type === "order") toast.success("Les informations en bas de commande ont été mises à jour !");
         }
 
     catch(err) {
@@ -54,8 +32,6 @@ const updateOrderInfo = async (mess) => {
 
 
 export {
-    getOrderInfo,
-    updateOrderInfo,
-    updateMess,
-    getMess,
+    getParam,
+    updateParam,
 };

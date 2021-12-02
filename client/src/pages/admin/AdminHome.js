@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import InputButton from '../../components/generic/InputButton';
 import TextArea from '../../components/generic/TextArea';
 
-import {getMess, getOrderInfo, updateMess, updateOrderInfo} from '../../services/paramsService';
+import {getParam, updateParam} from '../../services/paramsService';
 
 
 const AdminHome = () => {
@@ -17,12 +17,12 @@ const AdminHome = () => {
     }, []);
     
     const getSetMess = async () => {
-        const mess = await getMess();
+        const mess = await getParam("welcome");
         setWelcomeMess(mess);
     }
 
     const getSetOrderInfo = async () => {
-        const orderMess = await getOrderInfo();
+        const orderMess = await getParam("order");
         setOrderInfo(orderMess);
     }
 
@@ -42,12 +42,12 @@ const AdminHome = () => {
 
     const onWelcomeMessageSubmit = (e) => {
         e.preventDefault();
-        updateMess(welcomeMess);
+        updateParam("welcome",welcomeMess);
     }
 
     const onOrderInfoSubmit = (e) => {
         e.preventDefault();
-        updateOrderInfo(orderInfo);
+        updateParam("order",orderInfo);
     }
 
 
