@@ -1,7 +1,10 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from '../components/generic/Button';
 import Time from '../components/generic/Time';
 import BackgroundSlider from 'react-background-slider'
+
+import {getMess} from '../services/paramsService';
+
 
 const Home = () => {
 
@@ -14,14 +17,26 @@ const Home = () => {
         "https://lycee-charlespointet-thann.fr/wp-content/uploads/2018/12/DSC00040-Copie-800x400.jpg"
     ]
 
+
+    const [welcomeMess, setWelcomeMess] = useState("");
+
+    
+    useEffect(() => {
+        getSetMess();
+    }, []);
+    
+    const getSetMess = async () => {
+        const mess = await getMess();
+        setWelcomeMess(mess);
+    }
+
     return (
         <div className="home">
             <BackgroundSlider images={imgList} duration={4} transition={1}/>
             <div className = "home__left">
-                <h1>Bienvenue<br />au Lycée Pointet</h1>
+                <h1>Bienvenue au restaurant<br/>Le Charlemagne</h1>
 
-                {/*  can be changed */}
-                <p className = "home__subtitle" id = "home__subtitle">Nous faisons des ventes à emporter !</p>
+                <p className = "home__subtitle" id = "home__subtitle">{welcomeMess}</p>
                 
                 <Button name = "Commander" link = "/commander"/>
             </div>

@@ -58,7 +58,7 @@ router.patch('/nf/:userId', async (req, res) => {
     const { name, firstname } = req.body;
     try {
         const userToUpdate = await User.updateOne(
-            { id: req.params.userId }, { name: name, firstname: firstname }
+            { _id: req.params.userId }, { name: name, firstname: firstname }
         );
         res.json(userToUpdate);
     } catch(err) {
@@ -71,7 +71,7 @@ router.patch('/pw/:userId', async (req, res) => {
     const { password } = req.body;
     try {
         const userToUpdate = await User.updateOne(
-            { id: req.params.userId }, { password: password }
+            { _id: req.params.userId }, { password: password }
         );
         res.json(userToUpdate);
     } catch(err) {

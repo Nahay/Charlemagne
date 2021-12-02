@@ -38,7 +38,7 @@ class HeaderIcon extends React.Component {
                     : <FontAwesomeIcon icon = {faBars} className = 'icon--bg'/> }
                 </span>
             </div>
-            {this.state.clicked && <FullScreenHeader toggle = {this.toggleClicked}/>}
+            {this.state.clicked && <FullScreenHeader admin={this.props.admin} toggle = {this.toggleClicked}/>}
         </div>
         );
     }

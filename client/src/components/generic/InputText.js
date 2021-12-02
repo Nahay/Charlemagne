@@ -1,16 +1,37 @@
 import React from "react";
 
-const InputText = ({placeholder, id, divId, handleChange}) => {
+const InputText = ({value, placeholder, id, divId, required, handleChange}) => {
+
+  if (value === undefined) value="";
+  if (required === undefined) required = true;
+
   return (
     <div className={"input-text"} id={divId}>
+
+      {required ?
+
       <input
         type="text"
+        value={value}
         placeholder={placeholder}
         id={id}
-        required="required"
+        onChange={(e) => handleChange(e) }
+        name={id}
+        required
+      />
+
+      :
+
+      <input
+        type="text"
+        value={value}
+        placeholder={placeholder}
+        id={id}
         onChange={(e) => handleChange(e) }
         name={id}
       />
+      
+      }
     </div>
   );
 };

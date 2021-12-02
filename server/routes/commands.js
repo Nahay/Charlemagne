@@ -59,7 +59,7 @@ router.patch('/:commandId', async (req, res) => {
     const { paid } = req.body;
     try {
         const commandToUpdate = await Command.updateOne(
-            { id: req.params.commandId }, { paid: paid }
+            { _id: req.params.commandId }, { paid: paid }
         );
         res.json(commandToUpdate);
     } catch(err) {

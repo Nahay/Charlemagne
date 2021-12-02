@@ -1,20 +1,8 @@
 const mongoose = require("mongoose");
 
 const DishSchema = mongoose.Schema({
-  dateC: {
-    type: Number,
-    required: true,
-  },
   name: {
     type: String,
-    required: true,
-  },
-  numberKitchen: {
-    type: Number,
-    required: true,
-  },
-  numberRemaining: {
-    type: Number,
     required: true,
   },
   price: {
@@ -23,7 +11,7 @@ const DishSchema = mongoose.Schema({
   },
   description: {
     type: String,
-    required: true,
+    required: false,
   },
   type: {
     type: String,

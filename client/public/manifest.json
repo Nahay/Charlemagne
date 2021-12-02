@@ -3,7 +3,7 @@
   "name": "Create React App Sample",
   "icons": [
     {
-      "src": "P.png",
+      "src": "images/Charlemagne.png",
       "type": "image/png",
       "sizes": "400x400"
     }

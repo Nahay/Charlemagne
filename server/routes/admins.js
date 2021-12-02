@@ -19,6 +19,16 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Get all admins
+router.get("/", async (req, res) => {
+    try {
+      const admins = await Admin.find();
+      res.json(admins);
+    } catch (err) {
+      res.json({ error: err.message });
+    }
+  });
+
 // Get an admin by id
 router.get('/:adminId', async (req, res) => {
     try {
@@ -44,7 +54,7 @@ router.patch('/:adminId', async (req, res) => {
     const { password } = req.body;
     try {
         const adminToUpdate = await Admin.updateOne(
-            { id: req.params.adminId }, { password: password }
+            { _id: req.params.adminId }, { password: password }
         );
         res.json(adminToUpdate);
     } catch(err) {

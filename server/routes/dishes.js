@@ -23,14 +23,32 @@ router.get("/:dishId", async (req, res) => {
   }
 });
 
+// Get dish by name
+router.get("/name/:dishName", async (req, res) => {
+  try {
+    const dish = await Dish.findOne({name: req.params.dishName});
+    res.json(dish);
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+});
+
+// Count dish by name
+router.get("/findname/:dishName", async (req, res) => {
+  try {   
+    const dish = await Dish.countDocuments({name: req.params.dishName});
+    res.json(dish);
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+});
+
 // Create a dish
 router.post('/', async (req, res) => {
-    const {dateC, name, numberKitchen, numberRemaining, price, description, type} = req.body;
-    const dish = new Dish({
-        dateC: dateC, 
+    const {
+      name, price, description, type} = req.body;
+    const dish = new Dish({ 
         name: name,
-        numberKitchen: numberKitchen,
-        numberRemaining: numberRemaining,
         price: price,
         description: description,
         type: type
@@ -46,14 +64,13 @@ router.post('/', async (req, res) => {
 
 // Update dish
 router.patch('/:dishId', async (req, res) => {
-  const { dateC, name, numberKitchen, numberRemaining, price, description, type } = req.body;
+  const { name, price, description, type } = req.body;
   try {
+
       const dishToUpdate = await Dish.updateOne(
-          { id: req.params.dishId }, 
+          { _id: req.params.dishId }, 
           {
             name: name, 
-            numberKitchen: numberKitchen,
-            numberRemaining: numberRemaining,
             price: price, 
             description: description, 
             type: type 
@@ -65,7 +82,7 @@ router.patch('/:dishId', async (req, res) => {
   }
 });
 
-// Delete a date
+// Delete a dish
 router.delete("/:dishId", async (req, res) => {
   try {
       const dishToDelete = await Dish.findByIdAndDelete(req.params.dishId);

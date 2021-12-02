@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const HeaderBody = ({toggle}) => {
+const AdminHeaderBody = ({toggle}) => {
 
     return (
         <div className = "header__body">
@@ -16,29 +16,23 @@ const HeaderBody = ({toggle}) => {
                     to="/admin/plats"
                     activeClassName="active-link"
                     onClick={toggle}>
-                        Ajouter plats
+                        Plats
                 </NavLink>
                 <NavLink
                     to="/admin/dates"
                     activeClassName="active-link"
                     onClick={toggle}>
-                        Ajouter dates
+                        Dates
                 </NavLink>
                 <NavLink
-                    exact to="/admin/compte"
+                    exact to="/admin/comptes"
                     activeClassName="active-link"
                     onClick={toggle}>
-                        Compte
-                </NavLink>
-                <NavLink
-                    exact to="/contact"
-                    activeClassName="active-link"
-                    onClick={toggle}>
-                        Contact
+                        Comptes
                 </NavLink>
             </nav>
         </div>
     );
 }
  
-export default HeaderBody;
+export default AdminHeaderBody;

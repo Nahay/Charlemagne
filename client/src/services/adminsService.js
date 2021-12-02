@@ -33,7 +33,7 @@ const getAdminById = async (id) => {
 
 const updateAdmin = async (id, value) => {
     try {
-        await axios.patch(API_URL + "/" +id, { password: value });
+        await axios.patch(API_URL + "/admins/" +id, { password: value });
     } catch(err) {
         toast.error(err.message);
     }

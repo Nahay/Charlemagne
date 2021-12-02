@@ -1,14 +1,36 @@
 import React from "react";
 
-const TextArea = ({placeholder, id, handleChange}) => {
+const TextArea = ({value, placeholder, id, required, handleChange}) => {
+
+  if (value === undefined) value = "";
+  if (required === undefined) required = true;
+
   return (
     <div className={"textarea"}>
-      <textarea placeholder={placeholder} 
-      id={id} 
-      required="required"
+      
+      {required ?
+      
+      <textarea
+      value={value}
+      placeholder={placeholder} 
+      id={id}
+      onChange={(e) => { handleChange(e) }}
+      name={id}
+      required
+      />
+
+      :
+      
+      <textarea
+      value={value}
+      placeholder={placeholder} 
+      id={id}
       onChange={(e) => { handleChange(e) }}
       name={id}
       />
+
+      }
+      
     </div>
   );
 };

@@ -4,7 +4,7 @@ import moment from "moment";
 import 'moment/locale/fr';
 
 
-const ACalendar = ({dateList, setDate, rightRef}) => {
+const AdminCalendar = ({dateList, rightRef, onChangeDate}) => {
 
     const executeScroll = () => {
         rightRef.current.scrollIntoView({ 
@@ -14,7 +14,8 @@ const ACalendar = ({dateList, setDate, rightRef}) => {
     }
 
     const onChange = (e) => {
-        setDate(moment(e).locale('fr').format('LL'));
+        const date = moment(e).locale('fr').format('LL');
+        onChangeDate(date);
     };
     
     const tileClassName = ({ date }) => {
@@ -33,4 +34,4 @@ const ACalendar = ({dateList, setDate, rightRef}) => {
      );
 }
 
-export default ACalendar;
+export default AdminCalendar;

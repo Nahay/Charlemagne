@@ -1,13 +1,13 @@
 import React from 'react';
-import LoginForm from './LoginForm';
+import LoginForm from '../../components/admin/LoginForm';
 import { faUsersCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
-const AdminIndex = () => {
+const AdminLogin = () => {
 
     return ( 
-        <div className="admin-index">
+        <div className="admin-login">
             <LoginForm/>
             <div className="admin-icon">
                 <FontAwesomeIcon icon={faUsersCog}/>
@@ -16,4 +16,4 @@ const AdminIndex = () => {
     );
 }
 
-export default AdminIndex;
+export default AdminLogin;

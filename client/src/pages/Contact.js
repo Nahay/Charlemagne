@@ -10,7 +10,7 @@ const Contact = () => {
                     <div className="contact__left">
                         <div className="left__content">
                             <h1>Contactez-nous</h1>
-                            <p>Page contact, et je ne sais pas quoi mettre dans le p alors j'écris tout et n'importe quoi.</p>
+                            <p>Nous vous répondrons dans les plus bref délais !</p>
                             <ContactForm />
                         </div>
                     </div>

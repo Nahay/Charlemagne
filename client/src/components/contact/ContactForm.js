@@ -18,8 +18,8 @@ const ContactForm = () => {
     let nameValid = false;
     
     const handleChange = (e) => {
-        let mailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        let nameRegex = /^[ a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'\-]+$/;
+        let mailRegex = /^\w+([-]?\w+)*@\w+([-]?\w+)*(\w{2,3})+$/;
+        let nameRegex = /^[ a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`']+$/;
 
         switch (e.target.id) {
             case 'email': {
@@ -119,7 +119,7 @@ const ContactForm = () => {
                     <div className="hidden">
                         <input name="day" value={day}/>
                         <input name="time" value={time}/>
-                    </div>                    
+                    </div>
                 </div>
                 <ToastContainer />
             </form>

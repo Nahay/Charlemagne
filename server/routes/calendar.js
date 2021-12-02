@@ -14,9 +14,11 @@ router.get('/', async (req, res) => {
 });
 
 // Get calendar date by date
-router.get('/:calendarDate', async (req, res) => {
+router.get('/date/:calendarDate', async (req, res) => {
     try {
-        const date = await Date.findById(req.params.calendarDate);
+        const date = await Date.findOne({
+            dateC: parseInt(req.params.calendarDate)
+        });
         res.json(date);
     } catch(err) {
         res.json({error: err.message});
@@ -50,12 +52,13 @@ router.delete("/:calendarDate", async (req, res) => {
     }
 });
 
-// Update visibility of a date
+// Update a date
 router.patch('/:calendarDate', async (req, res) => {
     const { visibility, comment } = req.body;
     try {
         const dateToUpdate = await Date.updateOne(
-            { dateC: req.params.calendarDate }, { visibility: visibility, comment:comment }
+            { dateC: req.params.calendarDate },
+            { visibility: visibility, comment:comment }
         );
         res.json(dateToUpdate);
     } catch(err) {

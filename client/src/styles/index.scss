@@ -8,7 +8,11 @@
 @import "./components/home";
 @import "./components/contact";
 
-@import "./components/admin/adminIndex";
+@import "./components/admin/adminLogin";
+@import "./components/admin/adminHome";
+@import "./components/admin/adminDishes";
+@import "./components/admin/adminDates";
+@import "./components/admin/adminAccounts";
 
 @import "./components/order/order";
 @import "./components/order/calendar";

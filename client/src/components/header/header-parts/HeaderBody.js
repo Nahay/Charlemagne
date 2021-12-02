@@ -25,12 +25,6 @@ const HeaderBody = ({toggle}) => {
                         À propos
                 </NavLink>
                 <NavLink
-                    exact to="/le-lycee"
-                    activeClassName="active-link"
-                    onClick={toggle}>
-                        Le lycée
-                </NavLink>
-                <NavLink
                     exact to="/contact"
                     activeClassName="active-link"
                     onClick={toggle}>

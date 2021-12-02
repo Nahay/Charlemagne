@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const DateSchema = mongoose.Schema({
     dateC: {
-        type: Date,
+        type: Number,
         required: true
     },
     visibility: {
@@ -11,7 +11,7 @@ const DateSchema = mongoose.Schema({
     },
     comment: {
         type: String,
-        required: true
+        required: false
     }
 });
 

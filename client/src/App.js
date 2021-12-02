@@ -1,7 +1,8 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import UserRouter from './routers/UserRouter';
 import AdminRouter from './routers/AdminRouter';
-import AdminIndex from "./components/admin/AdminIndex";
+import AdminLogin from "./pages/admin/AdminLogin";
+import { ToastContainer } from 'react-toastify';
 
 function App() {
 
@@ -10,9 +11,10 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+      <ToastContainer/>
         <Switch>
 
-          <Route exact path="/admin" component = {AdminIndex} />
+          <Route exact path="/admin" component = {AdminLogin} />
           <Route path="/admin" component = {AdminRouter} />
           <Route path="/" component = {UserRouter} />
 
