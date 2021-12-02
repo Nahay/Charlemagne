@@ -21,6 +21,16 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Get dish by date
+router.get("/:date", async (req, res) => {
+  try {
+    const dish = await DishDate.find({dateC: parseInt(req.params.date)});
+    res.json(dish);
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+});
+
 // Count dish by name and date
 router.get("/findDateName", async (req, res) => {
     const {dateC, idDish} = req.body;

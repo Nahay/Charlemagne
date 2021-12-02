@@ -9,17 +9,17 @@ import InputButton from '../../components/generic/InputButton';
 import DishList from '../../components/admin/DishList';
 import AdminCalendar from "../../components/admin/AdminCalendar";
 
-import {getDates, updateDate, getDateByDate} from '../../services/calendarService';
-import {getDishes, createDishDate, getCountByDateAndId} from '../../services/dishesService';
+import {getDates, updateDate, getDateByDate, createDate} from '../../services/calendarService';
+import {getDishes, createDishDate, getCountByDateAndId, getDishByDate} from '../../services/dishesService';
 
 
 const AdminHome = () => {
 
     const ref = useRef(null);
 
-    const [id, setId] = useState("");
-    const [date, setDate] = useState(moment(new Date()).locale('fr').format('LL'));
+    const [date, setDate] = useState(new Date());
     const [dateList, setDatesList] = useState([]);
+    const [dishByDateList, setDishByDateList] = useState([]);
 
     const [visibility, setVisibility] = useState(false);
     const [comment, setComment] = useState("");
@@ -30,6 +30,8 @@ const AdminHome = () => {
 
     useEffect(() => {
         getDishList();
+        getDateList();
+        getDishByDateList();
     }, []);
     
     const getDishList = async () => {
@@ -42,23 +44,51 @@ const AdminHome = () => {
         setDatesList(dates);
     }
 
+    const getDishByDateList = async () => {
+        let dishes;
+
+        if (Number(date)) console.log(true +" "+ date);
+        else console.log(false + " "+ date);
+
+        if (Number(date)) dishes = await getDishByDate(date);
+        else dishes = await getDishByDate(date.getTime());
+
+        console.log(dishes);
+
+        if (dishes === null) {
+            setDishByDateList([]);
+        }
+        else console.log(dishes);
+        //else setDishByDateList(dishes);
+    }
+
     const resetValues = () => {
         setVisibility(false);
         setComment("");
         setSelect("0");
-        setNb(null);
-        setDishList([]);
+        setNb("");
+        setDishByDateList([]);
     }
+
+    const resetValuesFromDate = (foundDate) => {
+        setVisibility(foundDate.visibility);
+        setComment(foundDate.comment);
+        setSelect("0");
+        setNb("");
+
+        getDishByDateList();
+    }
+
 
     const onChangeDate = async (date) => {
         setDate(date);
-        const test = await getDateByDate(date);
+        const foundDate = await getDateByDate(date);
         // la date n'existe pas encore dans la bdd
-        if (test === null) {
+        if (foundDate === null) {
             resetValues();
         }
         else {
-
+            resetValuesFromDate(foundDate);
         }
     }
 
@@ -86,10 +116,17 @@ const AdminHome = () => {
 
     // BD -------------------------------------------------------------------
 
-    const onDateSubmit = (e) => {
+    const onDateSubmit = async (e) => {
         e.preventDefault();
 
-        // updateDate(date, visibility, comment);
+        const foundDate = await getDateByDate(date);
+        // la date n'existe pas encore dans la bdd
+        if (foundDate === null) {
+            createDate(date, visibility, comment);
+        }
+        else {
+            updateDate(date, visibility, comment);
+        }
     }
 
     const onDishSubmit = async (e) => {
@@ -98,12 +135,12 @@ const AdminHome = () => {
         // si on a sélectionné qqe chose :
         if (select !== "0") {
             
-            // const count = await getCountByDateAndId(date, select);
+            const count = await getCountByDateAndId(date, select);
 
-            // if (count !== "1") {
-            //     await createDishDate(date, select ,numberKitchen);
-            // }
-            // else toast.error("Ce plat existe déjà à cette date.");
+            if (count !== "1") {
+                // await createDishDate(date, select ,numberKitchen);
+            }
+            else toast.error("Ce plat existe déjà à cette date.");
 
             setNb(null);
             setSelect("0");
@@ -111,6 +148,8 @@ const AdminHome = () => {
         else toast.error("Aucun plat n'est sélectionné.");
     }
 
+
+    // RENDER ----------------------------------------------------------------
 
     return (
         <div className="admin-dates">
@@ -125,7 +164,7 @@ const AdminHome = () => {
             </div>
             
             <div className="admin-dates__right" ref={ref}>
-                <h1 className="right__date">{date}</h1>
+                <h1 className="right__date">{moment(date).locale('fr').format('LL')}</h1>
                 <div className="right__form">
                     <form className="right__form__1" onSubmit={onDateSubmit}>
                         <div className="right__form__radio" onChange={handleVisibilityChange}>
@@ -175,7 +214,7 @@ const AdminHome = () => {
                         </div>
                     </form>
                     <div className="dish-list">
-                        <DishList/>
+                        <DishList dishByDateList={dishByDateList}/>
                     </div>
                 </div>
             </div>

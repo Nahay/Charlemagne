@@ -10,7 +10,7 @@ const createDate = async (dateC, visibility, comment) => {
             visibility,
             comment
         });
-        toast.success("Le plat a été créé !");
+        toast.success("La date a été créée !");
 
     } catch(err) {
         toast.error(err.message);
@@ -44,10 +44,10 @@ const getDateById = async (id) => {
     }
 };
 
-const updateDate = async (id, visibility, comment) => {
+const updateDate = async (date, visibility, comment) => {
     try {
         await axios.patch(
-            API_URL + "/calendar/" +id, {
+            API_URL + "/calendar/" +date, {
                 visibility : visibility,
                 comment : comment
             }

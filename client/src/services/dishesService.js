@@ -98,6 +98,15 @@ const createDishDate = async (dateC, idDish, numberKitchen) => {
     }
 };
 
+const getDishByDate = async (date) => {
+    try {
+        const { data } = await axios.get(API_URL + "/dish-date/" +date);
+        return data;
+    } catch(err) {
+        toast.error(err.message);
+    }
+};
+
 const getCountByDateAndId = async (dateC, idDish) => {
     try {
         const { data } = await axios.get(API_URL + "/dish-date/findDateName", {
@@ -144,6 +153,7 @@ export {
     getCountByDateAndId,
 
     createDishDate,
+    getDishByDate,
     updateDishDate,
     deleteDishDate
 };
