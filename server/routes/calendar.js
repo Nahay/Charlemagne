@@ -43,9 +43,9 @@ router.post('/', async (req, res) => {
 });
 
 // Delete a date
-router.delete("/:calendarDate", async (req, res) => {
+router.delete("/:date", async (req, res) => {
     try {
-        const dateToDelete = await Date.findByIdAndDelete(req.params.calendarDate);
+        const dateToDelete = await Date.findOneAndDelete({dateC: req.params.date});
         res.json(dateToDelete);
     } catch(err) {
         res.json({error: err.message});

@@ -58,9 +58,9 @@ const updateDate = async (date, visibility, comment) => {
     }
 };
 
-const deleteDate = async (id) => {
+const deleteDate = async (date) => {
     try {
-        await axios.delete(API_URL + "/calendar/" +id);
+        await axios.delete(API_URL + "/calendar/" +date);
         toast.success("Cette date a été supprimée !");
     } catch(err) {
         toast.error(err.message);

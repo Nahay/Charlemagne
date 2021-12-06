@@ -132,6 +132,8 @@ const AdminHome = () => {
     }
 
 
+    // RENDER --------------------------------------------------------------
+
     return (
         <div className="admin-dishes">
             <div className="admin-dishes__left">

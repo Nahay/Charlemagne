@@ -100,19 +100,16 @@ const createDishDate = async (dateC, idDish, numberKitchen) => {
 
 const getDishByDate = async (date) => {
     try {
-        const { data } = await axios.get(API_URL + "/dish-date/" +date);
+        const { data } = await axios.get(API_URL + "/dish-date/date/" +date);
         return data;
     } catch(err) {
         toast.error(err.message);
     }
 };
 
-const getCountByDateAndId = async (dateC, idDish) => {
+const getDishByDateAndDish = async (dateC, idDish) => {
     try {
-        const { data } = await axios.get(API_URL + "/dish-date/findDateName", {
-            dateC,
-            idDish
-        });
+        const { data } = await axios.get(API_URL + "/dish-date/dateDish/" +dateC+"/"+idDish);
         return data;
     } catch(err) {
         toast.error(err.message);
@@ -135,8 +132,17 @@ const updateDishDate = async (id, numberKitchen, numberRemaining) => {
 
 const deleteDishDate = async (id) => {
     try {
-        await axios.delete(API_URL + "/dish-date/" +id);
+        await axios.delete(API_URL + "/dish-date/id/" +id);
         toast.success("Le plat a été supprimé de cette date !");
+    } catch(err) {
+        toast.error(err.message);
+    }
+};
+
+const deleteAllDishesDate = async (dateC) => {
+    try {
+        await axios.delete(API_URL + "/dish-date/date/"+dateC);
+        toast.success("Tous les plats de cette date ont été supprimés !");
     } catch(err) {
         toast.error(err.message);
     }
@@ -149,10 +155,11 @@ export {
     getDishByName,
     getCountByName,
     getDishes,
+    getDishByDateAndDish,
     deleteDish,
-    getCountByDateAndId,
 
     createDishDate,
+    deleteAllDishesDate,
     getDishByDate,
     updateDishDate,
     deleteDishDate

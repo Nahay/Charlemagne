@@ -9,18 +9,19 @@ import InputButton from '../../components/generic/InputButton';
 import DishList from '../../components/admin/DishList';
 import AdminCalendar from "../../components/admin/AdminCalendar";
 
-import {getDates, updateDate, getDateByDate, createDate} from '../../services/calendarService';
-import {getDishes, createDishDate, getCountByDateAndId, getDishByDate} from '../../services/dishesService';
+import {getDates, updateDate, getDateByDate, createDate, deleteDate} from '../../services/calendarService';
+import {getDishes, createDishDate, getDishByDate, getDishByDateAndDish, deleteAllDishesDate, deleteDishDate} from '../../services/dishesService';
 
 
 const AdminHome = () => {
 
     const ref = useRef(null);
 
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState(new Date(new Date().toDateString()).getTime());
     const [dateList, setDatesList] = useState([]);
     const [dishByDateList, setDishByDateList] = useState([]);
 
+    const [dateExists, setDateExists] = useState(false);
     const [visibility, setVisibility] = useState(false);
     const [comment, setComment] = useState("");
     const [Nb, setNb] = useState(null);
@@ -31,9 +32,13 @@ const AdminHome = () => {
     useEffect(() => {
         getDishList();
         getDateList();
-        getDishByDateList();
+        // si marche pas mettre new Date(new Date().toDateString()).getTime() en paramètre
+        onChangeDate(date);
     }, []);
     
+
+    // SET STATES --------------------------------------------------------------
+
     const getDishList = async () => {
         const dishes = await getDishes();
         setDishList(dishes);
@@ -44,25 +49,18 @@ const AdminHome = () => {
         setDatesList(dates);
     }
 
-    const getDishByDateList = async () => {
-        let dishes;
-
-        if (Number(date)) console.log(true +" "+ date);
-        else console.log(false + " "+ date);
-
-        if (Number(date)) dishes = await getDishByDate(date);
-        else dishes = await getDishByDate(date.getTime());
-
-        console.log(dishes);
+    const getDishByDateList = async (dateC) => {
+        
+        const dishes = await getDishByDate(dateC);
 
         if (dishes === null) {
             setDishByDateList([]);
         }
-        else console.log(dishes);
-        //else setDishByDateList(dishes);
+        else setDishByDateList(dishes);
     }
 
     const resetValues = () => {
+        setDateExists(false);
         setVisibility(false);
         setComment("");
         setSelect("0");
@@ -71,18 +69,21 @@ const AdminHome = () => {
     }
 
     const resetValuesFromDate = (foundDate) => {
+        setDateExists(true);
         setVisibility(foundDate.visibility);
         setComment(foundDate.comment);
         setSelect("0");
         setNb("");
 
-        getDishByDateList();
+        getDishByDateList(foundDate.dateC);
     }
 
 
     const onChangeDate = async (date) => {
+
         setDate(date);
         const foundDate = await getDateByDate(date);
+
         // la date n'existe pas encore dans la bdd
         if (foundDate === null) {
             resetValues();
@@ -116,17 +117,25 @@ const AdminHome = () => {
 
     // BD -------------------------------------------------------------------
 
-    const onDateSubmit = async (e) => {
-        e.preventDefault();
+    const saveDate = async () => {
 
-        const foundDate = await getDateByDate(date);
-        // la date n'existe pas encore dans la bdd
-        if (foundDate === null) {
+        if (!dateExists) {
             createDate(date, visibility, comment);
+            setDateExists(true);
+            getDateList();
         }
         else {
             updateDate(date, visibility, comment);
         }
+    }
+
+    const deleteAndSetDate = async () => {
+
+        await deleteDate(date);
+        await deleteAllDishesDate(date);
+        
+        await getDateList();
+        onChangeDate(new Date(new Date().toDateString()).getTime());
     }
 
     const onDishSubmit = async (e) => {
@@ -134,15 +143,27 @@ const AdminHome = () => {
         
         // si on a sélectionné qqe chose :
         if (select !== "0") {
-            
-            const count = await getCountByDateAndId(date, select);
 
-            if (count !== "1") {
-                // await createDishDate(date, select ,numberKitchen);
+            if (dateExists) {
+                const countDishDate = await getDishByDateAndDish(date, select);
+
+                // si le plat n'existe pas on le crée
+                if (countDishDate === null) {
+                    await createDishDate(date, select , Nb);
+                    getDishByDateList(date);
+                }
+                else toast.error("Ce plat existe déjà à cette date.");
             }
-            else toast.error("Ce plat existe déjà à cette date.");
 
-            setNb(null);
+            // la date n'existe pas : on la crée et on ajoute le plat
+            else {
+                await createDate(date, visibility, comment);
+                setDateExists(true);
+                await createDishDate(date, select , Nb);
+                getDishByDateList(date);
+            }
+
+            setNb("");
             setSelect("0");
         }
         else toast.error("Aucun plat n'est sélectionné.");
@@ -166,7 +187,7 @@ const AdminHome = () => {
             <div className="admin-dates__right" ref={ref}>
                 <h1 className="right__date">{moment(date).locale('fr').format('LL')}</h1>
                 <div className="right__form">
-                    <form className="right__form__1" onSubmit={onDateSubmit}>
+                    <div className="right__form__1">
                         <div className="right__form__radio" onChange={handleVisibilityChange}>
                             <span>Visible ?</span>
                             <input
@@ -193,8 +214,23 @@ const AdminHome = () => {
                             required={false}
                             handleChange={handleCommentChange}
                         />
-                        <InputButton id="radioEnregistrer" value="Enregistrer"/>
-                    </form>
+                        { dateExists ?
+                            <div className="multi-btn">
+                                <div onClick={saveDate}>
+                                    <InputButton value="Enregistrer"/>
+                                </div>
+                                <div onClick={deleteAndSetDate}>
+                                    <InputButton value="Supprimer"/>
+                                </div>
+                            </div>
+                        :
+                            <div className="multi-btn">
+                                <div onClick={saveDate}>
+                                    <InputButton id="crerDate" value="Créer"/>
+                                </div>
+                            </div>
+                        }
+                    </div>
                     <form className="right__form__2" onSubmit={onDishSubmit}>
                         <select value={select} id="dish-select" className="dish-select" onChange={handleSelectChange}>
                             <option value="" id="0">Liste des plats</option>

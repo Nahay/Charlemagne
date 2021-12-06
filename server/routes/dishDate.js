@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
 });
 
 // Get dish by date
-router.get("/:date", async (req, res) => {
+router.get("/date/:date", async (req, res) => {
   try {
     const dish = await DishDate.find({dateC: parseInt(req.params.date)});
     res.json(dish);
@@ -31,18 +31,19 @@ router.get("/:date", async (req, res) => {
   }
 });
 
-// Count dish by name and date
-router.get("/findDateName", async (req, res) => {
-    const {dateC, idDish} = req.body;
-    try {   
-      const dish = await DishDate.countDocuments({
-          dateC: dateC,
-          idDish: idDish
-        });
-      res.json(dish);
-    } catch (err) {
-      res.json({ error: err.message });
-    }
+// Get dish by date and idDish
+router.get("/dateDish/:dateC/:idDish", async (req, res) => {
+  try {
+    const dish = await DishDate.findOne(
+        {
+          dateC: parseInt(req.params.dateC),
+          idDish: req.params.idDish
+        }
+      );
+    res.json(dish);
+  } catch (err) {
+    res.json({ error: err.message});
+  }
 });
 
 // Update nb of a dish
@@ -62,8 +63,22 @@ router.patch('/:dishId', async (req, res) => {
   }
 });
 
+// Delete all dishes from a date
+router.delete("/date/:dateC", async (req, res) => {
+  try {
+      const dishToDelete = await DishDate.deleteMany(
+        {
+          dateC: req.params.dateC
+        }
+      );
+      res.json(dishToDelete);
+  } catch(err) {
+      res.json({error: err.message});
+  }
+});
+
 // Delete a dish from a date
-router.delete("/:dishId", async (req, res) => {
+router.delete("/id/:dishId", async (req, res) => {
   try {
       const dishToDelete = await DishDate.findByIdAndDelete(req.params.dishId);
       res.json(dishToDelete);
