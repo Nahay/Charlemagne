@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTable, faList } from "@fortawesome/free-solid-svg-icons";
+
 import ACalendar from "../components/order/ACalendar";
 import List from "../components/order/List";
 import DayDetails from "../components/order/DayDetails";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTable, faList } from "@fortawesome/free-solid-svg-icons";
-import moment from "moment";
-import 'moment/locale/fr';
+
+import { getDates } from '../services/calendarService';
+import { getDishByDate } from '../services/dishesService';
 
 
 const Order= () => {
@@ -13,11 +15,37 @@ const Order= () => {
   const ref = useRef(null);
 
   const [dateList, setDatesList] = useState([]);
+  const [dishByDateList, setDishByDateList] = useState([]);
   const [tableActive, setTableActive] = useState(true);
-  const [date, setDate] = useState(moment(new Date()).locale('fr').format('LL'));
+  const [date, setDate] = useState(new Date().getTime());
 
   useEffect(() => {
+    getSetDates();
   }, []);
+
+
+  const getSetDates = async () => {
+    const dates = await getDates();
+    setDatesList(dates);
+  }
+
+  const getDishByDateList = async (dateC) => {
+        
+    const dishes = await getDishByDate(dateC);
+
+    if (dishes === null) {
+        setDishByDateList([]);
+    }
+    else setDishByDateList(dishes);
+  }
+
+  const onDateChange = async (dateC) => {
+
+    setDate(dateC);
+
+    await getDishByDateList(dateC);
+
+  }
 
   return (
     <div className="order">
@@ -35,13 +63,13 @@ const Order= () => {
           </div>
 
           { tableActive ?
-          <ACalendar rightRef={ref} dateList={dateList} setDate={setDate} />
-          : <List rightRef={ref} dateList={dateList} setDate={setDate} /> }
+          <ACalendar rightRef={ref} dateList={dateList} onDateChange={onDateChange} />
+          : <List rightRef={ref} dateList={dateList} onDateChange={onDateChange} /> }
 
         </div>
       </div>
       <div className="order__right" ref={ref}>
-          <DayDetails date = {date}/>
+          <DayDetails date={date} dishByDateList = {dishByDateList}/>
       </div>
     </div>
   );

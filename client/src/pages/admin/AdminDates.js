@@ -79,10 +79,10 @@ const AdminHome = () => {
     }
 
 
-    const onChangeDate = async (date) => {
+    const onChangeDate = async (dateC) => {
 
-        setDate(date);
-        const foundDate = await getDateByDate(date);
+        setDate(dateC);
+        const foundDate = await getDateByDate(dateC);
 
         // la date n'existe pas encore dans la bdd
         if (foundDate === null) {

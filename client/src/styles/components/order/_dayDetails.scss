@@ -1,8 +1,29 @@
 .day-details {
+
+    width: 100%;
+    height: fit-content;
     
-    h1 {
-        margin-top : 15px;
+
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    .day-details__title {
+        margin-bottom : 5%;
         font-size : 30px;
         color : white;
+    }
+
+    .table__container {
+        min-width: 450px;
+        
+        .sc-dlVxhl {
+            border:10px solid rgb(51, 51, 51);
+        }
+    }
+
+    .day-details__button {
+        margin-top: 5%;
     }
 }

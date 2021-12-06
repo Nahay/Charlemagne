@@ -48,12 +48,18 @@
         display : flex;
         justify-content: center;
         background: $color-secondary;
+        overflow-y: scroll;
+
+        .day-details {
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
     }
 
 
     // ------------------- RESPONSIVE ----------------------
 
-    @media (max-width: 540px) {
+    @media (max-width: 1035px) {
         flex-direction: column;
         height : unset;
 
@@ -62,13 +68,14 @@
             height : 100vh;
 
             .order__left__content {
-                width : 90%;
+                width : 60%;
             }
         }
 
         .order__right {
             width : 100%;
-            height : 100vh;
+            height : auto;
+            overflow-y: hidden;
         }
     }
 
