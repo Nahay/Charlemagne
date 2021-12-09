@@ -6,8 +6,10 @@ import Home from '../pages/Home';
 import Contact from '../pages/Contact';
 import About from '../pages/About';
 import Order from '../pages/Order';
+import Connection from '../pages/Connection';
 
 import PageNotFound from '../pages/PageNotFound';
+import ProtectedLoginRoute from '../components/ProtectedLoginRoute';
 
 
 const UserTemp = () => {
@@ -25,6 +27,7 @@ const UserTemp = () => {
                     <Route exact path="/contact" component = {Contact} />
                     <Route exact path="/mentions-legales" component = {Home} />
                     <Route exact path="/cgu-cgv" component = {Home} />
+                    <ProtectedLoginRoute exact path="/connexion" component = {Connection} isAdmin={false} isAuthenticated={localStorage.getItem("userToken")}/>
 
                     <Route exact component = {PageNotFound} />
                 </Switch>

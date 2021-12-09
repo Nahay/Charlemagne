@@ -3,6 +3,7 @@ import UserRouter from './routers/UserRouter';
 import AdminRouter from './routers/AdminRouter';
 import AdminLogin from "./pages/admin/AdminLogin";
 import { ToastContainer } from 'react-toastify';
+import ProtectedLoginRoute from './components/ProtectedLoginRoute';
 
 function App() {
 
@@ -14,7 +15,7 @@ function App() {
       <ToastContainer/>
         <Switch>
 
-          <Route exact path="/admin" component = {AdminLogin} />
+          <ProtectedLoginRoute exact path="/admin" component = {AdminLogin} isAdmin={true} isAuthenticated={localStorage.getItem("adminToken")}/>
           <Route path="/admin" component = {AdminRouter} />
           <Route path="/" component = {UserRouter} />
 

@@ -82,6 +82,10 @@
     flex-direction: column;
     justify-content: space-between;
 
+    .btn__logout {
+        align-self: center;
+    }
+
     .social-media-list {
         padding : 0 10px;
         display : flex;
@@ -159,6 +163,9 @@
     justify-content: space-between;
 
     .header__footer {
+        .btn__logout {
+            align-self: center;
+        }
         .social-media-list {
             align-self: center;
             width : 300px;

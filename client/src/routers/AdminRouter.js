@@ -1,6 +1,7 @@
 import { Switch, Route } from "react-router-dom";
 import SideNavbar from "../components/header/SideNavbar";
 import HeaderIcon from "../components/header/HeaderIcon";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 import AdminHome from "../pages/admin/AdminHome";
 import AdminDishes from "../pages/admin/AdminDishes";
@@ -20,12 +21,11 @@ const AdminTemp = ({ match }) => {
       <HeaderIcon admin={true}/>
       <main className="main">
         <Switch>
-          <Route exact path={match.url + '/accueil'} component={AdminHome} />
-          <Route exact path={match.url + '/plats'} component={AdminDishes} />
-          <Route exact path={match.url + '/dates'} component={AdminDates} />
-          <Route exact path={match.url + '/comptes'} component={AdminAccounts} />
-
-          <Route exact component = {PageNotFound} />
+          <ProtectedRoute exact path={match.url + '/accueil'} component={AdminHome} />
+          <ProtectedRoute exact path={match.url + '/plats'} component={AdminDishes} />
+          <ProtectedRoute exact path={match.url + '/dates'} component={AdminDates} />
+          <ProtectedRoute exact path={match.url + '/comptes'} component={AdminAccounts} />
+          <ProtectedRoute exact component = {PageNotFound} />
         </Switch>
       </main>
     </>

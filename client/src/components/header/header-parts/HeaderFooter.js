@@ -1,11 +1,34 @@
 import React from 'react';
 import SocialMediaList from '../SocialMediaList';
 import { Link } from 'react-router-dom';
+import Logout from '../../generic/Logout';
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const HeaderFooter = ({admin, toggle}) => {
+    const history = useHistory();
 
-    return (
+    const handleAdminLogout = () => {
+        localStorage.removeItem('adminToken');
+        history.push('/admin');
+        toast.success('Vous avez été déconnecté.');
+    }
+    
+    const handleUserLogout = () => {
+        localStorage.removeItem('userToken');
+        history.push('/connexion');
+        toast.success('À bientôt !');
+    }
+
+    const handleUserLogin = () => {
+        history.push('/connexion');
+    }
+
+    return (    
         <div className = "header__footer">
+            { admin ? <Logout handleLogout={handleAdminLogout} isAdmin={true} isAuthenticated={localStorage.getItem("adminToken")}/>
+            : <Logout handleLogout={handleUserLogout} handleLogin={handleUserLogin} isAdmin={false} isAuthenticated={localStorage.getItem("userToken")}/>}
+            
             <SocialMediaList/>
             <div className = "footer__cg">
                 <Link
