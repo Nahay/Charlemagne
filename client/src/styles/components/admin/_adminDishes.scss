@@ -20,27 +20,6 @@
                 .list__container__box {
 
                     padding: 0;
-
-                    p {
-                        display : flex;
-                        align-items: center;
-                        width: 90%;
-                        height : 100%;
-                        padding-left: 20px;
-                    }
-
-                    &:hover > .icon-delete {
-                        background-color : $color-secondary;
-                    }
-
-                    .icon-delete {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        width : 10%;
-                        height: 100%;
-                        transition : background-color ease-out 0.2s;
-                    }
                 }
             }
         }

@@ -8,16 +8,19 @@ const DishList = ({dishByDateList}) => {
   const [dishesName, setDishesName] = useState([]);
 
   useEffect(() => {
-    getSetDishesName();
-  }, [dishByDateList]);
 
-  const getSetDishesName = async () => {
-    setDishesName([]);
-    dishByDateList.forEach(async d => {
-      const dish = await getDishById(d.idDish);
-      setDishesName(dishesName => [...dishesName, dish.name]);
-    });
-  }
+    async function getSetDishesName() {
+      setDishesName([]);
+      dishByDateList.forEach(async d => {
+        const dish = await getDishById(d.idDish);
+        setDishesName(dishesName => [...dishesName, dish.name]);
+      });
+    }
+
+    getSetDishesName();
+
+  }, [dishByDateList]);
+  
 
   return (
     <div className="list__container">

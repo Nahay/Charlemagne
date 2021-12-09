@@ -10,8 +10,28 @@ const Table = ({dishByDateList}) => {
 
 
     useEffect(() => {
+
+        async function getSetDishes() {
+        
+            setDishesList([]);
+            if (dishByDateList !== []) {
+    
+                dishByDateList.forEach(async d => {
+                    const dish = await getDishById(d.idDish);
+    
+                    setDishesList(dishesList =>
+                        [...dishesList,
+                            {type: getTypeName(dish.type), name: dish.name, nb: d.numberRemaining}
+                        ]
+                    );
+                });
+            }
+        }
+
         getSetDishes();
+   
     }, [dishByDateList]);
+
 
     const getTypeName = (type) => {
         switch (type) {
@@ -23,24 +43,6 @@ const Table = ({dishByDateList}) => {
                 return "Dessert";
             default:
                 return
-        }
-    }
-
-
-    const getSetDishes = async () => {
-        
-        setDishesList([]);
-        if (dishByDateList !== []) {
-
-            dishByDateList.forEach(async d => {
-                const dish = await getDishById(d.idDish);
-
-                setDishesList(dishesList =>
-                    [...dishesList,
-                        {type: getTypeName(dish.type), name: dish.name, nb: d.numberRemaining}
-                    ]
-                );
-            });
         }
     }
 
@@ -69,16 +71,16 @@ const Table = ({dishByDateList}) => {
     });
 
 
-  return (
-    <div className="table__container">
-        <DataTable
-            columns={columns}
-            data={dishesList}
-            noDataComponent="Il n'y a aucun plat à cette date."
-            defaultSortFieldId={1}
-            theme="dark"
-        />
-    </div>
+    return (
+        <div className="table__container">
+            <DataTable
+                columns={columns}
+                data={dishesList}
+                noDataComponent="Il n'y a aucun plat à cette date."
+                defaultSortFieldId={1}
+                theme="dark"
+            />
+        </div>
    );
 }
 

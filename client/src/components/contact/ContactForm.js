@@ -35,11 +35,11 @@ const ContactForm = () => {
             }
             case 'name': {
                 if(e.target.value.match(nameRegex) || e.target.value === "") {
-                    document.getElementById("inputNameDiv").classList.remove("input-text--invalid");
+                    document.getElementById("inputNameDiv").classList.remove("input--invalid");
                     nameValid = true;
                 }
                 else {
-                    document.getElementById("inputNameDiv").classList.add("input-text--invalid");
+                    document.getElementById("inputNameDiv").classList.add("input--invalid");
                     nameValid = false; 
                 }
                 break;

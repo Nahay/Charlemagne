@@ -70,7 +70,7 @@
 
 // -------------- INPUT TEXT & TEXTAREA -----------------------------------
 
-.input-text,
+.input,
 .input-email,
 .textarea {
   position: relative;
@@ -101,7 +101,7 @@
   }
 }
 
-.input-text,
+.input,
 .input-email {
   &::after {
     top: 48px;

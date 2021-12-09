@@ -12,15 +12,18 @@ const DayDetails = ({date, dishByDateList}) => {
 
 
     useEffect(() => {
+
+        async function getNb() {
+            setIsAvailable(false);
+            dishByDateList.forEach(d => {
+                if (d.numberRemaining > 0) setIsAvailable(true);
+            });
+        }
+
         getNb();
+    
     }, [dishByDateList]);
 
-    const getNb = () => {
-        setIsAvailable(false);
-        dishByDateList.forEach(d => {
-            if (d.numberRemaining > 0) setIsAvailable(true);
-        });
-    }
 
     return ( 
         <div className="day-details">

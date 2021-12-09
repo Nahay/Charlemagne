@@ -1,6 +1,6 @@
 import React from "react";
 
-const InputEmail = ({value, placeholder, id, divId, required, handleChange}) => {
+const InputPassword = ({value, placeholder, id, divId, required, handleChange}) => {
 
   if (value === undefined) value="";
   if (required === undefined) required = true;
@@ -11,7 +11,7 @@ const InputEmail = ({value, placeholder, id, divId, required, handleChange}) => 
       {required ?
 
       <input
-        type="email"
+        type="password"
         value={value}
         placeholder={placeholder}
         id={id}
@@ -23,7 +23,7 @@ const InputEmail = ({value, placeholder, id, divId, required, handleChange}) => 
       :
 
       <input
-        type="email"
+        type="password"
         value={value}
         placeholder={placeholder}
         id={id}
@@ -36,4 +36,4 @@ const InputEmail = ({value, placeholder, id, divId, required, handleChange}) => 
   );
 };
 
-export default InputEmail;
+export default InputPassword;

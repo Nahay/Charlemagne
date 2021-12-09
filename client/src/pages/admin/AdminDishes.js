@@ -126,8 +126,7 @@ const AdminHome = () => {
             }
 
         } catch(err) {
-            console.log(err.message);
-            toast.error("Il y a eu une erreur lors de la mise à jour du plat.");
+            toast.error("Il y a eu une erreur.");
         }
     }
 

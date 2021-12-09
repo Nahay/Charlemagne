@@ -24,16 +24,34 @@ const AdminHome = () => {
     const [dateExists, setDateExists] = useState(false);
     const [visibility, setVisibility] = useState(false);
     const [comment, setComment] = useState("");
-    const [Nb, setNb] = useState(null);
+    const [nb, setNb] = useState(null);
     const [select, setSelect] = useState("0");
     const [dishList, setDishList] = useState([]);
 
 
     useEffect(() => {
+
+        async function defineDate(dateC) {
+
+            setDate(dateC);
+            const foundDate = await getDateByDate(dateC);
+    
+            // la date n'existe pas encore dans la bdd
+            if (foundDate !== null) {
+                setDateExists(true);
+                setVisibility(foundDate.visibility);
+                setComment(foundDate.comment);
+                setSelect("0");
+                setNb("");
+
+                getDishByDateList(foundDate.dateC);
+            }
+        }
+
         getDishList();
         getDateList();
-        // si marche pas mettre new Date(new Date().toDateString()).getTime() en paramètre
-        onChangeDate(date);
+        defineDate(new Date(new Date().toDateString()).getTime());
+
     }, []);
     
 
@@ -149,7 +167,7 @@ const AdminHome = () => {
 
                 // si le plat n'existe pas on le crée
                 if (countDishDate === null) {
-                    await createDishDate(date, select , Nb);
+                    await createDishDate(date, select , nb);
                     getDishByDateList(date);
                 }
                 else toast.error("Ce plat existe déjà à cette date.");
@@ -159,7 +177,7 @@ const AdminHome = () => {
             else {
                 await createDate(date, visibility, comment);
                 setDateExists(true);
-                await createDishDate(date, select , Nb);
+                await createDishDate(date, select , nb);
                 getDishByDateList(date);
             }
 
@@ -240,7 +258,7 @@ const AdminHome = () => {
                         </select>
                         <div className="input-duo">
                             <InputText
-                                value={Nb}
+                                value={nb}
                                 placeholder="Nombre Cuisine*"
                                 id="nombreCuisine"
                                 divId="inputNbCuisine"

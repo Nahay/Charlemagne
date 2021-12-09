@@ -6,7 +6,7 @@ const InputText = ({value, placeholder, id, divId, required, handleChange}) => {
   if (required === undefined) required = true;
 
   return (
-    <div className={"input-text"} id={divId}>
+    <div className={"input"} id={divId}>
 
       {required ?
 
