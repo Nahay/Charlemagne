@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 const bcrypt = require("bcrypt");
 
-const AdminSchema = mongoose.Schema({
+const AdminSchema = Schema({
     username: {
         type: String,
         required: true
@@ -20,4 +20,4 @@ AdminSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.password);
 }
 
-module.exports = mongoose.model('admins', AdminSchema);
+module.exports = model('Admin', AdminSchema);

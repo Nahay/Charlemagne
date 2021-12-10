@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require('mongoose');
 
-const DishSchema = mongoose.Schema({
+
+const DishSchema = Schema({
   name: {
     type: String,
     required: true,
@@ -19,4 +20,4 @@ const DishSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('dishes', DishSchema);
+module.exports = model('Dish', DishSchema);

@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require('mongoose');
 
-const DishDateSchema = mongoose.Schema({
+
+const DishDateSchema = Schema({
   dateC: {
     type: Number,
     required: true,
@@ -19,4 +20,4 @@ const DishDateSchema = mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('dish-date', DishDateSchema);
+module.exports = model('DishDate', DishDateSchema);

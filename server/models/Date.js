@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 
-const DateSchema = mongoose.Schema({
+
+const DateSchema = Schema({
     dateC: {
         type: Number,
         required: true
@@ -15,4 +16,4 @@ const DateSchema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('calendar', DateSchema);
+module.exports = model('Date', DateSchema);

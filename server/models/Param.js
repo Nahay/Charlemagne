@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 
-const ParamSchema = mongoose.Schema({
+
+const ParamSchema = Schema({
     sentence: {
         type: String,
         required: true
@@ -11,4 +12,4 @@ const ParamSchema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('params', ParamSchema);
+module.exports = model('Param', ParamSchema);

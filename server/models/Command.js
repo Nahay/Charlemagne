@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 
-const CommandSchema = mongoose.Schema({
+const CommandSchema = new Schema({
     userID: {
         type: String,
         required: true
@@ -31,4 +31,25 @@ const CommandSchema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('commands', CommandSchema);
+
+const CommandListSchema = new Schema({
+    command: {
+        type: Schema.Types.ObjectId,
+        ref: 'Command',
+        required: true
+    },
+    dishID: {
+        type: String,
+        required: true
+    },
+    quantity: {
+        type: Number,
+        required: true
+    }
+});
+
+
+module.exports = {
+    Command: model('Command', CommandSchema),
+    CommandList: model('CommandList', CommandListSchema)
+};

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const Command = require('../models/Command');
+const { Command } = require('../models/Command');
 
 // Get all commands
 router.get('/', async (req, res) => {
@@ -13,10 +13,10 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Get command by id
-router.get('/:commandId', async (req, res) => {
+// Get command by date
+router.get('/:dateC', async (req, res) => {
     try {
-        const command = await Command.findById(req.params.commandId);
+        const command = await Command.findOne({ dateC: req.params.dateC });
         res.json(command);
     } catch(err) {
         res.json({error: err.message});
@@ -54,12 +54,19 @@ router.delete("/:commandId", async (req, res) => {
     }
 });
 
-// Update paid
+// Update a command
 router.patch('/:commandId', async (req, res) => {
-    const { paid } = req.body;
+    const { time, paid, container, comment, total } = req.body;
     try {
         const commandToUpdate = await Command.updateOne(
-            { _id: req.params.commandId }, { paid: paid }
+            { _id: req.params.commandId },
+            {
+                time : time,
+                paid : paid,
+                container: container, 
+                comment: comment,
+                total: total
+            }
         );
         res.json(commandToUpdate);
     } catch(err) {

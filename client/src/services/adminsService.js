@@ -108,4 +108,15 @@ const adminSignIn = async (username, password) => {
     }
 }
 
-export { createAdmin, updateAdminById, updateAdminWithPw, updateAdminWithoutPw, getAdminById, getAdminByUsername, adminSignIn, getAdmins, deleteAdmin, deleteAdminByUsername };
+export {
+    createAdmin,
+    updateAdminById,
+    updateAdminWithPw,
+    updateAdminWithoutPw,
+    getAdminById,
+    getAdminByUsername,
+    adminSignIn,
+    getAdmins,
+    deleteAdmin,
+    deleteAdminByUsername
+};

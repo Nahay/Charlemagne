@@ -9,6 +9,7 @@ import InputButton from '../../components/generic/InputButton';
 import DishList from '../../components/admin/DishList';
 import AdminCalendar from "../../components/admin/AdminCalendar";
 
+import {getCommandByDate} from '../../services/commandsService';
 import {getDates, updateDate, getDateByDate, createDate, deleteDate} from '../../services/calendarService';
 import {getDishes, createDishDate, getDishByDate, getDishByDateAndDish, deleteAllDishesDate, deleteDishDate} from '../../services/dishesService';
 
@@ -146,11 +147,14 @@ const AdminHome = () => {
 
     const deleteAndSetDate = async () => {
 
-        await deleteDate(date);
-        await deleteAllDishesDate(date);
-        
-        await getDateList();
-        onChangeDate(new Date(new Date().toDateString()).getTime());
+        const command = await getCommandByDate(date);
+        if (command === null) {
+            await deleteDate(date);
+            await deleteAllDishesDate(date);
+            await getDateList();
+            onChangeDate(new Date(new Date().toDateString()).getTime());
+        }
+        else toast.error("Il y a une commande à cette date, vous ne pouvez pas supprimer la date.");
     }
 
     const onDishSubmit = async (e) => {
