@@ -9,15 +9,19 @@ import AccountList from '../../components/admin/AccountList';
 import { faUser, faUserCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { createUser, deleteUserByUsername, getUsers, updateUserWithoutPw, updateUserWithPw } from '../../services/usersService';
+import { createAdmin, deleteAdminByUsername, getAdmins, updateAdminWithoutPw, updateAdminWithPw} from '../../services/adminsService';
+
 
 const AdminAccounts = () => {
+    const token = localStorage.getItem("adminToken");
 
     const [admin, setAdmin] = useState(false);
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [name, setName] = useState("");
     const [firstname, setFirstname] = useState("");
-    const [tel, setTel] = useState(null);
+    const [tel, setTel] = useState("");
     const [password, setPassword] = useState("");
 
     const [create, setCreate] = useState(true);
@@ -30,8 +34,8 @@ const AdminAccounts = () => {
 
 
     useEffect(() => {
-        // getClientAccountList();
-        // getAdminAccountList();
+        getClientAccountList();
+        getAdminAccountList();
     }, []);
     
 
@@ -46,10 +50,11 @@ const AdminAccounts = () => {
         setPassword("");
         setName("");
         setFirstname("");
-        setTel(null);
+        setTel("");
     }
 
-    const onClickClientAccount = (email, username, password, name, firstname, tel) => {
+    const onClickClientAccount = (email, username, password, name, firstname, tel) => {    
+        setAdmin(false);
         setCreate(false);
         setEmail(email);
         setUsername(username);
@@ -60,35 +65,31 @@ const AdminAccounts = () => {
     }
 
     const onClickAdminAccount = (username, password) => {
+        setAdmin(true);
         setCreate(false);
         setUsername(username);
         setPassword(password);
     }
 
-
     // HANDLE ------------------------------------------------------------
+
+    const handleCheckboxChange = (e) => e.target.checked = true;
 
     const handleAdminChange = (e) => {
         if (e.target.id ==='y') setAdmin(true);
         else setAdmin(false);
     }
 
-    const handleEmail = (e) => {
-        setEmail(e.target.value);
-    }
+    const handleEmail = (e) => setEmail(e.target.value);
 
-    const handleUsername = (e) => {
-        setUsername(e.target.value);
-    }
+    const handleUsername = (e) => setUsername(e.target.value);
 
-    const handlePassword = (e) => {
-        setPassword(e.target.value);
-    }
+    const handlePassword = (e) => setPassword(e.target.value);
 
     const handleName = (e) => {
         const val = e.target.value;
         if (nameReg.test(val) || val === "") setName(val);
-    }
+    }   
 
     const handleFirstname = (e) => {
         const val = e.target.value;
@@ -100,27 +101,26 @@ const AdminAccounts = () => {
         if (Number(val) || val === "") setTel(val);
     }
 
-
     // DB -------------------------------------------------------------
 
     const getClientAccountList = async () => {
-        // const clients = await getClientAccounts();
-        // setClientAccountList(clients);
+        const clients = await getUsers(token);
+        setClientAccountList(clients.users);
     }
 
     const getAdminAccountList = async () => {
-        // const admins = await getAdminAccounts();
-        // setAdminAccountList(admins);
+        const admins = await getAdmins(token);
+        setAdminAccountList(admins.admins);
     }
 
     const onClickDelete = async (username) => {
 
         if (watchClients) {
-            // await deleteClientAccount(username);
+            await deleteUserByUsername(username, token);
             getClientAccountList();
         }
         else {
-            // await deleteAdminAccount(username);
+            await deleteAdminByUsername(username, token);
             getAdminAccountList();
         } 
     }
@@ -137,7 +137,8 @@ const AdminAccounts = () => {
                 if (admin) {
 
                     // ajout bdd admin
-        
+                    await createAdmin(username, password, token);
+                    getAdminAccountList();
                     resetValues();
                 }
                 else {
@@ -145,7 +146,8 @@ const AdminAccounts = () => {
                     if (emailReg.test(email)) {
 
                         // ajout bdd client
-        
+                        await createUser(username, password, name, firstname, email, tel, token);
+                        getClientAccountList();
                         resetValues();
                     }
                     
@@ -155,28 +157,26 @@ const AdminAccounts = () => {
 
             // modification d'un utilisateur
             else {
-
                 if (admin) {
-
                     // mot de passe inchangé
                     if (password === "") {
                         // update bdd admin sans mdp
+                        await updateAdminWithoutPw(username, token);
                     }
-                    else {
-                        // update bdd admin
-                    }
+                    // update bdd admin
+                    await updateAdminWithPw(username, password, token);
+                    getAdminAccountList();
                 }
-                else {
-        
+                else {        
                     if (emailReg.test(email)) {
-
                         if (password === "") {
                             // update bdd client sans mdp
+                            await updateUserWithoutPw(username, name, firstname, email, tel, token);
                         }
                         // update bdd client
-        
-                    }
-                    
+                        await updateUserWithPw(username, password, name, firstname, email, tel, token);
+                        getClientAccountList();
+                    }                    
                     else toast.error("Email non valide.");
                 }
 
@@ -238,6 +238,7 @@ const AdminAccounts = () => {
                                     name="admin"
                                     id="n"
                                     checked={admin === false}
+                                    onChange={handleCheckboxChange}
                                 />
                                 <label htmlFor="n">Non</label>
                                 <input
@@ -246,6 +247,7 @@ const AdminAccounts = () => {
                                     name="admin"
                                     id="y"
                                     checked={admin === true}
+                                    onChange={handleCheckboxChange}
                                 />
                                 <label htmlFor="y">Oui</label>
                             </div>

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsersCog } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 
-import { adminSignIn, getAdminByUsername } from "../../services/adminsService";
+import { adminSignIn, getAdminByUsername, createAdmin } from "../../services/adminsService";
 
 const AdminLogin = () => {
     const history = useHistory();
@@ -21,20 +21,10 @@ const AdminLogin = () => {
         const si = await adminSignIn(username, password);
         // test si le token est présent dans la promesse qui a été configurée dans le server
         if (si.token) {
-          // si il y est
-          // on l'ajoute au local storage
+          // si il y est, on l'ajoute au local storage
           localStorage.setItem('adminToken', si.token);
-          localStorage.setItem('userToken', si.token);
-          // récupère un administrateur par son nom d'utilisateur
-          const a = await getAdminByUsername(username, si.token);
-          // si l'administrateur existe, et le token est valide, redirige vers la page accueil, 
-          // sinon reste sur la page de connexion
-          if (!a.success)
-            history.push('/admin');
-          else {
-            history.push("/admin/accueil");
-            toast.success("Bienvenue " + username +" !");
-          }
+          history.push("/admin/accueil");
+          toast.success("Bienvenue " + username + " !");
         } else {
           toast.error("Le nom d'utilisateur ou le mot de passe est incorrect.");
         }

@@ -11,6 +11,7 @@ const config = (token) => {
 const createAdmin = async (username, password, token) => {
     try {
         await axios.post(API_URL + "/admins", { username, password }, config(token));
+        toast.success("L'administrateur a été crée !");
     } catch(err) {
         toast.error(err.message);
     }
@@ -50,15 +51,28 @@ const getAdminById = async (id, token) => {
 const updateAdminById = async (id, password, token) => {
     try {
         await axios.patch(API_URL + "/admins/" +id, { password }, config(token));
+        toast.success("L'administrateur a été mis à jour !");
     } catch(err) {
         toast.error(err.message);
     }
 }
 
-const updateAdminByUsername = async (username, password, token) => {
+const updateAdminWithPw = async (username, password, token) => {
     try {
-        await axios.patch(API_URL + "/admins/admin/" +username, { password }, config(token));
+        await axios.patch(API_URL + "/admins/adminPW/" +username, { password }, config(token));
+        toast.success("L'administrateur a été mis à jour !");
     } catch(err) {
+        console.log(err);
+        toast.error(err.message);
+    }
+}
+
+const updateAdminWithoutPw = async (username, token) => {
+    try {
+        await axios.patch(API_URL + "/admins/adminNPW/" +username, config(token));
+        toast.success("L'administrateur a été mis à jour !");
+    } catch(err) {
+        console.log(err);
         toast.error(err.message);
     }
 }
@@ -66,6 +80,17 @@ const updateAdminByUsername = async (username, password, token) => {
 const deleteAdmin = async (id, token) => {
     try {
         await axios.delete(API_URL + "/admins/" +id, config(token));
+        toast.success("L'administrateur a été supprimé !");
+    } catch(err) {
+        console.log(err);
+        toast.error(err.message);
+    }
+}
+
+const deleteAdminByUsername = async (username, token) => {
+    try {
+        await axios.delete(API_URL + "/admins/admin/" +username, config(token));
+        toast.success("L'administrateur a été supprimé !");
     } catch(err) {
         console.log(err);
         toast.error(err.message);
@@ -83,4 +108,4 @@ const adminSignIn = async (username, password) => {
     }
 }
 
-export { createAdmin, updateAdminById, updateAdminByUsername, getAdminById, getAdminByUsername, adminSignIn, getAdmins, deleteAdmin };
+export { createAdmin, updateAdminById, updateAdminWithPw, updateAdminWithoutPw, getAdminById, getAdminByUsername, adminSignIn, getAdmins, deleteAdmin, deleteAdminByUsername };

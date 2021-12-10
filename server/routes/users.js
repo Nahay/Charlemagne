@@ -11,8 +11,8 @@ const getRequestingAdmin = async(req, res) => {
      // on récupère le token, et on vérifie l'admin qui fait la requête est bien la seule et unique personne la faisant
      const token = req.headers["x-access-token"];
      const decoded = jwt.verify(token, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
-     const adminUsername = decoded.username;
-     const adminRequesting = await Admin.findOne({ username: adminUsername });
+     const adminId = decoded._id;
+     const adminRequesting = await Admin.findById({ _id: adminId });
      // on retourne cette administrateur
      return adminRequesting;
     } catch(err) {
@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
 
         const user = await newUser.save();
 
-        return res.send({ success: true, message: "Signed up.", adminRequesting: adminRequesting.username, savedUser: { user } });
+        return res.send({ success: true, message: "Signed up.", adminRequesting: adminRequesting._id, savedUser: { user } });
     } catch(err) {
         console.log(err);
         return res.send({ error: err.message, success: false, message:"Invalid token." });
@@ -47,10 +47,12 @@ router.post('/', async (req, res) => {
 router.get("/", async (req, res) => {
     try {
       const adminRequesting = await getRequestingAdmin(req, res);
+      console.log(adminRequesting);
 
       const users = await User.find();
-      return res.send({ success: true, adminRequesting: adminRequesting.username, users: users });
+      return res.send({ success: true, adminRequesting: adminRequesting._id, users: users });
     } catch (err) {
+        console.log(err);
       return res.send({ error: err.message });
     }
 });
@@ -60,7 +62,7 @@ router.get('/:userId', async (req, res) => {
     try {
         const adminRequesting = await getRequestingAdmin(req, res); 
         const user = await User.findById(req.params.userId);
-        return res.send({success: true, adminRequesting: adminRequesting.username, user: user});
+        return res.send({success: true, adminRequesting: adminRequesting._id, user: user});
     } catch(err) {
         return res.send({ error: err.message, success: false });
     }
@@ -70,10 +72,10 @@ router.get('/:userId', async (req, res) => {
 router.get("/user/:username", async (req, res) => {  
     try {
       const adminRequesting = await getRequestingAdmin(req, res);
-  
+
       const userFound = await User.findOne({username: req.params.username});
   
-      return res.send({ success: true, message: "Valid token", adminRequesting: adminRequesting.username, userFound });
+      return res.send({ success: true, message: "Valid token", adminRequesting: adminRequesting._id, userFound });
     } catch (err) {
       console.log(err);
       return res.send({ error: err.message, success: false });
@@ -90,7 +92,7 @@ router.patch('/:userId', async (req, res) => {
         const adminRequesting = await getRequestingAdmin(req, res);
 
         const userUpdated = await User.updateOne( { _id: req.params.userId }, { password: user.generateHash(password) } );
-        return res.send({ success: true, message: "User updated successfully", adminRequesting: adminRequesting.username, userUpdated })
+        return res.send({ success: true, message: "User updated successfully", adminRequesting: adminRequesting._id, userUpdated })
     } catch(err) {
         console.log(err);
         return res.send({error: err.message});
@@ -105,7 +107,7 @@ router.patch('/userPW/:userUsername', async (req, res) => {
         const adminRequesting = await getRequestingAdmin(req, res);
 
         const userUpdated = await User.updateOne( { username: req.params.userUsername }, { password: user.generateHash(password), name, firstname, email, tel } );
-        return res.send({ success: true, message: "User updated successfully", adminRequesting: adminRequesting.username, userUpdated })
+        return res.send({ success: true, message: "User updated successfully", adminRequesting: adminRequesting._id, userUpdated })
     } catch(err) {
         console.log(err);
         return res.send({error: err.message});
@@ -119,7 +121,7 @@ router.patch('/userNPW/:userUsername', async (req, res) => {
         const adminRequesting = await getRequestingAdmin(req, res);
 
         const userUpdated = await User.updateOne( { username: req.params.userUsername }, { name, firstname, email, tel } );
-        return res.send({ success: true, message: "User updated successfully", adminRequesting: adminRequesting.username, userUpdated })
+        return res.send({ success: true, message: "User updated successfully", adminRequesting: adminRequesting._id, userUpdated })
     } catch(err) {
         console.log(err);
         return res.send({error: err.message});
@@ -133,7 +135,21 @@ router.delete('/:userId', async (req, res) => {
         
         const userDeleted = await User.findByIdAndDelete(req.params.userId);
 
-        return res.send({success: true, adminRequesting: adminRequesting.username, userDeleted })
+        return res.send({success: true, adminRequesting: adminRequesting._id, userDeleted })
+    } catch(err) {
+        console.log(err);
+        return res.send({error: err.message});
+    }
+});
+
+// Delete a user by username
+router.delete('/user/:userUsername', async (req, res) => {
+    try {
+        const adminRequesting = await getRequestingAdmin(req, res);
+        
+        const userDeleted = await User.findOneAndDelete({username: req.params.userUsername});
+
+        return res.send({success: true, adminRequesting: adminRequesting._id, userDeleted })
     } catch(err) {
         console.log(err);
         return res.send({error: err.message});
@@ -150,11 +166,11 @@ router.post("/signin", async (req, res) => {
     if (!password) return res.send({ success: false, message: "Error: Password cannot be blank."});
   
     try {
-      const user = await User.findOne({ username });  
+      const user = await User.findOne({ username: username });  
       // Teste si le mot de passe vaut celui qui est hashé
       if (!user.validPassword(password)) return res.send({ success: false, message: "Error: Invalid password while testing" });
       // ajoute les valeurs assignées dans le token
-      const token = jwt.sign({ username, name: user.name, firstname: user.firstname, auth: true }, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
+      const token = jwt.sign({ username: username, name: user.name, firstname: user.firstname, auth: true }, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
       return res.send({ success: true, message: "Valid sign in", token });
     } catch (err) {
       console.log(err);

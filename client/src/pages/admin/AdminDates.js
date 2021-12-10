@@ -24,7 +24,7 @@ const AdminHome = () => {
     const [dateExists, setDateExists] = useState(false);
     const [visibility, setVisibility] = useState(false);
     const [comment, setComment] = useState("");
-    const [nb, setNb] = useState(null);
+    const [nb, setNb] = useState("");
     const [select, setSelect] = useState("0");
     const [dishList, setDishList] = useState([]);
 
@@ -114,24 +114,21 @@ const AdminHome = () => {
 
     // HANDLE ---------------------------------------------------------------
 
+    const handleCheckboxChange = (e) => e.target.checked = true;
+
     const handleVisibilityChange = (e) => {
         if (e.target.id ==='y') setVisibility(true);
         else setVisibility(false);
     }
 
-    const handleCommentChange = (e) => {
-        setComment(e.target.value);
-    }
+    const handleCommentChange = (e) => setComment(e.target.value);
 
-    const handleSelectChange = (e) => {
-        setSelect(e.target.value);
-    }
+    const handleSelectChange = (e) => setSelect(e.target.value);
 
     const handleNbChange = (e) => {
         const val = e.target.value;
         if(Number(val) || val === "") setNb(val);
     }
-
 
     // BD -------------------------------------------------------------------
 
@@ -214,6 +211,7 @@ const AdminHome = () => {
                                 name="visibility"
                                 id="n"
                                 checked={visibility === false}
+                                onChange={handleCheckboxChange}
                             />
                             <label htmlFor="n">Non</label>
                             <input
@@ -222,6 +220,7 @@ const AdminHome = () => {
                                 name="visibility"
                                 id="y"
                                 checked={visibility === true}
+                                onChange={handleCheckboxChange}
                             />
                             <label htmlFor="y">Oui</label>
                         </div>

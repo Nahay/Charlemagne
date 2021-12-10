@@ -9,7 +9,7 @@ import Order from '../pages/Order';
 import Connection from '../pages/Connection';
 
 import PageNotFound from '../pages/PageNotFound';
-import ProtectedLoginRoute from '../components/ProtectedLoginRoute';
+import ProtectedUserRoute from '../components/ProtectedUserRoute';
 
 
 const UserTemp = () => {
@@ -27,7 +27,7 @@ const UserTemp = () => {
                     <Route exact path="/contact" component = {Contact} />
                     <Route exact path="/mentions-legales" component = {Home} />
                     <Route exact path="/cgu-cgv" component = {Home} />
-                    <ProtectedLoginRoute exact path="/connexion" component = {Connection} isAdmin={false} isAuthenticated={localStorage.getItem("userToken")}/>
+                    <ProtectedUserRoute exact path="/connexion" component = {Connection}/>
 
                     <Route exact component = {PageNotFound} />
                 </Switch>
