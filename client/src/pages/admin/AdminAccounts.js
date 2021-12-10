@@ -58,7 +58,7 @@ const AdminAccounts = () => {
         setCreate(false);
         setEmail(email);
         setUsername(username);
-        setPassword(password);
+        setPassword("");
         setName(name);
         setFirstname(firstname);
         setTel(tel);
