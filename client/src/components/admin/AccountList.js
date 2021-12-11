@@ -11,8 +11,8 @@ const AccountList = ({watchClients, accountList, onClickClientAccount, onClickAd
           return (
             <div className="list__container__box" key={a._id}>
               <p onClick={() => {
-                  if (watchClients) onClickClientAccount(a.email, a.username, a.password, a.name, a.firstname, a.tel)
-                  else onClickAdminAccount(a.username, a.password)}
+                  if (watchClients) onClickClientAccount(a.email, a.username, a.name, a.firstname, a.tel)
+                  else onClickAdminAccount(a.username)}
                 }
               >
                 {a.username}

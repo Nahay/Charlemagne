@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import LoginForm from '../../components/LoginForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsersCog } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 
-import { adminSignIn, getAdminByUsername, createAdmin } from "../../services/adminsService";
+import { adminSignIn } from "../../services/adminsService";
 
 const AdminLogin = () => {
     const history = useHistory();

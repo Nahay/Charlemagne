@@ -3,10 +3,10 @@ import InputText from '../generic/InputText';
 import InputButton from '../generic/InputButton';
 import InputEmail from '../generic/InputEmail';
 import TextArea from '../generic/TextArea';
-import emailjs from 'emailjs-com';
 import moment from 'moment';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// import emailjs from 'emailjs-com';
 
 const ContactForm = () => {
     

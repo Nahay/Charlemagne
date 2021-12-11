@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import { toast } from 'react-toastify';
+import { faUser, faUserCog } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import InputText from '../../components/generic/InputText';
 import InputButton from '../../components/generic/InputButton';
 import InputNumber from '../../components/generic/InputNumber';
 import InputEmail from '../../components/generic/InputEmail';
 import AccountList from '../../components/admin/AccountList';
-import { faUser, faUserCog } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { createUser, deleteUserByUsername, getUsers, updateUserWithoutPw, updateUserWithPw } from '../../services/usersService';
 import { createAdmin, deleteAdminByUsername, getAdmins, updateAdminWithoutPw, updateAdminWithPw} from '../../services/adminsService';
@@ -34,8 +34,22 @@ const AdminAccounts = () => {
 
 
     useEffect(() => {
+
+        const token = localStorage.getItem("adminToken");
+
+        async function getClientAccountList() {
+            const clients = await getUsers(token);
+            setClientAccountList(clients.users);
+        }
+    
+        async function getAdminAccountList() {
+            const admins = await getAdmins(token);
+            setAdminAccountList(admins.admins);
+        }
+
         getClientAccountList();
         getAdminAccountList();
+
     }, []);
     
 
@@ -53,7 +67,7 @@ const AdminAccounts = () => {
         setTel("");
     }
 
-    const onClickClientAccount = (email, username, password, name, firstname, tel) => {    
+    const onClickClientAccount = (email, username, name, firstname, tel) => {    
         setAdmin(false);
         setCreate(false);
         setEmail(email);
@@ -64,11 +78,11 @@ const AdminAccounts = () => {
         setTel(tel);
     }
 
-    const onClickAdminAccount = (username, password) => {
+    const onClickAdminAccount = (username) => {
         setAdmin(true);
         setCreate(false);
         setUsername(username);
-        setPassword(password);
+        setPassword("");
     }
 
     // HANDLE ------------------------------------------------------------

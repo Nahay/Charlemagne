@@ -77,6 +77,20 @@ router.delete("/date/:dateC", async (req, res) => {
   }
 });
 
+// Delete all dishes from a dish
+router.delete("/dish/:idDish", async (req, res) => {
+  try {
+      const dishToDelete = await DishDate.deleteMany(
+        {
+          idDish: req.params.idDish
+        }
+      );
+      res.json(dishToDelete);
+  } catch(err) {
+      res.json({error: err.message});
+  }
+});
+
 // Delete a dish from a date
 router.delete("/id/:dishId", async (req, res) => {
   try {

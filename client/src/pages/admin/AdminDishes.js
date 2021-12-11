@@ -5,7 +5,7 @@ import TextArea from '../../components/generic/TextArea';
 import AllDishesList from '../../components/admin/AllDishesList';
 import { toast } from 'react-toastify';
 
-import { getCountByName, getDishes, updateDish, createDish, deleteDish } from "../../services/dishesService";
+import { getCountByName, getDishes, updateDish, createDish, deleteDish, deleteAllDishesDish } from "../../services/dishesService";
 import { getOneCommandListByDish } from '../../services/commandsListService';
 
 
@@ -91,6 +91,7 @@ const AdminHome = () => {
         const dish = await getOneCommandListByDish(id);
         if (dish === null) {
             await deleteDish(id);
+            await deleteAllDishesDish(id);
             getDishList();
         }
         else toast.error("Le plat appartient à une commande, vous ne pouvez pas le supprimer.");

@@ -3,14 +3,14 @@ import { toast } from 'react-toastify';
 import API_URL from '../app-config';
 
 
-const createCommandList = async (commandID, dishID, quantity) => {
+const createCommandList = async (command, dishID, quantity) => {
     try {
         await axios.post(API_URL + "/commandsList", {
-            commandID,
+            command,
             dishID,
             quantity
         });
-        toast.success("L'élément de la commande a été créée !");
+        toast.success("L'élément de la commande a été créé !");
     } catch(err) {
         toast.error(err.message);
     }
@@ -37,6 +37,15 @@ const getCommandListByCommand = async (commandID) => {
 const getOneCommandListByDish = async (dishID) => {
     try {
         const { data } = await axios.get(API_URL + "/commandsList/dish/" +dishID);
+        return data;
+    } catch(err) {
+        toast.error(err.message);
+    }
+};
+
+const getOneCommandListByDate = async (date) => {
+    try {
+        const { data } = await axios.get(API_URL + "/commandsList/date/" +date);
         return data;
     } catch(err) {
         toast.error(err.message);
@@ -82,5 +91,6 @@ export {
     getOneCommandListByDish,
     updateQuantity,
     deleteCommandList,
-    deleteCommandListByCommand
+    deleteCommandListByCommand,
+    getOneCommandListByDate
 };

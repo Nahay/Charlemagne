@@ -112,17 +112,16 @@
                     .list__container__box {
                         height : 30%;
                         padding-left: 20px;
-    
-                        &:hover {
-                            cursor : default;
-                        }
+
     
                         p, span {
                             font-size: 80%;
                         }
+
+                        p {padding:0}
     
                         .nb-dish {
-                            width : 50%;
+                            width : 125%;
                             height : 100%;
                             display : flex;
                             align-items: center;
@@ -160,6 +159,38 @@
 
                 .right__form__1 {
                     margin-bottom: 60px;
+
+                    .multi-btn {
+                        flex-direction: column;
+                        align-items: center;
+
+                        div, .input-btn, input {
+                            width:100%;
+                        }
+
+                        .input-btn:first-child {
+                            margin-bottom: 7px;
+                        }
+                    }
+                }
+
+                .right__form__2 {
+                    .input-duo {
+                        flex-direction: column;
+                        align-items: center;
+
+                        .input {
+                            margin-top:4px;
+                        }
+
+                        .input, .input-btn {
+                            width:100%;
+                        }
+
+                        .input-btn input {
+                            width:100%;
+                        }
+                    }
                 }
 
                 .dish-list {

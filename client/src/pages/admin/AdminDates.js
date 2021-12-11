@@ -33,7 +33,6 @@ const AdminHome = () => {
     useEffect(() => {
 
         async function defineDate(dateC) {
-            console.log("ok");
             setDate(dateC);
             const foundDate = await getDateByDate(dateC);
     

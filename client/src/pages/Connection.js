@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import LoginForm from '../components/LoginForm';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
-import { getUserByUsername, updateUserWithPwByUsername, userSignIn } from '../services/usersService';
+import { userSignIn } from '../services/usersService';
 
 const Connection = () => {
     const history = useHistory();

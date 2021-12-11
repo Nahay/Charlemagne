@@ -7,13 +7,13 @@ import API_URL from '../app-config';
 
 const createDish = async (name, price, description, type) => {
     try {
-        await axios.post(API_URL + "/dishes", {
+        const { data } = await axios.post(API_URL + "/dishes", {
             name,
             price,
             description,
             type
         });
-        toast.success("Le plat a été créé !");
+        toast.success(`Le plat ${data.name} a été créé !`);
 
     } catch(err) {
         toast.error(err.message);
@@ -58,17 +58,16 @@ const getCountByName = async (name) => {
 
 const updateDish = async (id, name, price, desc, type) => {
     try {
-            await axios.patch(
-            API_URL + "/dishes/" +id, {
-                name: name,
-                price : price,
-                description : desc,
-                type: type,
-            }
-            );
-            toast.success("Le plat a été mis à jour !");
+        const { data } = await axios.patch(
+        API_URL + "/dishes/" +id, {
+            name: name,
+            price : price,
+            description : desc,
+            type: type,
         }
-
+        );
+        if (data.modifiedCount > 0) toast.success(`Le plat a été mis à jour !`);
+    }
     catch(err) {
         toast.error(err.message);
     }
@@ -76,9 +75,10 @@ const updateDish = async (id, name, price, desc, type) => {
 
 const deleteDish = async (id) => {
     try {
-        await axios.delete(API_URL + "/dishes/" +id);
-        toast.success("Le plat a été supprimé !");
-    } catch(err) {
+        const { data } = await axios.delete(API_URL + "/dishes/" +id);
+        toast.success(`Le plat ${data.name} a été supprimé !`);
+    }
+    catch(err) {
         toast.error(err.message);
     }
 };
@@ -132,7 +132,8 @@ const updateDishDate = async (id, numberKitchen, numberRemaining) => {
 
 const deleteDishDate = async (id) => {
     try {
-        await axios.delete(API_URL + "/dish-date/id/" +id);
+        const data = await axios.delete(API_URL + "/dish-date/id/" +id);
+        console.log(data);
         toast.success("Le plat a été supprimé de cette date !");
     } catch(err) {
         toast.error(err.message);
@@ -143,6 +144,15 @@ const deleteAllDishesDate = async (dateC) => {
     try {
         await axios.delete(API_URL + "/dish-date/date/"+dateC);
         toast.success("Tous les plats de cette date ont été supprimés !");
+    } catch(err) {
+        toast.error(err.message);
+    }
+};
+
+const deleteAllDishesDish = async (idDish) => {
+    try {
+        const { data } = await axios.delete(API_URL + "/dish-date/dish/"+idDish);
+        if (data.deletedCount !== 0) toast.success("Tous les plats ont été supprimés des dates !");
     } catch(err) {
         toast.error(err.message);
     }
@@ -162,5 +172,6 @@ export {
     deleteAllDishesDate,
     getDishByDate,
     updateDishDate,
-    deleteDishDate
+    deleteDishDate,
+    deleteAllDishesDish
 };

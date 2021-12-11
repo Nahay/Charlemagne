@@ -6,7 +6,7 @@ const Dish = require("../models/Dish");
 // Get all dishes
 router.get("/", async (req, res) => {
   try {
-    const dishes = await Dish.find();
+    const dishes = await Dish.find().sort('name');
     res.json(dishes);
   } catch (err) {
     res.json({ error: err.message });

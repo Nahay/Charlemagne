@@ -1,4 +1,4 @@
-import { Switch, Route } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import SideNavbar from "../components/header/SideNavbar";
 import HeaderIcon from "../components/header/HeaderIcon";
 import ProtectedRoute from "../components/ProtectedRoute";
