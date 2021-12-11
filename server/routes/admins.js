@@ -18,7 +18,7 @@ const getRequestingAdmin = async(req, res) => {
      return adminRequesting;
     } catch(err) {
         console.log(err);
-        return res.send({ error: err.message });
+        res.json({ error: err.message });
     }
 }
 
@@ -35,10 +35,10 @@ router.post('/', async (req, res) => {
 
         const savedAdmin = await newAdmin.save();
 
-        return res.send({ success: true, message: "Signed up.", adminRequesting: adminRequesting._id, savedAdmin });
+        res.json({ success: true, message: "Signed up.", adminRequesting: adminRequesting._id, savedAdmin });
     } catch(err) {
         console.log(err);
-        return res.send({ error: err.message, success: false, message:"Invalid token." });
+        res.json({ error: err.message, success: false, message:"Invalid token." });
     }
 });
 
@@ -50,9 +50,9 @@ router.get("/", async (req, res) => {
       const adminRequesting = await getRequestingAdmin(req, res);
 
       const admins = await Admin.find();
-      return res.send({ success: true, adminRequesting: adminRequesting._id, admins });
+      res.json({ success: true, adminRequesting: adminRequesting._id, admins });
     } catch (err) {
-      return res.send({ error: err.message, success: false });
+      res.json({ error: err.message, success: false });
     }
   });
 
@@ -62,7 +62,7 @@ router.get('/:adminId', async (req, res) => {
         const adminRequesting = await getRequestingAdmin(req, res); 
         
         const admin = await Admin.findById(req.params.adminId);
-        return res.send({success: true, adminRequesting: adminRequesting._id, admin });
+        res.json({success: true, adminRequesting: adminRequesting._id, admin });
     } catch(err) {
         res.send({ error: err.message, success: false });
     }
@@ -74,10 +74,10 @@ router.get("/admin/:adminUsername", async (req, res) => {
       const adminRequesting = await getRequestingAdmin(req, res);  
 
       const adminFound = await Admin.findOne({username: req.params.adminUsername});  
-      return res.send({ success: true, message: "Valid token", adminRequesting: adminRequesting._id, adminFound });
+      res.json({ success: true, message: "Valid token", adminRequesting: adminRequesting._id, adminFound });
     } catch (err) {
       console.log(err);
-      return res.send({ error: err.message, success: false });
+      res.json({ error: err.message, success: false });
     }
 });
 
@@ -91,10 +91,10 @@ router.patch('/:adminId', async (req, res) => {
         const adminRequesting = await getRequestingAdmin(req, res);
 
         const adminUpdated = await Admin.updateOne( { _id: req.params.adminId }, { password: admin.generateHash(password) } );
-        return res.send({ success: true, message: "Admin updated successfully", adminRequesting: adminRequesting._id, adminUpdated })
+        res.json({ success: true, message: "Admin updated successfully", adminRequesting: adminRequesting._id, adminUpdated })
     } catch(err) {
         console.log(err);
-        return res.send({error: err.message});
+        res.json({error: err.message});
     }
 });
 
@@ -106,10 +106,10 @@ router.patch('/adminPW/:adminUsername', async (req, res) => {
         const adminRequesting = await getRequestingAdmin(req, res);
 
         const adminUpdated = await Admin.updateOne( { username: req.params.adminUsername }, { password: admin.generateHash(password) } );
-        return res.send({ success: true, message: "Admin updated successfully", adminRequesting: adminRequesting._id, adminUpdated })
+        res.json({ success: true, message: "Admin updated successfully", adminRequesting: adminRequesting._id, adminUpdated })
     } catch(err) {
         console.log(err);
-        return res.send({error: err.message});
+        res.json({error: err.message});
     }
 });
 // Update by username with password
@@ -118,10 +118,10 @@ router.patch('/adminNPW/:adminUsername', async (req, res) => {
         const adminRequesting = await getRequestingAdmin(req, res);
 
         const adminUpdated = await Admin.updateOne( { username: req.params.adminUsername } );
-        return res.send({ success: true, message: "Admin updated successfully", adminRequesting: adminRequesting._id, adminUpdated })
+        res.json({ success: true, message: "Admin updated successfully", adminRequesting: adminRequesting._id, adminUpdated })
     } catch(err) {
         console.log(err);
-        return res.send({error: err.message});
+        res.json({error: err.message});
     }
 });
 
@@ -131,10 +131,10 @@ router.delete('/:adminId', async (req, res) => {
         const adminRequesting = await getRequestingAdmin(req, res); 
 
         const adminDeleted = await Admin.findByIdAndDelete(req.params.adminId);
-        return res.send({success: true, adminRequesting: adminRequesting._id, adminDeleted })
+        res.json({success: true, adminRequesting: adminRequesting._id, adminDeleted })
     } catch(err) {
         console.log(err);
-        return res.send({error: err.message});
+        res.json({error: err.message});
     }
 });
 
@@ -144,10 +144,10 @@ router.delete('/admin/:adminUsername', async (req, res) => {
         const adminRequesting = await getRequestingAdmin(req, res); 
 
         const adminDeleted = await Admin.findOneAndDelete({username: req.params.adminUsername});
-        return res.send({success: true, adminRequesting: adminRequesting._id, adminDeleted })
+        res.json({success: true, adminRequesting: adminRequesting._id, adminDeleted })
     } catch(err) {
         console.log(err);
-        return res.send({error: err.message});
+        res.json({error: err.message});
     }
 });
 
@@ -157,19 +157,19 @@ router.post("/signin", async (req, res) => {
     const { username, password } = req.body;
     
     // if the fields are empty => error
-    if (!username) return res.send({ success: false, message: "Error: Username cannot be blank."});
-    if (!password) return res.send({ success: false, message: "Error: Password cannot be blank."});
+    if (!username) res.json({ success: false, message: "Error: Username cannot be blank."});
+    if (!password) res.json({ success: false, message: "Error: Password cannot be blank."});
   
     try {
       const admin = await Admin.findOne({ username });  
       // Compare le mot de passe entré avec le hash
-      if (!admin.validPassword(password)) return res.send({ success: false, message: "Error: Invalid password while testing" });
+      if (!admin.validPassword(password)) res.json({ success: false, message: "Error: Invalid password while testing" });
       // ajoute les valeurs assignées dans le token
       const token = jwt.sign({ _id: admin._id, auth: true }, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
-      return res.send({ success: true, message: "Valid sign in", token });
+      res.json({ success: true, message: "Valid sign in", token });
     } catch (err) {
       console.log(err);
-      return res.send({ success: false, message: "Error: Invalid." });
+      res.json({ success: false, message: "Error: Invalid." });
     }  
 });
 
