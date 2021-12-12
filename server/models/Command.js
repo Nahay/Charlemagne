@@ -71,7 +71,11 @@ const CommandSchema = new Schema({
     total: {
         type: Number,
         required: true
-    }
+    },
+    list: [{ 
+        type: Schema.Types.ObjectId,
+        ref: 'CommandList'
+    }]
 });
 
 

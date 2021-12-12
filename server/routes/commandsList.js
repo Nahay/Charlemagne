@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { CommandList } = require('../models/Command');
-
+const { Command, CommandList } = require('../models/Command');
 
 // Get all commands list
 router.get('/', async (req, res) => {
@@ -44,7 +43,6 @@ router.get('/date/:date', async (req, res) => {
         const commandList = await CommandList.find().populate({ path: 'command', match: { dateC: req.params.date }});
 
         const currentCommands = commandList.map(c => c.command).filter(c => c);
-        console.log(currentCommands.length);
 
         if (currentCommands.length != 0) {
             res.json({success: true, message: "Commands successfully retrieved !", commands: currentCommands})
@@ -56,6 +54,7 @@ router.get('/date/:date', async (req, res) => {
         res.json({error: err.message});
     }
 });
+
 // Create a command list
 router.post('/', async (req, res) => {
     const { command, dishID, quantity } = req.body;
@@ -63,10 +62,13 @@ router.post('/', async (req, res) => {
         command: command,
         dishID: dishID,
         quantity: quantity
-    });
+    });   
 
     try {
         const savedCommandList = await commandList.save();
+        const currentCommand = await Command.findById(command);
+        currentCommand.list.push(savedCommandList);
+        await currentCommand.save();
         res.json(savedCommandList);
     } catch(err) {
         res.json({error: err.message});

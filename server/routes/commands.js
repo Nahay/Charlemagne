@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 // Get command by date
 router.get('/:dateC', async (req, res) => {
     try {
-        const command = await Command.find({ dateC: req.params.dateC }).populate('user');
+        const command = await Command.find({ dateC: req.params.dateC }).populate('user').populate('list');
         res.json(command);
     } catch(err) {
         res.json({error: err.message});
