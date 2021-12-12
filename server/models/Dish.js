@@ -4,19 +4,20 @@ const { Schema, model } = require('mongoose');
 const DishSchema = Schema({
   name: {
     type: String,
-    required: true,
+    unique: true,
+    required: true
   },
   price: {
     type: Number,
-    required: true,
+    required: true
   },
   description: {
     type: String,
-    required: false,
+    required: false
   },
   type: {
     type: String,
-    required: true,
+    required: true
   },
 });
 

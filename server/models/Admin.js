@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const AdminSchema = Schema({
     username: {
         type: String,
+        unique: true,
         required: true
     },
     password: {

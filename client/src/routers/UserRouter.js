@@ -6,7 +6,7 @@ import Home from '../pages/Home';
 import Contact from '../pages/Contact';
 import About from '../pages/About';
 import Order from '../pages/Order';
-import Connection from '../pages/Connection';
+import Login from '../pages/Login';
 
 import PageNotFound from '../pages/PageNotFound';
 import ProtectedUserRoute from '../components/ProtectedUserRoute';
@@ -27,7 +27,7 @@ const UserTemp = () => {
                     <Route exact path="/contact" component = {Contact} />
                     <Route exact path="/mentions-legales" component = {Home} />
                     <Route exact path="/cgu-cgv" component = {Home} />
-                    <ProtectedUserRoute exact path="/connexion" component = {Connection}/>
+                    <ProtectedUserRoute exact path="/connexion" component = {Login}/>
 
                     <Route exact component = {PageNotFound} />
                 </Switch>

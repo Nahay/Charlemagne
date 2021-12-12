@@ -25,6 +25,12 @@ const AdminHeaderBody = ({toggle}) => {
                         Dates
                 </NavLink>
                 <NavLink
+                    to="/admin/commandes"
+                    activeClassName="active-link"
+                    onClick={toggle}>
+                        Commandes
+                </NavLink>
+                <NavLink
                     exact to="/admin/comptes"
                     activeClassName="active-link"
                     onClick={toggle}>

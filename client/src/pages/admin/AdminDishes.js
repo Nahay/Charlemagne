@@ -9,7 +9,7 @@ import { getCountByName, getDishes, updateDish, createDish, deleteDish, deleteAl
 import { getOneCommandListByDish } from '../../services/commandsListService';
 
 
-const AdminHome = () => {
+const AdminDishes = () => {
 
     const [id, setId] = useState('');
     const [type, setType] = useState('e');
@@ -92,6 +92,7 @@ const AdminHome = () => {
         if (dish === null) {
             await deleteDish(id);
             await deleteAllDishesDish(id);
+            onClickNewDish();
             getDishList();
         }
         else toast.error("Le plat appartient à une commande, vous ne pouvez pas le supprimer.");
@@ -213,4 +214,4 @@ const AdminHome = () => {
     );
 };
 
-export default AdminHome;
+export default AdminDishes;

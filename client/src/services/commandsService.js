@@ -3,10 +3,10 @@ import { toast } from 'react-toastify';
 import API_URL from '../app-config';
 
 
-const createCommand = async (userID, dateC, time, paid, container, comment, total) => {
+const createCommand = async (user, dateC, time, paid, container, comment, total) => {
     try {
         await axios.post(API_URL + "/commands", {
-            userID,
+            user,
             dateC,
             time,
             paid,

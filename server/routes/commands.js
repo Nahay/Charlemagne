@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 // Get command by date
 router.get('/:dateC', async (req, res) => {
     try {
-        const command = await Command.findOne({ dateC: req.params.dateC });
+        const command = await Command.find({ dateC: req.params.dateC }).populate('user');
         res.json(command);
     } catch(err) {
         res.json({error: err.message});
@@ -25,9 +25,9 @@ router.get('/:dateC', async (req, res) => {
 
 // Create a command
 router.post('/', async (req, res) => {
-    const {userID, dateC, time, paid, container, comment, total} = req.body;
+    const {user, dateC, time, paid, container, comment, total} = req.body;
     const command = new Command({
-        userID: userID,
+        user: user,
         dateC: dateC,
         time: time,
         paid: paid,

@@ -31,14 +31,14 @@ const AdminLogin = () => {
       }
             
     return ( 
-        <div className="admin-login">
+        <div className="login-container">
             <LoginForm 
             handleUsernameChange={handleUsernameChange}
             handlePasswordChange={handlePasswordChange}
             handleLoginSubmit={handleLoginSubmit}
             username={username}
             password={password} />
-            <div className="admin-icon">
+            <div className="login-icon">
                 <FontAwesomeIcon icon={faUsersCog}/>
             </div>
         </div>

@@ -11,10 +11,10 @@ import AdminCalendar from "../../components/admin/AdminCalendar";
 
 import {getCommandByDate} from '../../services/commandsService';
 import {getDates, updateDate, getDateByDate, createDate, deleteDate} from '../../services/calendarService';
-import {getDishes, createDishDate, getDishByDate, getDishByDateAndDish, deleteAllDishesDate, deleteDishDate} from '../../services/dishesService';
+import {getDishes, createDishDate, getDishByDate, deleteAllDishesDate, deleteDishDate, updateDishDate} from '../../services/dishesService';
 
 
-const AdminHome = () => {
+const AdminDates = () => {
 
     const ref = useRef(null);
 
@@ -25,7 +25,14 @@ const AdminHome = () => {
     const [dateExists, setDateExists] = useState(false);
     const [visibility, setVisibility] = useState(false);
     const [comment, setComment] = useState("");
+
+
+    const [upD, setUpD] = useState(false);
     const [nb, setNb] = useState("");
+    const [idD, setIdD] = useState("");
+    const [nbC, setNbC] = useState("");
+    const [nbR, setNbR] = useState("");
+
     const [select, setSelect] = useState("0");
     const [dishList, setDishList] = useState([]);
 
@@ -111,11 +118,21 @@ const AdminHome = () => {
         }
     }
 
+    const onClickDish = (id, idDish, nbK, nbR) => {
+        setUpD(true);
+
+        setIdD(id);
+        setSelect(idDish);
+        setNb(nbK);
+        setNbC(nbK);
+        setNbR(nbR);
+    }
+
 
     // HANDLE ---------------------------------------------------------------
 
     const handleCheckboxChange = (e) => e.target.checked = true;
-
+    
     const handleVisibilityChange = (e) => {
         if (e.target.id ==='y') setVisibility(true);
         else setVisibility(false);
@@ -123,12 +140,22 @@ const AdminHome = () => {
 
     const handleCommentChange = (e) => setComment(e.target.value);
 
-    const handleSelectChange = (e) => setSelect(e.target.value);
+    const handleSelectChange = (e) => {
+        setSelect(e.target.value);
+
+        const dish = dishByDateList.filter(d => d.idDish === e.target.value);
+        if(dish.length > 0) {
+            const { _id, idDish, numberKitchen, numberRemaining } = dish[0];
+            onClickDish(_id, idDish, numberKitchen, numberRemaining);
+        }
+        else setUpD(false);
+    }
 
     const handleNbChange = (e) => {
         const val = e.target.value;
         if(Number(val) || val === "") setNb(val);
     }
+    
 
     // BD -------------------------------------------------------------------
 
@@ -144,6 +171,7 @@ const AdminHome = () => {
         }
     }
 
+
     const deleteAndSetDate = async () => {
 
         const command = await getCommandByDate(date);
@@ -156,6 +184,7 @@ const AdminHome = () => {
         else toast.error("Il y a une commande à cette date, vous ne pouvez pas supprimer la date.");
     }
 
+
     const onDishSubmit = async (e) => {
         e.preventDefault();
         
@@ -163,14 +192,8 @@ const AdminHome = () => {
         if (select !== "0") {
 
             if (dateExists) {
-                const countDishDate = await getDishByDateAndDish(date, select);
-
-                // si le plat n'existe pas on le crée
-                if (countDishDate === null) {
-                    await createDishDate(date, select , nb);
-                    getDishByDateList(date);
-                }
-                else toast.error("Ce plat existe déjà à cette date.");
+                await createDishDate(date, select , nb);
+                getDishByDateList(date);
             }
 
             // la date n'existe pas : on la crée et on ajoute le plat
@@ -185,6 +208,27 @@ const AdminHome = () => {
             setSelect("0");
         }
         else toast.error("Aucun plat n'est sélectionné.");
+    }
+
+
+    const onUpdateDishSubmit = async (e) => {
+        e.preventDefault();
+
+        const nbCommande = nbC - nbR;
+
+        if (nb >= nbCommande) {
+            await updateDishDate(idD, nb, nb-nbCommande);
+            getDishByDateList(date);
+        }
+        else toast.error(`Vous ne pouvez pas mettre un nombre inférieur au nombre de commandes qui est de : ${nbCommande}.`);
+    }
+
+    const onClickDelete = async (id, nbK, nbR) => {
+        if (nbK === nbR) {
+            await deleteDishDate(id);
+            getDishByDateList(date);
+        }
+        else toast.error("Ce plat a déjà été commandé, vous ne pouvez pas le supprimer.");
     }
 
 
@@ -251,7 +295,7 @@ const AdminHome = () => {
                             </div>
                         }
                     </div>
-                    <form className="right__form__2" onSubmit={onDishSubmit}>
+                    <form className="right__form__2" onSubmit={upD ? onUpdateDishSubmit : onDishSubmit }>
                         <select value={select} id="dish-select" className="dish-select" onChange={handleSelectChange}>
                             <option value="" id="0">Liste des plats</option>
                             {dishList.map((d) => {
@@ -266,11 +310,15 @@ const AdminHome = () => {
                                 divId="inputNbCuisine"
                                 handleChange={handleNbChange}
                             />
-                            <InputButton value="Ajouter le plat à cette date"/>
+                            <InputButton value= { upD ? "Enregistrer nombre" : "Ajouter le plat à cette date" } />
                         </div>
                     </form>
                     <div className="dish-list">
-                        <DishList dishByDateList={dishByDateList}/>
+                        <DishList
+                            dishByDateList={dishByDateList}
+                            onClickDish={onClickDish}
+                            onClickDelete={onClickDelete}
+                        />
                     </div>
                 </div>
             </div>
@@ -278,4 +326,4 @@ const AdminHome = () => {
     );
 };
 
-export default AdminHome;
+export default AdminDates;

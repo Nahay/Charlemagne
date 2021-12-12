@@ -116,4 +116,35 @@
             }
         }
     }
+
+    @media (max-width: 850px) {
+        flex-direction: column;
+        height : unset;
+
+        .admin-accounts__left {
+            width : 100%;
+            height : 100vh;
+        }
+
+        .admin-accounts__right {
+            width : 100%;
+            height : 100vh;
+        }
+    }
+
+    @media (max-width: 415px) {
+
+        .admin-accounts__right {
+            .right__content {
+                .right__content__form__radio {
+                    margin-left:0 !important;
+                    font-size: 14px;
+
+                    label {
+                        margin-left: 25px !important;
+                    }
+                }
+            }
+        }
+    }
 }

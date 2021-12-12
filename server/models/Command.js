@@ -1,9 +1,52 @@
 const { Schema, model } = require('mongoose');
+const { hashSync, compareSync, genSaltSync } = require('bcrypt');
+
+
+const UserSchema = new Schema({
+    username: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    firstname: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    tel: {
+        type: String,
+        default: "non défini"
+    },
+    creationDate: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+UserSchema.methods.generateHash = function(password) {
+    return hashSync(password, genSaltSync(8), null);
+}
+
+UserSchema.methods.validPassword = function(password) {
+    return compareSync(password, this.password);
+}
 
 
 const CommandSchema = new Schema({
-    userID: {
-        type: String,
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     dateC: {
@@ -49,7 +92,9 @@ const CommandListSchema = new Schema({
 });
 
 
+
 module.exports = {
     Command: model('Command', CommandSchema),
-    CommandList: model('CommandList', CommandListSchema)
+    CommandList: model('CommandList', CommandListSchema),
+    User: model('User', UserSchema)
 };

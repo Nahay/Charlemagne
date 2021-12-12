@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
-const User = require('../models/User');
+const { User } = require('../models/Command');
 
 // FUNCTIONS ------------------------------------------------------------------------------------------------------------------------------
 
@@ -47,7 +47,6 @@ router.post('/', async (req, res) => {
 router.get("/", async (req, res) => {
     try {
       const adminRequesting = await getRequestingAdmin(req, res);
-      console.log(adminRequesting);
 
       const users = await User.find();
       return res.send({ success: true, adminRequesting: adminRequesting._id, users: users });

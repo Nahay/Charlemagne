@@ -84,4 +84,22 @@
             height : 100vh;
         }
     }
+
+    @media (max-width: 430px) {
+
+        .admin-dishes__right {
+            .right__form {
+                .right__form__radio {
+                    font-size: 14px;
+
+                    label {
+                        margin-left: 20px !important;
+                    }
+                    label:nth-child(2) {
+                        margin-left: 0px !important;
+                    }
+                }
+            }
+        }
+    }
 }

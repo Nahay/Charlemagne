@@ -3,8 +3,10 @@ import LoginForm from '../components/LoginForm';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { userSignIn } from '../services/usersService';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
 
-const Connection = () => {
+const Login = () => {
     const history = useHistory();
 
     const [username, setUsername] = useState("");
@@ -29,15 +31,18 @@ const Connection = () => {
         }
       }
     return (
-        <div className="connection">
+        <div className="login-container">
             <LoginForm handleUsernameChange={handleUsernameChange}
             handlePasswordChange={handlePasswordChange}
             handleLoginSubmit={handleLoginSubmit} 
             username={username}
             password={password}
             />
+            <div className="login-icon">
+                <FontAwesomeIcon icon={faUsers}/>
+            </div>
         </div>
     );
 }
  
-export default Connection;
+export default Login;
