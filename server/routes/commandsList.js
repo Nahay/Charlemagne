@@ -41,19 +41,21 @@ router.get('/dish/:dishID', async (req, res) => {
 // Get one command list by date command
 router.get('/date/:date', async (req, res) => {
     try {
-        const commandList = await CommandList.findOne().
-            populate(
-                {
-                    path: 'command',
-                    match: { dateC: req.params.date }
-                }
-            );
-        res.json(commandList);
+        const commandList = await CommandList.find().populate({ path: 'command', match: { dateC: req.params.date }});
+
+        const currentCommands = commandList.map(c => c.command).filter(c => c);
+        console.log(currentCommands.length);
+
+        if (currentCommands.length != 0) {
+            res.json({success: true, message: "Commands successfully retrieved !", commands: currentCommands})
+        }
+        else {
+            res.json({success: false, message: "There are no commands on this date." })
+        }
     } catch(err) {
         res.json({error: err.message});
     }
 });
-
 // Create a command list
 router.post('/', async (req, res) => {
     const { command, dishID, quantity } = req.body;

@@ -17,7 +17,7 @@ const getRequestingAdmin = async(req, res) => {
      return adminRequesting;
     } catch(err) {
         console.log(err);
-        return res.send({ error: err.message });
+        res.json({ error: err.message });
     }
 }
 
@@ -34,10 +34,10 @@ router.post('/', async (req, res) => {
 
         const user = await newUser.save();
 
-        return res.send({ success: true, message: "Signed up.", adminRequesting: adminRequesting._id, savedUser: { user } });
+        res.json({ success: true, message: "Signed up.", adminRequesting: adminRequesting._id, savedUser: { user } });
     } catch(err) {
         console.log(err);
-        return res.send({ error: err.message, success: false, message:"Invalid token." });
+        res.json({ error: err.message, success: false, message:"Invalid token." });
     }
 });
 
@@ -49,10 +49,10 @@ router.get("/", async (req, res) => {
       const adminRequesting = await getRequestingAdmin(req, res);
 
       const users = await User.find();
-      return res.send({ success: true, adminRequesting: adminRequesting._id, users: users });
+      res.json({ success: true, adminRequesting: adminRequesting._id, users: users });
     } catch (err) {
         console.log(err);
-      return res.send({ error: err.message });
+      res.json({ error: err.message });
     }
 });
 
@@ -61,9 +61,9 @@ router.get('/:userId', async (req, res) => {
     try {
         const adminRequesting = await getRequestingAdmin(req, res); 
         const user = await User.findById(req.params.userId);
-        return res.send({success: true, adminRequesting: adminRequesting._id, user: user});
+        res.json({success: true, adminRequesting: adminRequesting._id, user: user});
     } catch(err) {
-        return res.send({ error: err.message, success: false });
+        res.json({ error: err.message, success: false });
     }
 });
 
@@ -74,10 +74,10 @@ router.get("/user/:username", async (req, res) => {
 
       const userFound = await User.findOne({username: req.params.username});
   
-      return res.send({ success: true, message: "Valid token", adminRequesting: adminRequesting._id, userFound });
+      res.json({ success: true, message: "Valid token", adminRequesting: adminRequesting._id, userFound });
     } catch (err) {
       console.log(err);
-      return res.send({ error: err.message, success: false });
+      res.json({ error: err.message, success: false });
     }
 });
 
@@ -91,10 +91,10 @@ router.patch('/:userId', async (req, res) => {
         const adminRequesting = await getRequestingAdmin(req, res);
 
         const userUpdated = await User.updateOne( { _id: req.params.userId }, { password: user.generateHash(password) } );
-        return res.send({ success: true, message: "User updated successfully", adminRequesting: adminRequesting._id, userUpdated })
+        res.json({ success: true, message: "User updated successfully", adminRequesting: adminRequesting._id, userUpdated })
     } catch(err) {
         console.log(err);
-        return res.send({error: err.message});
+        res.json({error: err.message});
     }
 });
 
@@ -106,10 +106,10 @@ router.patch('/userPW/:userUsername', async (req, res) => {
         const adminRequesting = await getRequestingAdmin(req, res);
 
         const userUpdated = await User.updateOne( { username: req.params.userUsername }, { password: user.generateHash(password), name, firstname, email, tel } );
-        return res.send({ success: true, message: "User updated successfully", adminRequesting: adminRequesting._id, userUpdated })
+        res.json({ success: true, message: "User updated successfully", adminRequesting: adminRequesting._id, userUpdated })
     } catch(err) {
         console.log(err);
-        return res.send({error: err.message});
+        res.json({error: err.message});
     }
 });
 
@@ -120,10 +120,10 @@ router.patch('/userNPW/:userUsername', async (req, res) => {
         const adminRequesting = await getRequestingAdmin(req, res);
 
         const userUpdated = await User.updateOne( { username: req.params.userUsername }, { name, firstname, email, tel } );
-        return res.send({ success: true, message: "User updated successfully", adminRequesting: adminRequesting._id, userUpdated })
+        res.json({ success: true, message: "User updated successfully", adminRequesting: adminRequesting._id, userUpdated })
     } catch(err) {
         console.log(err);
-        return res.send({error: err.message});
+        res.json({error: err.message});
     }
 });
 
@@ -134,10 +134,10 @@ router.delete('/:userId', async (req, res) => {
         
         const userDeleted = await User.findByIdAndDelete(req.params.userId);
 
-        return res.send({success: true, adminRequesting: adminRequesting._id, userDeleted })
+        res.json({success: true, adminRequesting: adminRequesting._id, userDeleted })
     } catch(err) {
         console.log(err);
-        return res.send({error: err.message});
+        res.json({error: err.message});
     }
 });
 
@@ -148,10 +148,10 @@ router.delete('/user/:userUsername', async (req, res) => {
         
         const userDeleted = await User.findOneAndDelete({username: req.params.userUsername});
 
-        return res.send({success: true, adminRequesting: adminRequesting._id, userDeleted })
+        res.json({success: true, adminRequesting: adminRequesting._id, userDeleted })
     } catch(err) {
         console.log(err);
-        return res.send({error: err.message});
+        res.json({error: err.message});
     }
 });
 
@@ -161,19 +161,19 @@ router.post("/signin", async (req, res) => {
     const { username, password } = req.body;
     
     // if the fields are empty => error
-    if (!username) return res.send({ success: false, message: "Error: Username cannot be blank."});
-    if (!password) return res.send({ success: false, message: "Error: Password cannot be blank."});
+    if (!username) res.json({ success: false, message: "Error: Username cannot be blank."});
+    if (!password) res.json({ success: false, message: "Error: Password cannot be blank."});
   
     try {
       const user = await User.findOne({ username: username });  
       // Teste si le mot de passe vaut celui qui est hashé
-      if (!user.validPassword(password)) return res.send({ success: false, message: "Error: Invalid password while testing" });
+      if (!user.validPassword(password)) res.json({ success: false, message: "Error: Invalid password while testing" });
       // ajoute les valeurs assignées dans le token
       const token = jwt.sign({ username: username, name: user.name, firstname: user.firstname, auth: true }, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
-      return res.send({ success: true, message: "Valid sign in", token });
+      res.json({ success: true, message: "Valid sign in", token });
     } catch (err) {
       console.log(err);
-      return res.send({ success: false, message: "Error: Invalid." });
+      res.json({ success: false, message: "Error: Invalid." });
     }  
 });  
 
