@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const Dish = require("../models/Dish");
+const { Dish } = require("../models/Dish");
+
 
 // Get all dishes
 router.get("/", async (req, res) => {
@@ -78,6 +79,7 @@ router.patch('/:dishId', async (req, res) => {
       );
       res.json(dishToUpdate);
   } catch(err) {
+      console.log(err);
       res.json({error: err.message});
   }
 });

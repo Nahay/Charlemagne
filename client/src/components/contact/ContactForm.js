@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
+import moment from 'moment';
+import { toast } from 'react-toastify';
+// import emailjs from 'emailjs-com';
+
 import InputText from '../generic/InputText';
 import InputButton from '../generic/InputButton';
 import InputEmail from '../generic/InputEmail';
 import TextArea from '../generic/TextArea';
-import moment from 'moment';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-// import emailjs from 'emailjs-com';
+
 
 const ContactForm = () => {
     

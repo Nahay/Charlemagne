@@ -21,4 +21,30 @@ const DishSchema = Schema({
   },
 });
 
-module.exports = model('Dish', DishSchema);
+
+const DishDateSchema = Schema({
+  dateC: {
+    type: Number,
+    required: true
+  },
+  idDish: {
+    type: Schema.Types.ObjectId,
+    ref:'Dish',
+    required: true
+  },
+  numberKitchen: {
+    type: Number,
+    required: true,
+  },
+  numberRemaining: {
+    type: Number,
+    required: true,
+  }
+});
+
+
+
+module.exports = {
+  Dish: model('Dish', DishSchema),
+  DishDate: model('DishDate', DishDateSchema)
+};

@@ -4,7 +4,8 @@ const { Schema, model } = require('mongoose');
 const DateSchema = Schema({
     dateC: {
         type: Number,
-        required: true
+        required: true,
+        unique: true
     },
     visibility: {
         type: Boolean,

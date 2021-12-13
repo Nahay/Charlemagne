@@ -10,7 +10,7 @@ const AllDishesList = ({dishList, onClickDish, onClickDelete}) => {
     {dishList.map((d) => {
           return (
             <div className="list__container__box" key={d.name}>
-              <p onClick={() => onClickDish(d._id, d.name, d.price, d.description, d.type)}>
+              <p onClick={() => onClickDish(d)}>
                 {d.name}
               </p>
               <div

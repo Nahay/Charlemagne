@@ -2,6 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import API_URL from '../app-config';
 
+
 const config = (token) => {
     return { headers: {'x-access-token': token}};
 }
@@ -107,4 +108,16 @@ const userSignIn = async (username, password) => {
     }
 };
 
-export { userSignIn, getUserByUsername, getUserById, getUsers, createUser, updateUserById, updateUserWithPw, updateUserWithoutPw, deleteUser, deleteUserByUsername }
+
+export {
+    userSignIn,
+    getUserByUsername,
+    getUserById,
+    getUsers,
+    createUser,
+    updateUserById,
+    updateUserWithPw,
+    updateUserWithoutPw,
+    deleteUser,
+    deleteUserByUsername
+}

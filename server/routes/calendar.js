@@ -25,6 +25,18 @@ router.get('/date/:calendarDate', async (req, res) => {
     }
 });
 
+// Get calendar dates by visibility true
+router.get('/visibility', async (req, res) => {
+    try {
+        const date = await Date.find({
+            visibility: true
+        });
+        res.json(date);
+    } catch(err) {
+        res.json({error: err.message});
+    }
+});
+
 // Create a date
 router.post('/', async (req, res) => {
     const {dateC, visibility, comment} = req.body;

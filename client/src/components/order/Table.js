@@ -1,8 +1,6 @@
 import React, {useState, useEffect} from "react";
 import DataTable, { createTheme } from 'react-data-table-component';
 
-import { getDishById } from '../../services/dishesService';
-
 
 const Table = ({dishByDateList}) => {
 
@@ -17,11 +15,10 @@ const Table = ({dishByDateList}) => {
             if (dishByDateList !== []) {
     
                 dishByDateList.forEach(async d => {
-                    const dish = await getDishById(d.idDish);
     
                     setDishesList(dishesList =>
                         [...dishesList,
-                            {type: getTypeName(dish.type), name: dish.name, nb: d.numberRemaining}
+                            {type: getTypeName(d.idDish.type), name: d.idDish.name, nb: d.numberRemaining}
                         ]
                     );
                 });
@@ -64,11 +61,7 @@ const Table = ({dishByDateList}) => {
         }
     ];
 
-    createTheme('dark', {
-        background: {
-          default: 'rgb(51, 51, 51)',
-        },
-    });
+    createTheme('dark', {background: {default: 'rgb(51, 51, 51)'}});
 
 
     return (

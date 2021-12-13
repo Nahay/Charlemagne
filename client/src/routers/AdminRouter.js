@@ -1,7 +1,9 @@
 import { Switch } from "react-router-dom";
+
+import ProtectedRoute from "../components/ProtectedRoute";
+
 import SideNavbar from "../components/header/SideNavbar";
 import HeaderIcon from "../components/header/HeaderIcon";
-import ProtectedRoute from "../components/ProtectedRoute";
 
 import AdminHome from "../pages/admin/AdminHome";
 import AdminDishes from "../pages/admin/AdminDishes";

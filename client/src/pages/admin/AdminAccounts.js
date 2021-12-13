@@ -14,6 +14,7 @@ import { createAdmin, deleteAdminByUsername, getAdmins, updateAdminWithoutPw, up
 
 
 const AdminAccounts = () => {
+
     const token = localStorage.getItem("adminToken");
 
     const [admin, setAdmin] = useState(false);
@@ -67,7 +68,7 @@ const AdminAccounts = () => {
         setTel("");
     }
 
-    const onClickClientAccount = (email, username, name, firstname, tel) => {    
+    const onClickClientAccount = ({ email, username, name, firstname, tel }) => {
         setAdmin(false);
         setCreate(false);
         setEmail(email);
@@ -86,8 +87,6 @@ const AdminAccounts = () => {
     }
 
     // HANDLE ------------------------------------------------------------
-
-    const handleCheckboxChange = (e) => e.target.checked = true;
 
     const handleAdminChange = (e) => {
         if (e.target.id ==='y') setAdmin(true);
@@ -114,6 +113,7 @@ const AdminAccounts = () => {
         const val = e.target.value;
         if (Number(val) || val === "") setTel(val);
     }
+    
 
     // DB -------------------------------------------------------------
 
@@ -215,12 +215,12 @@ const AdminAccounts = () => {
 
                     <div className="left__icons">
                         <FontAwesomeIcon
-                        icon={faUser}
-                        onClick={() => setWatchClients(true)}
+                            icon={faUser}
+                            onClick={() => setWatchClients(true)}
                         />
                         <FontAwesomeIcon
-                        icon={faUserCog}
-                        onClick={() => setWatchClients(false)}
+                            icon={faUserCog}
+                            onClick={() => setWatchClients(false)}
                         />
                     </div>
 
@@ -252,7 +252,7 @@ const AdminAccounts = () => {
                                     name="admin"
                                     id="n"
                                     checked={admin === false}
-                                    onChange={handleCheckboxChange}
+                                    readOnly
                                 />
                                 <label htmlFor="n">Non</label>
                                 <input
@@ -261,7 +261,7 @@ const AdminAccounts = () => {
                                     name="admin"
                                     id="y"
                                     checked={admin === true}
-                                    onChange={handleCheckboxChange}
+                                    readOnly
                                 />
                                 <label htmlFor="y">Oui</label>
                             </div>

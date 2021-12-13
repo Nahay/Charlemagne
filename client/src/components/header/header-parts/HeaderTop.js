@@ -1,6 +1,8 @@
 import React from 'react';
-import Logo from '../../generic/Logo';
 import { Link } from 'react-router-dom';
+
+import Logo from '../../generic/Logo';
+
 
 const HeaderTop = ({admin, toggle}) => {
 

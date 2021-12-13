@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import API_URL from '../app-config';
 
 
-
 const getParam = async (type) => {
     try {
         const { data } = await axios.get(API_URL + "/params/" +type);

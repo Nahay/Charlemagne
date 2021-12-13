@@ -35,6 +35,15 @@ const getDateByDate = async (date) => {
     }
 };
 
+const getDatesByVisibility = async () => {
+    try {
+        const { data } = await axios.get(API_URL + "/calendar/visibility");
+        return data;
+    } catch(err) {
+        toast.error(err.message);
+    }
+};
+
 const getDateById = async (id) => {
     try {
         const { data } = await axios.get(API_URL + "/calendar/" +id);
@@ -67,11 +76,13 @@ const deleteDate = async (date) => {
     }
 };
 
+
 export {
     createDate,
     getDates,
     getDateByDate,
     getDateById,
+    getDatesByVisibility,
     updateDate,
     deleteDate
 };

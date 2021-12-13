@@ -6,11 +6,11 @@ import ACalendar from "../components/order/ACalendar";
 import List from "../components/order/List";
 import DayDetails from "../components/order/DayDetails";
 
-import { getDates } from '../services/calendarService';
+import { getDatesByVisibility } from '../services/calendarService';
 import { getDishByDate } from '../services/dishesService';
 
 
-const Order= () => {
+const Order = () => {
 
   const ref = useRef(null);
 
@@ -25,7 +25,7 @@ const Order= () => {
 
 
   const getSetDates = async () => {
-    const dates = await getDates();
+    const dates = await getDatesByVisibility();
     setDatesList(dates);
   }
 
@@ -63,8 +63,10 @@ const Order= () => {
           </div>
 
           { tableActive ?
-          <ACalendar rightRef={ref} dateList={dateList} onDateChange={onDateChange} />
-          : <List rightRef={ref} dateList={dateList} onDateChange={onDateChange} /> }
+            <ACalendar rightRef={ref} dateList={dateList} onDateChange={onDateChange} />
+          : 
+            <List rightRef={ref} dateList={dateList} onDateChange={onDateChange} />
+          }
 
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React from "react";
 
+
 const InputText = ({value, placeholder, id, divId, required, handleChange, readOnly}) => {
 
   if (value === undefined) value="";

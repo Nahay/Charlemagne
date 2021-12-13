@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import BackgroundSlider from 'react-background-slider';
+
 import Button from '../components/generic/Button';
 import Time from '../components/generic/Time';
-import BackgroundSlider from 'react-background-slider'
 
-import {getParam} from '../services/paramsService';
+import { getParam } from '../services/paramsService';
 
 
 const Home = () => {

@@ -9,7 +9,6 @@ import InputButton from '../../components/generic/InputButton';
 import DishList from '../../components/admin/DishList';
 import AdminCalendar from "../../components/admin/AdminCalendar";
 
-import {getCommandByDate} from '../../services/commandsService';
 import {getDates, updateDate, getDateByDate, createDate, deleteDate} from '../../services/calendarService';
 import {getDishes, createDishDate, getDishByDate, deleteAllDishesDate, deleteDishDate, updateDishDate} from '../../services/dishesService';
 
@@ -78,9 +77,7 @@ const AdminDates = () => {
         
         const dishes = await getDishByDate(dateC);
 
-        if (dishes === null) {
-            setDishByDateList([]);
-        }
+        if (dishes === null) setDishByDateList([]);
         else setDishByDateList(dishes);
     }
 
@@ -109,29 +106,23 @@ const AdminDates = () => {
         setDate(dateC);
         const foundDate = await getDateByDate(dateC);
 
-        // la date n'existe pas encore dans la bdd
-        if (foundDate === null) {
-            resetValues();
-        }
-        else {
-            resetValuesFromDate(foundDate);
-        }
+        // si la date n'existe pas encore dans la bdd
+        if (foundDate === null) resetValues();
+        else resetValuesFromDate(foundDate);
     }
 
-    const onClickDish = (id, idDish, nbK, nbR) => {
+    const onClickDish = ({_id, idDish, numberKitchen, numberRemaining}) => {
         setUpD(true);
 
-        setIdD(id);
-        setSelect(idDish);
-        setNb(nbK);
-        setNbC(nbK);
-        setNbR(nbR);
+        setIdD(_id);
+        setSelect(idDish._id);
+        setNb(numberKitchen);
+        setNbC(numberKitchen);
+        setNbR(numberRemaining);
     }
 
 
     // HANDLE ---------------------------------------------------------------
-
-    const handleCheckboxChange = (e) => e.target.checked = true;
     
     const handleVisibilityChange = (e) => {
         if (e.target.id ==='y') setVisibility(true);
@@ -143,11 +134,8 @@ const AdminDates = () => {
     const handleSelectChange = (e) => {
         setSelect(e.target.value);
 
-        const dish = dishByDateList.filter(d => d.idDish === e.target.value);
-        if(dish.length > 0) {
-            const { _id, idDish, numberKitchen, numberRemaining } = dish[0];
-            onClickDish(_id, idDish, numberKitchen, numberRemaining);
-        }
+        const dish = dishByDateList.filter(d => d.idDish._id === e.target.value);
+        if(dish.length > 0) onClickDish(dish[0]);
         else setUpD(false);
     }
 
@@ -166,22 +154,24 @@ const AdminDates = () => {
             setDateExists(true);
             getDateList();
         }
-        else {
-            updateDate(date, visibility, comment);
-        }
+        else updateDate(date, visibility, comment);
     }
 
 
     const deleteAndSetDate = async () => {
 
-        const command = await getCommandByDate(date);
-        if (command === null) {
+        let haveCommand = false;
+        dishByDateList.forEach(d => {
+            if (d.numberKitchen !== d.numberRemaining) haveCommand = true;
+        });
+
+        if (!haveCommand) {
             await deleteDate(date);
             await deleteAllDishesDate(date);
             await getDateList();
             onChangeDate(new Date(new Date().toDateString()).getTime());
         }
-        else toast.error("Il y a une commande à cette date, vous ne pouvez pas supprimer la date.");
+        else toast.error("Il y a une commande à cette date, vous ne pouvez pas la supprimer.");
     }
 
 
@@ -192,15 +182,24 @@ const AdminDates = () => {
         if (select !== "0") {
 
             if (dateExists) {
-                await createDishDate(date, select , nb);
-                getDishByDateList(date);
+
+                let dishExists = false;
+                dishByDateList.forEach(d => {
+                    if (d.idDish._id === select) dishExists = true;
+                });
+
+                if (!dishExists) {
+                    await createDishDate(date, select, nb);
+                    getDishByDateList(date);
+                }
+                else toast.error("Le plat existe déjà !");
             }
 
             // la date n'existe pas : on la crée et on ajoute le plat
             else {
                 await createDate(date, visibility, comment);
                 setDateExists(true);
-                await createDishDate(date, select , nb);
+                await createDishDate(date, select, nb);
                 getDishByDateList(date);
             }
 
@@ -223,9 +222,9 @@ const AdminDates = () => {
         else toast.error(`Vous ne pouvez pas mettre un nombre inférieur au nombre de commandes qui est de : ${nbCommande}.`);
     }
 
-    const onClickDelete = async (id, nbK, nbR) => {
-        if (nbK === nbR) {
-            await deleteDishDate(id);
+    const onClickDelete = async ({_id, numberKitchen, numberRemaining}) => {
+        if (numberKitchen === numberRemaining) {
+            await deleteDishDate(_id);
             getDishByDateList(date);
         }
         else toast.error("Ce plat a déjà été commandé, vous ne pouvez pas le supprimer.");
@@ -258,7 +257,7 @@ const AdminDates = () => {
                                 name="visibility"
                                 id="n"
                                 checked={visibility === false}
-                                onChange={handleCheckboxChange}
+                                readOnly
                             />
                             <label htmlFor="n">Non</label>
                             <input
@@ -267,7 +266,7 @@ const AdminDates = () => {
                                 name="visibility"
                                 id="y"
                                 checked={visibility === true}
-                                onChange={handleCheckboxChange}
+                                readOnly
                             />
                             <label htmlFor="y">Oui</label>
                         </div>

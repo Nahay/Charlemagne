@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const DishDate = require("../models/DishDate");
+const { DishDate } = require("../models/Dish");
+
 
 // Create a dish
 router.post('/', async (req, res) => {
@@ -17,6 +18,7 @@ router.post('/', async (req, res) => {
         const savedDishDate = await dishDate.save();
         res.json(savedDishDate);
     } catch(err) {
+        console.log(err);
         res.json({error: err.message});
     }
 });
@@ -24,7 +26,7 @@ router.post('/', async (req, res) => {
 // Get dish by date
 router.get("/date/:date", async (req, res) => {
   try {
-    const dish = await DishDate.find({dateC: parseInt(req.params.date)});
+    const dish = await DishDate.find({dateC: parseInt(req.params.date)}).populate('idDish');
     res.json(dish);
   } catch (err) {
     res.json({ error: err.message });

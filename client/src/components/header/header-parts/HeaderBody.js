@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+
 const HeaderBody = ({toggle}) => {
 
     return (
@@ -17,12 +18,6 @@ const HeaderBody = ({toggle}) => {
                     activeClassName="active-link"
                     onClick={toggle}>
                         Commander
-                </NavLink>
-                <NavLink
-                    to="/a-propos"
-                    activeClassName="active-link"
-                    onClick={toggle}>
-                        À propos
                 </NavLink>
                 <NavLink
                     exact to="/contact"

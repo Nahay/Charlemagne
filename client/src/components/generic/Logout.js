@@ -1,6 +1,7 @@
 import React from "react";
 import { decodeToken } from "react-jwt";
 
+
 const Logout = ({handleLogout, handleLogin, isAuthenticated}) => { 
 
     const decodedToken = decodeToken(isAuthenticated);

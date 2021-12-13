@@ -2,6 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import API_URL from '../app-config';
 
+
 const config = (token) => {
     return { headers: {'x-access-token': token}};
 }
@@ -107,6 +108,7 @@ const adminSignIn = async (username, password) => {
         toast.error(err.message);
     }
 }
+
 
 export {
     createAdmin,

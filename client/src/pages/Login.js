@@ -1,12 +1,16 @@
 import React, {useState} from 'react';
-import LoginForm from '../components/LoginForm';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
-import { userSignIn } from '../services/usersService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 
+import LoginForm from '../components/LoginForm';
+
+import { userSignIn } from '../services/usersService';
+
+
 const Login = () => {
+
     const history = useHistory();
 
     const [username, setUsername] = useState("");
@@ -19,24 +23,24 @@ const Login = () => {
         e.preventDefault();
 
         const si = await userSignIn(username, password);
-        console.log(si);
         // test si le token est présent dans la promesse qui a été configurée dans le server
         if (si.token) {
           // si il y est, on l'ajoute au local storage
           localStorage.setItem('userToken', si.token);
           history.push("/");
           toast.success("Bienvenue " + username +" !");          
-        } else {
-          toast.error("Le nom d'utilisateur ou le mot de passe est incorrect.");
         }
-      }
+        else toast.error("Le nom d'utilisateur ou le mot de passe est incorrect.");
+    }
+
     return (
         <div className="login-container">
-            <LoginForm handleUsernameChange={handleUsernameChange}
-            handlePasswordChange={handlePasswordChange}
-            handleLoginSubmit={handleLoginSubmit} 
-            username={username}
-            password={password}
+            <LoginForm
+              handleUsernameChange={handleUsernameChange}
+              handlePasswordChange={handlePasswordChange}
+              handleLoginSubmit={handleLoginSubmit} 
+              username={username}
+              password={password}
             />
             <div className="login-icon">
                 <FontAwesomeIcon icon={faUsers}/>

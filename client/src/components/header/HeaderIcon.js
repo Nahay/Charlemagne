@@ -1,7 +1,9 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+
 import FullScreenHeader from './FullScreenHeader';
+
 
 class HeaderIcon extends React.Component {
 
@@ -10,9 +12,7 @@ class HeaderIcon extends React.Component {
         matches: window.matchMedia("(min-width: 1300px)").matches
     }
 
-    toggleClicked = () => {
-        this.setState({clicked:this.state.clicked ? false:true})
-    }
+    toggleClicked = () => this.setState({clicked:this.state.clicked ? false:true});
 
     componentDidMount() {
         const handler = e => {
@@ -34,8 +34,10 @@ class HeaderIcon extends React.Component {
             <div className = "header__icon">
                 <span onClick={()=>this.toggleClicked()}>
                     { this.state.clicked ?
-                    <FontAwesomeIcon icon = {faTimes}/>
-                    : <FontAwesomeIcon icon = {faBars} className = 'icon--bg'/> }
+                        <FontAwesomeIcon icon = {faTimes}/>
+                    :
+                        <FontAwesomeIcon icon = {faBars} className = 'icon--bg'/>
+                    }
                 </span>
             </div>
             {this.state.clicked && <FullScreenHeader admin={this.props.admin} toggle = {this.toggleClicked}/>}

@@ -107,6 +107,19 @@ const getDishByDate = async (date) => {
     }
 };
 
+const getNbRByDate = async (date) => {
+    try {
+        const { data } = await axios.get(API_URL + "/dish-date/date/" +date);
+        let nb = 0;
+        data.forEach(d => {
+            nb+=d.numberRemaining;
+        });
+        return nb;
+    } catch(err) {
+        toast.error(err.message);
+    }
+};
+
 const getDishByDateAndDish = async (dateC, idDish) => {
     try {
         const { data } = await axios.get(API_URL + "/dish-date/dateDish/" +dateC+"/"+idDish);
@@ -157,6 +170,7 @@ const deleteAllDishesDish = async (idDish) => {
     }
 };
 
+
 export {
     createDish,
     updateDish,
@@ -172,5 +186,6 @@ export {
     getDishByDate,
     updateDishDate,
     deleteDishDate,
-    deleteAllDishesDish
+    deleteAllDishesDish,
+    getNbRByDate
 };

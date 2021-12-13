@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import moment from 'moment';
 import 'moment/locale/fr'
 
+
 const Time = () => {
 
     const [time, setTime] = useState(moment(new Date()).locale('fr').format('LTS'));

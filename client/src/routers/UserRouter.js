@@ -1,15 +1,15 @@
 import { Switch, Route } from 'react-router-dom';
+import ProtectedUserRoute from '../components/ProtectedUserRoute';
+
 import SideNavbar from '../components/header/SideNavbar';
 import HeaderIcon from '../components/header/HeaderIcon';
 
 import Home from '../pages/Home';
 import Contact from '../pages/Contact';
-import About from '../pages/About';
 import Order from '../pages/Order';
 import Login from '../pages/Login';
 
 import PageNotFound from '../pages/PageNotFound';
-import ProtectedUserRoute from '../components/ProtectedUserRoute';
 
 
 const UserTemp = () => {
@@ -23,7 +23,6 @@ const UserTemp = () => {
                     <Route exact path="/" component = {Home} />
 
                     <Route exact path="/commander" component = {Order} />
-                    <Route exact path="/a-propos" component = {About} />
                     <Route exact path="/contact" component = {Contact} />
                     <Route exact path="/mentions-legales" component = {Home} />
                     <Route exact path="/cgu-cgv" component = {Home} />

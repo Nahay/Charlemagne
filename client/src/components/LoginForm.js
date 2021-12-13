@@ -1,10 +1,12 @@
 import React from 'react';
+
 import InputButton from './generic/InputButton';
 import InputText from './generic/InputText';
 import InputPassword from "./generic/InputPassword";
-import 'react-toastify/dist/ReactToastify.css';
 
-const LoginForm = ({handleUsernameChange, handlePasswordChange, handleLoginSubmit, username, password}) => {    
+
+const LoginForm = ({handleUsernameChange, handlePasswordChange, handleLoginSubmit, username, password}) => {  
+      
     return ( 
         <form className="login-form" onSubmit={handleLoginSubmit}>
             <div className="login-form__content">

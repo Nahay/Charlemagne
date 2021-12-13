@@ -66,13 +66,13 @@ const AdminDishes = () => {
 
     // SET STATES ------------------------------------------------------------
 
-    const onClickDish = (id, name, price, desc, type) => {
+    const onClickDish = ({ _id, name, price, description, type }) => {
         setCreate(false);
-        setId(id);
+        setId(_id);
         setName(name);
         setPreviousName(name);
         setPrice(price);
-        setDesc(desc);
+        setDesc(description);
         setType(type);
     }
 
@@ -89,7 +89,7 @@ const AdminDishes = () => {
 
     const onClickDelete = async (id) => {
         const dish = await getOneCommandListByDish(id);
-        if (dish === null) {
+        if (dish === []) {
             await deleteDish(id);
             await deleteAllDishesDish(id);
             onClickNewDish();
@@ -167,6 +167,7 @@ const AdminDishes = () => {
                             name="typePlat"
                             id="e"
                             checked={type === 'e'}
+                            readOnly
                         />
                         <label htmlFor="e">Entrée</label>
                         <input
@@ -175,6 +176,7 @@ const AdminDishes = () => {
                             name="typePlat"
                             id="p"
                             checked={type === 'p'}
+                            readOnly
                         />
                         <label htmlFor="p">Plat</label>
                         <input
@@ -183,6 +185,7 @@ const AdminDishes = () => {
                             name="typePlat"
                             id="d"
                             checked={type === 'd'}
+                            readOnly
                         />
                         <label htmlFor="d">Dessert</label>
                     </div>

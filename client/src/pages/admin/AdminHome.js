@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+
 import InputButton from '../../components/generic/InputButton';
 import TextArea from '../../components/generic/TextArea';
 
@@ -51,35 +52,33 @@ const AdminHome = () => {
     }
 
 
+    // RENDER ---------------------------------------------------------------
+
     return (
-        <div className="admin-home">
-            <div className="admin-home__left">
-                
-            </div>
-            
-            <div className="admin-home__right">
-                <div className="right__inputs">
-                    <form className="right__inputs__1" onSubmit={onWelcomeMessageSubmit}>
-                            <p>Changer la phrase de bienvenue :</p>
-                            <TextArea
-                                value={welcomeMess}
-                                placeholder=""
-                                id="welcome-message"
-                                required = {false}
-                                handleChange={handleWelcomeMessage}
-                            />
-                            <InputButton value="Changer"/>
-                        </form>
-                    <form className="right__inputs__2" onSubmit={onOrderInfoSubmit}>
-                            <p>Changer les informations en bas de commande :</p>
-                            <TextArea
-                                value={orderInfo}
-                                placeholder=""
-                                id="order_info"
-                                required = {false}
-                                handleChange={handleOrderInfo}
-                            />
-                            <InputButton value="Changer"/>
+        <div className="admin-home">            
+            <div className="admin-home__container">
+                <div className="container__inputs">
+                    <form className="container__inputs__1" onSubmit={onWelcomeMessageSubmit}>
+                        <p>Changer la phrase de bienvenue :</p>
+                        <TextArea
+                            value={welcomeMess}
+                            placeholder=""
+                            id="welcome-message"
+                            required = {false}
+                            handleChange={handleWelcomeMessage}
+                        />
+                        <InputButton value="Changer"/>
+                    </form>
+                    <form className="container__inputs__2" onSubmit={onOrderInfoSubmit}>
+                        <p>Changer les informations en bas de commande :</p>
+                        <TextArea
+                            value={orderInfo}
+                            placeholder=""
+                            id="order_info"
+                            required = {false}
+                            handleChange={handleOrderInfo}
+                        />
+                        <InputButton value="Changer"/>
                     </form>
                 </div>
             </div>

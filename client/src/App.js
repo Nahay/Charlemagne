@@ -1,9 +1,12 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import ProtectedAdminRoute from './components/ProtectedAdminRoute';
+
 import UserRouter from './routers/UserRouter';
 import AdminRouter from './routers/AdminRouter';
 import AdminLogin from "./pages/admin/AdminLogin";
-import { ToastContainer } from 'react-toastify';
-import ProtectedAdminRoute from './components/ProtectedAdminRoute';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 

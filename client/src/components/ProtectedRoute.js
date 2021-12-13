@@ -2,8 +2,11 @@ import React from "react";
 import { Redirect, Route } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 
+
 function ProtectedRoute({ component: Component, ...restOfProps }) {
+
   const decodedToken = decodeToken(localStorage.getItem("adminToken"));
+  
   return (
     <Route
       {...restOfProps}
