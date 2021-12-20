@@ -59,16 +59,15 @@ router.get("/", async (req, res) => {
 // User by id
 router.get('/:userId', async (req, res) => {
     try {
-        const adminRequesting = await getRequestingAdmin(req, res); 
         const user = await User.findById(req.params.userId);
-        res.json({success: true, adminRequesting: adminRequesting._id, user: user});
+        res.json(user);
     } catch(err) {
         res.json({ error: err.message, success: false });
     }
 });
 
 // User by username
-router.get("/user/:username", async (req, res) => {  
+router.get("/user/:username", async (req, res) => {
     try {
       const adminRequesting = await getRequestingAdmin(req, res);
 
@@ -169,7 +168,7 @@ router.post("/signin", async (req, res) => {
       // Teste si le mot de passe vaut celui qui est hashé
       if (!user.validPassword(password)) res.json({ success: false, message: "Error: Invalid password while testing" });
       // ajoute les valeurs assignées dans le token
-      const token = jwt.sign({ username: username, name: user.name, firstname: user.firstname, auth: true }, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
+      const token = jwt.sign({ _id: user._id,  username, name: user.name, firstname: user.firstname, auth: true }, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
       res.json({ success: true, message: "Valid sign in", token });
     } catch (err) {
       console.log(err);

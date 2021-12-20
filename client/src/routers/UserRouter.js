@@ -7,6 +7,7 @@ import HeaderIcon from '../components/header/HeaderIcon';
 import Home from '../pages/Home';
 import Contact from '../pages/Contact';
 import Order from '../pages/Order';
+import PassCommand from '../pages/PassCommand';
 import Login from '../pages/Login';
 
 import PageNotFound from '../pages/PageNotFound';
@@ -23,6 +24,7 @@ const UserTemp = () => {
                     <Route exact path="/" component = {Home} />
 
                     <Route exact path="/commander" component = {Order} />
+                    <Route exact path="/passer-commande/:date" component = {PassCommand} />
                     <Route exact path="/contact" component = {Contact} />
                     <Route exact path="/mentions-legales" component = {Home} />
                     <Route exact path="/cgu-cgv" component = {Home} />

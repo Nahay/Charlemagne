@@ -27,9 +27,9 @@ const getUserByUsername = async (username, token) => {
     }
 }
 
-const getUserById = async (id, token) => {
+const getUserById = async (id) => {
     try {
-        const {data} = await axios.get(API_URL + "/users/" + id, config(token));
+        const {data} = await axios.get(API_URL + "/users/" + id);
         return data;
     } catch (err) { 
         toast.error(err.message);

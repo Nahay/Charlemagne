@@ -57,7 +57,6 @@ const Table = ({dishByDateList}) => {
         {
             name: 'Nombre Restant',
             selector: row => row.nb,
-            sortable: true,
         }
     ];
 

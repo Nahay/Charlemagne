@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import moment from "moment";
 import "moment/locale/fr";
 
-import Button from '../generic/Button';
 import Table from '../order/Table';
+import { Link } from 'react-router-dom';
 
 
 const DayDetails = ({date, dishByDateList}) => {
@@ -33,7 +33,11 @@ const DayDetails = ({date, dishByDateList}) => {
             { isAvailable &&
             
             <div className="day-details__button">
-                <Button name="Commander"/>
+                <div className="btn">
+                    <Link to={`passer-commande/${date}`}>
+                        Commander
+                    </Link>
+                </div>
             </div>
 
             }
