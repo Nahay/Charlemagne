@@ -61,15 +61,14 @@ const ContactForm = () => {
                         <InputText
                             value={name}
                             placeholder="Nom*"
-                            id="name"
                             handleChange={handleNameChange}
                         />
-                        <InputEmail value={email} id="email" placeholder="Email*" handleChange={handleEmailChange} />
+                        <InputEmail value={email} placeholder="Email*" handleChange={handleEmailChange} />
                     </div>
-                    <InputText value={subject} id="subject" divId="inputsubjectDiv" placeholder="Objet*" handleChange={handleSubjectChange} />
-                    <TextArea value={message} id="msg" placeholder="Message*" handleChange={handleMessageChange} />
+                    <InputText value={subject} placeholder="Objet*" handleChange={handleSubjectChange} />
+                    <TextArea value={message} placeholder="Message*" handleChange={handleMessageChange} />
                     <div className="input__btn">
-                        <InputButton value="Envoyer le message" />
+                        <InputButton value="Envoyer le message" type="submit"/>
                     </div>
                     <div className="hidden">
                         <input name="day" value={day}/>

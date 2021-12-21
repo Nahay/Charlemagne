@@ -31,6 +31,8 @@ const AdminDates = () => {
     const [idD, setIdD] = useState("");
     const [nbC, setNbC] = useState("");
     const [nbR, setNbR] = useState("");
+    const [timeMin, setTimeMin] = useState("");
+    const [timeMax, setTimeMax] = useState("");
 
     const [select, setSelect] = useState("0");
     const [dishList, setDishList] = useState([]);
@@ -47,6 +49,8 @@ const AdminDates = () => {
                 setDateExists(true);
                 setVisibility(foundDate.visibility);
                 setComment(foundDate.comment);
+                setTimeMin(foundDate.timeMin);
+                setTimeMax(foundDate.timeMax);
                 setSelect("0");
                 setNb("");
 
@@ -87,19 +91,21 @@ const AdminDates = () => {
         setComment("");
         setSelect("0");
         setNb("");
+        setTimeMin("");
+        setTimeMax("");
         setDishByDateList([]);
-    }
+    }   
 
     const resetValuesFromDate = (foundDate) => {
         setDateExists(true);
         setVisibility(foundDate.visibility);
         setComment(foundDate.comment);
+        setTimeMin(foundDate.timeMin);
+        setTimeMax(foundDate.timeMax);
         setSelect("0");
-        setNb("");
-
+        setNb(""); 
         getDishByDateList(foundDate.dateC);
     }
-
 
     const onChangeDate = async (dateC) => {
 
@@ -143,6 +149,10 @@ const AdminDates = () => {
         const val = e.target.value;
         if(Number(val) || val === "") setNb(val);
     }
+
+    const handleTimeMinChange = (e) => setTimeMin(e.target.value);
+
+    const handleTimeMaxChange = (e) => setTimeMax(e.target.value);
     
 
     // BD -------------------------------------------------------------------
@@ -150,11 +160,12 @@ const AdminDates = () => {
     const saveDate = async () => {
 
         if (!dateExists) {
-            createDate(date, visibility, comment);
+            createDate(date, visibility, comment, timeMin, timeMax);
+            console.log("ok");
             setDateExists(true);
             getDateList();
         }
-        else updateDate(date, visibility, comment);
+        else updateDate(date, visibility, comment, timeMin, timeMax);
     }
 
 
@@ -174,6 +185,12 @@ const AdminDates = () => {
         else toast.error("Il y a une commande à cette date, vous ne pouvez pas la supprimer.");
     }
 
+    const onDateSubmit = async (e) => {
+        e.preventDefault();
+        console.log(e);
+        saveDate(); 
+
+    }
 
     const onDishSubmit = async (e) => {
         e.preventDefault();
@@ -197,7 +214,7 @@ const AdminDates = () => {
 
             // la date n'existe pas : on la crée et on ajoute le plat
             else {
-                await createDate(date, visibility, comment);
+                await createDate(date, visibility, comment, timeMin, timeMax);
                 setDateExists(true);
                 await createDishDate(date, select, nb);
                 getDishByDateList(date);
@@ -248,7 +265,7 @@ const AdminDates = () => {
             <div className="admin-dates__right" ref={ref}>
                 <h1 className="right__date">{moment(date).locale('fr').format('LL')}</h1>
                 <div className="right__form">
-                    <div className="right__form__1">
+                    <form className="right__form__1" onSubmit={onDateSubmit}>
                         <div className="right__form__radio" onChange={handleVisibilityChange}>
                             <span>Visible ?</span>
                             <input
@@ -273,30 +290,37 @@ const AdminDates = () => {
                         <TextArea
                             value={comment}
                             placeholder="Commentaire pour cette date..."
-                            id="dateComment"
                             required={false}
                             handleChange={handleCommentChange}
                         />
+                        <div className='input-time'>
+                            <div className="input-time___min">
+                                <p>Heure minimale</p>
+                                <input type="time" value={timeMin} onChange={handleTimeMinChange} required/>
+                            </div>
+                            <div className="input-time___max">
+                                <p>Heure maximale</p>
+                                <input type="time" value={timeMax} onChange={handleTimeMaxChange} required/>
+                            </div>
+                            
+                        </div>
                         { dateExists ?
                             <div className="multi-btn">
-                                <div onClick={saveDate}>
-                                    <InputButton value="Enregistrer"/>
-                                </div>
-                                <div onClick={deleteAndSetDate}>
-                                    <InputButton value="Supprimer"/>
-                                </div>
+                                    <InputButton value="Enregistrer" type="submit"/>
+
+                                    <div onClick={deleteAndSetDate}>
+                                        <InputButton type="button" value="Supprimer"/>
+                                    </div>                                    
                             </div>
                         :
                             <div className="multi-btn">
-                                <div onClick={saveDate}>
-                                    <InputButton id="crerDate" value="Créer"/>
-                                </div>
+                                <InputButton value="Créer" type="submit"/>
                             </div>
                         }
-                    </div>
+                    </form>
                     <form className="right__form__2" onSubmit={upD ? onUpdateDishSubmit : onDishSubmit }>
                         <select value={select} id="dish-select" className="dish-select" onChange={handleSelectChange}>
-                            <option value="" id="0">Liste des plats</option>
+                            <option value="0" id="0">Liste des plats</option>
                             {dishList.map((d) => {
                                 return <option value={d._id} key={d._id}>{d.name}</option>
                             })}
@@ -305,11 +329,9 @@ const AdminDates = () => {
                             <InputText
                                 value={nb}
                                 placeholder="Nombre Cuisine*"
-                                id="nombreCuisine"
-                                divId="inputNbCuisine"
                                 handleChange={handleNbChange}
                             />
-                            <InputButton value= { upD ? "Enregistrer nombre" : "Ajouter le plat à cette date" } />
+                            <InputButton value= { upD ? "Enregistrer nombre" : "Ajouter le plat à cette date" } type="submit"/>
                         </div>
                     </form>
                     <div className="dish-list">

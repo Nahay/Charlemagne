@@ -119,16 +119,12 @@ const AdminCommands = () => {
               <InputText
                 value={name}
                 placeholder="Nom"
-                id="Name"
-                divId="inputName"
                 handleChange={handleNameChange}
                 readOnly
               />
               <InputText
                 value={firstname}
                 placeholder="Prénom"
-                id="firstname"
-                divId="inputFirstname"
                 handleChange={handleFirstnameChange}
                 readOnly
               />
@@ -174,15 +170,11 @@ const AdminCommands = () => {
               <InputText
                 value={total}
                 placeholder="Total"
-                id="total"
-                divId="inputTotal"
                 handleChange={handleTotalChange}
               />
               <InputText
                 value={total}
                 placeholder="Total"
-                id="total"
-                divId="inputTotal"
                 handleChange={handleTotalChange}
               />
             </div>
@@ -208,7 +200,7 @@ const AdminCommands = () => {
               />
               <label htmlFor="y---paid">Oui</label>
             </div>
-            <InputButton value="Enregistrer" />
+            <InputButton value="Enregistrer" type="submit"/>
           </div>
         </div>
       </div>

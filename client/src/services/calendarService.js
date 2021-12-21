@@ -3,12 +3,14 @@ import { toast } from 'react-toastify';
 import API_URL from '../app-config';
 
 
-const createDate = async (dateC, visibility, comment) => {
+const createDate = async (dateC, visibility, comment, timeMin, timeMax) => {
     try {
         await axios.post(API_URL + "/calendar", {
             dateC,
             visibility,
-            comment
+            comment, 
+            timeMin,
+            timeMax
         });
         toast.success("La date a été créée !");
 
@@ -53,12 +55,14 @@ const getDateById = async (id) => {
     }
 };
 
-const updateDate = async (date, visibility, comment) => {
+const updateDate = async (date, visibility, comment, timeMin, timeMax) => {
     try {
         await axios.patch(
             API_URL + "/calendar/" +date, {
                 visibility : visibility,
-                comment : comment
+                comment : comment,
+                timeMin: timeMin,
+                timeMax: timeMax
             }
         );
         toast.success("La date a été mise à jour !");

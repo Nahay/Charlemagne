@@ -1,13 +1,13 @@
 import React from "react";
 
 
-const InputEmail = ({value, placeholder, id, divId, required, handleChange}) => {
+const InputEmail = ({value, placeholder, required, handleChange}) => {
 
   if (value === undefined) value="";
   if (required === undefined) required = true;
 
   return (
-    <div className={"input"} id={divId}>
+    <div className={"input"}>
 
       {required ?
 
@@ -15,9 +15,7 @@ const InputEmail = ({value, placeholder, id, divId, required, handleChange}) => 
         type="email"
         value={value}
         placeholder={placeholder}
-        id={id}
         onChange={(e) => handleChange(e) }
-        name={id}
         required
       />
 
@@ -27,9 +25,7 @@ const InputEmail = ({value, placeholder, id, divId, required, handleChange}) => 
         type="email"
         value={value}
         placeholder={placeholder}
-        id={id}
         onChange={(e) => handleChange(e) }
-        name={id}
       />
       
       }

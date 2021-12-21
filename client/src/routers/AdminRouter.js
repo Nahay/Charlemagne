@@ -1,6 +1,6 @@
 import { Switch } from "react-router-dom";
 
-import ProtectedRoute from "../components/ProtectedRoute";
+import ProtectedAdminRoute from "../components/routes/admin/ProtectedAdminRoute";
 
 import SideNavbar from "../components/header/SideNavbar";
 import HeaderIcon from "../components/header/HeaderIcon";
@@ -24,12 +24,12 @@ const AdminTemp = ({ match }) => {
       <HeaderIcon admin={true}/>
       <main className="main">
         <Switch>
-          <ProtectedRoute exact path={match.url + '/accueil'} component={AdminHome} />
-          <ProtectedRoute exact path={match.url + '/plats'} component={AdminDishes} />
-          <ProtectedRoute exact path={match.url + '/dates'} component={AdminDates} />
-          <ProtectedRoute exact path={match.url + '/commandes'} component={AdminCommands} />
-          <ProtectedRoute exact path={match.url + '/comptes'} component={AdminAccounts} />
-          <ProtectedRoute exact component = {PageNotFound} />
+          <ProtectedAdminRoute exact path={match.url + '/accueil'} component={AdminHome} />
+          <ProtectedAdminRoute exact path={match.url + '/plats'} component={AdminDishes} />
+          <ProtectedAdminRoute exact path={match.url + '/dates'} component={AdminDates} />
+          <ProtectedAdminRoute exact path={match.url + '/commandes'} component={AdminCommands} />
+          <ProtectedAdminRoute exact path={match.url + '/comptes'} component={AdminAccounts} />
+          <ProtectedAdminRoute exact component = {PageNotFound} />
         </Switch>
       </main>
     </>

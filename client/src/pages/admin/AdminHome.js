@@ -63,22 +63,20 @@ const AdminHome = () => {
                         <TextArea
                             value={welcomeMess}
                             placeholder=""
-                            id="welcome-message"
                             required = {false}
                             handleChange={handleWelcomeMessage}
                         />
-                        <InputButton value="Changer"/>
+                        <InputButton value="Changer" type="submit"/>
                     </form>
                     <form className="container__inputs__2" onSubmit={onOrderInfoSubmit}>
                         <p>Changer les informations en bas de commande :</p>
                         <TextArea
                             value={orderInfo}
                             placeholder=""
-                            id="order_info"
                             required = {false}
                             handleChange={handleOrderInfo}
                         />
-                        <InputButton value="Changer"/>
+                        <InputButton value="Changer" type="submit"/>
                     </form>
                 </div>
             </div>

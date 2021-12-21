@@ -176,7 +176,7 @@
     justify-content: center;
     align-items: center;
     padding: 10px;
-    height: 50px;
+    height: 100%;
     border: 2px solid $color-primary;
     transition: 0.5s;
     color: $color-primary;
@@ -266,3 +266,5 @@ input[type="time"] {
     width: 100%;
   }
 }
+
+// --------------- INPUT TYPE BUTTON -----------------------------

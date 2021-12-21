@@ -3,7 +3,7 @@ import { Redirect, Route } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 
 
-function ProtectedRoute({ component: Component, ...restOfProps }) {
+function ProtectedAdminRoute({ component: Component, ...restOfProps }) {
 
   const decodedToken = decodeToken(localStorage.getItem("adminToken"));
   
@@ -17,4 +17,4 @@ function ProtectedRoute({ component: Component, ...restOfProps }) {
   );
 }
 
-export default ProtectedRoute;
+export default ProtectedAdminRoute;

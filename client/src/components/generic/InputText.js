@@ -1,13 +1,13 @@
 import React from "react";
 
 
-const InputText = ({value, placeholder, id, divId, required, handleChange, readOnly}) => {
+const InputText = ({value, placeholder, required, handleChange, readOnly}) => {
 
   if (value === undefined) value="";
   if (required === undefined) required = true;
 
   return (
-    <div className={"input"} id={divId}>
+    <div className={"input"}>
 
       {required ?
       readOnly ?
@@ -15,9 +15,7 @@ const InputText = ({value, placeholder, id, divId, required, handleChange, readO
         type="text"
         value={value}
         placeholder={placeholder}
-        id={id}
         onChange={(e) => handleChange(e) }
-        name={id}
         required
         readOnly
       />
@@ -26,9 +24,7 @@ const InputText = ({value, placeholder, id, divId, required, handleChange, readO
         type="text"
         value={value}
         placeholder={placeholder}
-        id={id}
         onChange={(e) => handleChange(e) }
-        name={id}
         required
       />
       :
@@ -37,9 +33,7 @@ const InputText = ({value, placeholder, id, divId, required, handleChange, readO
         type="text"
         value={value}
         placeholder={placeholder}
-        id={id}
         onChange={(e) => handleChange(e) }
-        name={id}
         readOnly
       />
       :
@@ -47,9 +41,7 @@ const InputText = ({value, placeholder, id, divId, required, handleChange, readO
         type="text"
         value={value}
         placeholder={placeholder}
-        id={id}
         onChange={(e) => handleChange(e) }
-        name={id}
       />
       
       }

@@ -11,14 +11,14 @@ import OrderTable from "../components/order/OrderTable";
 import { getDishByDate } from "../services/dishesService";
 import { getParam } from '../services/paramsService';
 import { getUserById } from '../services/usersService'; 
+import { getDateByDate } from "../services/calendarService";
 
 
 const PassCommand = () => {
 
     const { date } = useParams();
 
-    const [dateMin, setDateMin] = useState("12:00");
-    const [dateMax, setDateMax] = useState("16:00");
+    const [time, setTime] = useState("");
     const [orderInfo, setOrderInfo] = useState("");
     const [comm, setComm] = useState("");    
     const [container, setContainer] = useState(false);    
@@ -38,12 +38,23 @@ const PassCommand = () => {
         const dishes = await getDishByDate(date);
         setDishList(dishes);
       }
-      
+
+      async function getCurrentUser() {
+        const userDecoded = decodeToken(localStorage.getItem("userToken"));
+        const user = await getUserById(userDecoded._id);
+        setFirstname(user.firstname);
+        setName(user.name);
+      }
+
+      async function getTimeLimit() {
+        const currentDate = await getDateByDate(date);
+        setTime({min: currentDate.timeMin, max: currentDate.timeMax});
+      }
+      getTimeLimit();
       getDishList();
       getSetOrderInfo();
       getCurrentUser();
-    
-    }, []);
+    }, [date]);
 
 
     useEffect(() => {
@@ -90,17 +101,6 @@ const PassCommand = () => {
     setOrderInfo(orderMess);
   }
 
-  const getCurrentUser = async () => {
-    const userDecoded = decodeToken(localStorage.getItem("userToken"));
-    const user = await getUserById(userDecoded._id);
-    setFirstname(user.firstname);
-    setName(user.name);
-  }
-
-  const getTimeLimit = async () => {
-    const getDate
-  }
-
   // HANDLE ------------------------------------------------
 
   const handleComm = (e) => { setComm(e.target.value) } 
@@ -117,7 +117,7 @@ const PassCommand = () => {
         <div className="container__name-time">
           <p className="fixed-text name">{name} {firstname}</p>
           <div className="time__container">
-            <input type="time" min={dateMin} max={dateMax}/>
+            <input type="time" min={time.min} max={time.max} required/>
           </div>
         </div>
         <OrderTable data={data} setData={setData}/>
@@ -125,7 +125,6 @@ const PassCommand = () => {
           <TextArea
               value={comm}
               placeholder="Commentaire..."
-              id="comment"
               required = {false}
               handleChange={handleComm}
           />
@@ -155,7 +154,7 @@ const PassCommand = () => {
         </div>
         <div className="container__mess-btn">
           <p className="fixed-text order">{orderInfo}</p>
-          <InputButton value= "Commander" />
+          <InputButton value= "Commander" type="submit"/>
         </div>
       </div>
     </div>

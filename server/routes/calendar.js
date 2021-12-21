@@ -39,17 +39,20 @@ router.get('/visibility', async (req, res) => {
 
 // Create a date
 router.post('/', async (req, res) => {
-    const {dateC, visibility, comment} = req.body;
+    const {dateC, visibility, comment, timeMin, timeMax } = req.body;
     const date = new Date({
         dateC: dateC,
         visibility: visibility,
-        comment: comment
+        comment: comment, 
+        timeMin: timeMin,
+        timeMax: timeMax
     });
 
     try {
         const savedDate = await date.save();
         res.json(savedDate);
     } catch(err) {
+        console.log(err);
         res.json({error: err.message});
     }
 });
@@ -66,14 +69,15 @@ router.delete("/:date", async (req, res) => {
 
 // Update a date
 router.patch('/:calendarDate', async (req, res) => {
-    const { visibility, comment } = req.body;
+    const { visibility, comment, timeMin, timeMax } = req.body;
     try {
         const dateToUpdate = await Date.updateOne(
             { dateC: req.params.calendarDate },
-            { visibility: visibility, comment:comment }
+            { visibility: visibility, comment:comment, timeMin: timeMin, timeMax: timeMax }
         );
         res.json(dateToUpdate);
     } catch(err) {
+        console.log(err);
         res.json({error: err.message});
     }
 });

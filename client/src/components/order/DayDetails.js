@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import moment from "moment";
 import "moment/locale/fr";
-
-import Table from '../order/Table';
+import { decodeToken } from 'react-jwt';
 import { Link } from 'react-router-dom';
 
+import Table from '../order/Table';
+import { toast } from 'react-toastify';
 
 const DayDetails = ({date, dishByDateList}) => {
 
     const [isAvailable, setIsAvailable] = useState(false);
-
+    const [isLogged, setIsLogged] = useState(false);
 
     useEffect(() => {
 
@@ -19,7 +20,15 @@ const DayDetails = ({date, dishByDateList}) => {
                 if (d.numberRemaining > 0) setIsAvailable(true);
             });
         }
-
+        
+        async function getUser() {
+            const userDecoded = decodeToken(localStorage.getItem("userToken"));
+            if (userDecoded) {
+                setIsLogged(true);
+            }
+        }
+        
+        getUser();
         getNb();
     
     }, [dishByDateList]);
@@ -34,9 +43,15 @@ const DayDetails = ({date, dishByDateList}) => {
             
             <div className="day-details__button">
                 <div className="btn">
-                    <Link to={`passer-commande/${date}`}>
-                        Commander
-                    </Link>
+                    { isLogged ? 
+                        <Link to={`passer-commande/${date}`}>
+                            Commander
+                        </Link> 
+                        :
+                        <Link to={"connexion"} onClick={() => toast.error("Veuillez vous connecter avant de passer commande !")}>
+                            Commander
+                        </Link> 
+                    }                    
                 </div>
             </div>
 

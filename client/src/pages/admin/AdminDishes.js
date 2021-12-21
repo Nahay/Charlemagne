@@ -192,25 +192,20 @@ const AdminDishes = () => {
                     <InputText
                         value={name}
                         placeholder="Nom du plat*"
-                        id="nomPlat"
-                        divId="inputNomPlat"
                         handleChange={handleNameChange}
                     />
                     <InputText
                         value={price}
                         placeholder="Prix*"
-                        id="prix"
-                        divId="inputPrix"
                         handleChange={handlePriceChange}
                     /> 
                     <TextArea
                         value={desc}
                         placeholder="Description"
-                        id="description"
                         required={false}
                         handleChange={handleDescChange}
                     />
-                    <InputButton value={create? "Créer" : "Enregistrer"}/>
+                    <InputButton value={create? "Créer" : "Enregistrer"} type="submit"/>
                 </form>
             </div>
         </div>

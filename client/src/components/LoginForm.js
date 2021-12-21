@@ -10,10 +10,10 @@ const LoginForm = ({handleUsernameChange, handlePasswordChange, handleLoginSubmi
     return ( 
         <form className="login-form" onSubmit={handleLoginSubmit}>
             <div className="login-form__content">
-                <InputText placeholder="Nom d'utilisateur" id="username" handleChange={handleUsernameChange} value={username}/>
-                <InputPassword placeholder="Mot de passe" id="password" handleChange={handlePasswordChange} value={password}/>
+                <InputText placeholder="Nom d'utilisateur" handleChange={handleUsernameChange} value={username}/>
+                <InputPassword placeholder="Mot de passe" handleChange={handlePasswordChange} value={password}/>
                 <span>Mot de passe oublié ?</span>
-                <InputButton value="Login"/>
+                <InputButton value="Login" type="submit"/>
             </div>
         </form>
     );

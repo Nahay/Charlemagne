@@ -1,5 +1,6 @@
 import { Switch, Route } from 'react-router-dom';
-import ProtectedUserRoute from '../components/ProtectedUserRoute';
+import ProtectedLoginRoute from '../components/routes/user/ProtectedLoginRoute';
+import ProtectedUserRoute from '../components/routes/user/ProtectedUserRoute';
 
 import SideNavbar from '../components/header/SideNavbar';
 import HeaderIcon from '../components/header/HeaderIcon';
@@ -24,11 +25,11 @@ const UserTemp = () => {
                     <Route exact path="/" component = {Home} />
 
                     <Route exact path="/commander" component = {Order} />
-                    <Route exact path="/passer-commande/:date" component = {PassCommand} />
+                    <ProtectedUserRoute exact path="/passer-commande/:date" component = {PassCommand} />
                     <Route exact path="/contact" component = {Contact} />
                     <Route exact path="/mentions-legales" component = {Home} />
                     <Route exact path="/cgu-cgv" component = {Home} />
-                    <ProtectedUserRoute exact path="/connexion" component = {Login}/>
+                    <ProtectedLoginRoute exact path="/connexion" component = {Login}/>
 
                     <Route exact component = {PageNotFound} />
                 </Switch>

@@ -11,6 +11,14 @@ const DateSchema = Schema({
         type: Boolean,
         required: true
     },
+    timeMin: {
+        type: String,
+        required: true
+    },
+    timeMax: {
+        type: String,
+        required: true
+    },
     comment: {
         type: String,
         required: false

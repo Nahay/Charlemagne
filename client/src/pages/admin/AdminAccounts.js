@@ -273,19 +273,15 @@ const AdminAccounts = () => {
                                 <InputText
                                     value={username}
                                     placeholder="Nom d'utilisateur*"
-                                    id="username"
-                                    divId="divUsername"
                                     handleChange={handleUsername}
                                 />
                                 <InputText
                                     value={password}
                                     placeholder={create ? "Mot de passe*" : "Changer mot de passe"}
-                                    id="password"
-                                    divId="divPassword"
                                     required={create ? true : false}
                                     handleChange={handlePassword}
                                 />
-                                <InputButton value={create? "Créer" : "Enregistrer"}/>
+                                <InputButton value={create? "Créer" : "Enregistrer"} type="submit"/>
                             </div>
                         
                         :
@@ -294,48 +290,36 @@ const AdminAccounts = () => {
                                 <InputEmail
                                     value={email}
                                     placeholder="Email*"
-                                    id="email"
-                                    divId="divEmail"
                                     handleChange={handleEmail}
                                 />
                                 <InputText
                                     value={username}
                                     placeholder="Nom d'utilisateur*"
-                                    id="username"
-                                    divId="divUsername"
                                     handleChange={handleUsername}
                                 />
                                 <InputText
                                     value={password}
                                     placeholder={create ? "Mot de passe*" : "Changer mot de passe"}
-                                    id="password"
-                                    divId="divPassword"
                                     required={create ? true : false}
                                     handleChange={handlePassword}
                                 />
                                 <InputText
                                     value={name}
                                     placeholder="Nom*"
-                                    id="name"
-                                    divId="divName"
                                     handleChange={handleName}
                                 />
                                 <InputText
                                     value={firstname}
                                     placeholder="Prénom*"
-                                    id="firstname"
-                                    divId="divFirstname"
                                     handleChange={handleFirstname}
                                 />
                                 <InputNumber
                                     value={tel}
                                     placeholder="Tel"
-                                    id="tel"
-                                    divId="divTel"
                                     required={false}
                                     handleChange={handleTel}
                                 />
-                                <InputButton value={create? "Créer" : "Enregistrer"}/>
+                                <InputButton value={create? "Créer" : "Enregistrer"} type="submit"/>
                             </div>
 
                         }

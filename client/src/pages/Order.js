@@ -18,6 +18,7 @@ const Order = () => {
   const [dishByDateList, setDishByDateList] = useState([]);
   const [tableActive, setTableActive] = useState(true);
   const [date, setDate] = useState(new Date().getTime());
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     getSetDates();
@@ -71,7 +72,7 @@ const Order = () => {
         </div>
       </div>
       <div className="order__right" ref={ref}>
-          <DayDetails date={date} dishByDateList = {dishByDateList}/>
+          <DayDetails date={date} dishByDateList = {dishByDateList} />
       </div>
     </div>
   );

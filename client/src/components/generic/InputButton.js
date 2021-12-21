@@ -1,11 +1,11 @@
 import React from "react";
 
 
-const InputButton = ({value}) => {
+const InputButton = ({value, type}) => {
 
   return (
     <div className="input-btn">
-      <input type="submit" value={value} />
+      <input type={type} value={value} />
     </div>
   );
 };

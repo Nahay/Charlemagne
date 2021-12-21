@@ -1,6 +1,6 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import ProtectedAdminRoute from './components/ProtectedAdminRoute';
+import ProtectedLoginRoute from './components/routes/admin/ProtectedLoginRoute';
 
 import UserRouter from './routers/UserRouter';
 import AdminRouter from './routers/AdminRouter';
@@ -18,7 +18,7 @@ function App() {
       <ToastContainer/>
         <Switch>
 
-          <ProtectedAdminRoute exact path="/admin" component = {AdminLogin}/>
+          <ProtectedLoginRoute exact path="/admin" component = {AdminLogin}/>
           <Route path="/admin" component = {AdminRouter} />
           <Route path="/" component = {UserRouter} />
 

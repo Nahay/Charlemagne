@@ -11,7 +11,7 @@ function ProtectedUserRoute({ component: Component, ...restOfProps }) {
     <Route
       {...restOfProps}
       render={(props) =>
-        !decodedToken ? <Component {...props} /> : <Redirect to="/"/>
+        decodedToken ? <Component {...props} /> : <Redirect to="/" />
       }
     />
   );
