@@ -38,11 +38,11 @@ const getCommandByDate = async (dateC) => {
     }
 };
 
-const updateCommand = async (id, time, paid, container, comment, total) => {
+const updateCommand = async (id, timeC, paid, container, comment, total) => {
     try {
         await axios.patch(
             API_URL + "/commands/" +id, {
-                time,
+                timeC,
                 paid,
                 container,
                 comment,

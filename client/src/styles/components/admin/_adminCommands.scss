@@ -1,224 +1,268 @@
 .admin-commands {
-    height : 100%;
-    width : 100%;
-    display : flex;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+
+  .admin-commands__left {
+    width: 40%;
+    height: 100%;
+    display: flex;
     justify-content: center;
     align-items: center;
-    color : white;
+    margin: 0 5%;
+  }
+
+  .admin-commands__right {
+    background: $color-secondary;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+
+    .commands-list {
+      width: 70%;
+      height: 200px;
+      min-height: 20%;
+
+      .list__container {
+        height: 85%;
+
+        .list__container__box {
+          height: 60px;
+          padding-left: 20px;
+          align-items: center;
+
+          .infos-commands {
+            width: 80%;
+            height: 100%;
+            display: flex;
+
+            p,
+            span {
+              font-size: 100%;
+            }
+
+            span:first-child {
+              margin-left: 0;
+            }
+
+            p {
+              padding: 0;
+            }
+            .icon-delete {
+              width: 15%;
+            }
+          }
+        }
+      }
+    }
+
+    .right__date {
+      margin-top: 15px;
+      margin-bottom: 3%;
+    }
+
+    .right__form {
+      width: 70%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .input-btn {
+        margin-bottom: 3%;
+        display: flex;
+        justify-content: center;
+
+        input {
+          background: $color-primary;
+          color: white;
+          height: 50px;
+          width: 150px;
+        }
+      }
+
+      .right__form__1 {
+
+        .input-duo {
+          display : flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 2%;
+          
+          .input {
+              width: 49%;
+          }
+
+          .time__container {
+            display: flex;
+            width: 100%;
+            .input__time {
+              width: 100%;
+              display: flex;
+              align-items: center;
+  
+              p {
+                white-space: nowrap;
+                margin-right: 10%;
+              }
+  
+              input {
+                width: 150px;
+                height: 50px;
+              }
+            }
+          }
+  
+          .total__container {
+            display: flex;
+            justify-content: flex-end;            
+            width: 60%;
+            margin-left: 2%;
+  
+            .total__content {
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: flex-end;
+  
+              p {
+                white-space: nowrap;
+                margin-right: 10%;
+              }
+  
+              .input {                
+                width: 100%;
+                input {
+                  margin: 0;
+                }
+              }
+            }
+          }  
+        }        
+        
+        .right__form--quantity {
+          display: flex;
+          width: 100%;
+          align-items: center;
+          margin-top: 3%;
+          margin-bottom: 3%;
+
+          .input__quantity {
+            display: flex;
+            width: 100%;
+            align-items: center;
+
+            input {
+              margin-bottom: 0;
+            }
+
+            p {
+              white-space: nowrap;
+              margin-right: 10%;
+            }
+          }
+
+          .input-btn {
+            display: flex;
+            justify-content: flex-end;
+            height: 100%;
+            width: 50%;
+            margin-left: 2%;
+            margin-bottom: 0;
+          }
+        }
+
+        .right__form__radio {
+          align-self: flex-start;
+          margin-bottom: 3%;
+
+          label {
+            margin-left: 30px;
+          }
+        }
+
+        .commands-dish-list {
+          height: 184px;
+          margin-top: 2%;
+          margin-bottom: 2%;
+
+          .list__container {
+            height: 100%;
+
+            .list__container__box {
+              height: 30%;
+              padding-left: 20px;
+
+              .infos-dish {
+                display: flex;
+
+                align-items: center;
+                width: 100%;
+                height: 100%;
+
+                p {
+                  font-size: 100%;
+                  padding: 0;
+                }
+                .dish__quantity {
+                  width: 50%;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1050px) {
+    flex-direction: column;
+    height: unset;
 
     .admin-commands__left {
-        width : 40%;
-        height : 100%;
-        display : flex;
-        justify-content: center;
-        align-items:center;
-        margin: 0 5%;
+      width: 100%;
+      height: 100vh;
+      margin: 0 5%;
     }
 
     .admin-commands__right {
-        background : $color-secondary;
-        height : 100%;
-        width : 50%;
-        display : flex;
-        flex-direction: column;
-        align-items: center;
-        overflow-y: scroll;
-        .commands-list {
-            width: 70%;
-            height : 100%;
+      width: 100%;
+      height: fit-content;
 
-            .list__container {
-                height: 85%;
-                .list__container__box {
-                    height : 30%;
-                    padding-left: 20px;
-                    
-                    .infos-commands {
-                        width: 80%;
-                        height: 100%;
-                        display: flex;
-                        p, span {
-                            font-size: 100%;
-                        }
+      .right__date {
+        margin-top: 30px;
+        margin-bottom: 50px;
+      }
 
-                        span:first-child { 
-                            margin-left: 0;
-                        }
-
-                        p {
-                            padding:0
-                        }
-                        .icon-delete {
-                            width: 15%;
-                        }
-                    }
-                }
-            }
-        }
-
-        .right__date {
-            margin-top: 15px;
-            margin-bottom:7%;
-        }
-
-        .right__form {
-            width: 70%;
-            height: 70%;
-            display: flex;
+      .right__form {
+        .right__form__1 {
+          margin-bottom: 60px;
+          .multi-btn {
             flex-direction: column;
+            align-items: center;
 
-            .input-btn input {
-                background : $color-primary;
-                color : white;
-                height : 50px;
-                width: 150px;
+            div,
+            .input-btn,
+            input {
+              width: 100%;
             }
 
-            .right__form__1 {
-
-                display : flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: space-between;
-                margin-bottom : 10%;
-                
-                .input-duo {
-                    display: flex;
-                    width: 100%;
-
-                    div:first-child{
-                        margin-right: 10px;
-                    }
-                    
-                }
-
-                .right__form__radio {
-
-                    align-self: flex-start;
-                    margin-bottom : 3%;
-
-                    label {
-                        margin-left : 30px;
-                    }
-                }
-
-                .textarea {
-                    margin-bottom : 2%;
-                }
-
-                .multi-btn {
-                    width:100%;
-                    display:flex;
-                    justify-content: space-between;
-                }
+            .input-btn:first-child {
+              margin-bottom: 7px;
             }
-
-            .command-dish-list {
-
-                height : 40%;
-                min-height: 130px;
-
-                .list__container {
-                    
-                    height: 100%;
-    
-                    .list__container__box {
-                        height : 30%;
-                        padding-left: 20px;
-
-                        .infos-dish {
-                            p, span {
-                                font-size: 80%;
-                            }
-
-                            span:first-child { 
-                                margin-left: 0;
-                            }
-
-                            p {
-                                padding:0
-                            }
-        
-                            .nb-dish {
-                                width : 125%;
-                                height : 100%;
-                                display : flex;
-                                align-items: center;
-                            }
-                            
-                            .icon-delete {
-                                width: 15%;
-                            }
-                        }
-                        
-                    }
-                }
-            }
+          }
         }
+
+        .dish-list {
+          height: 200px;
+          margin-bottom: 30px;
+        }
+      }
     }
-
-    @media (max-width: 1050px) {
-        flex-direction: column;
-        height : unset;
-
-        .admin-commands__left {
-            width : 100%;
-            height : 100vh;
-            margin: 0 5%;
-        }
-
-        .admin-commands__right {
-            width : 100%;
-            height : fit-content;
-
-            .right__date {
-                margin-top:30px;
-                margin-bottom: 50px;
-            }
-
-            .right__form {
-
-                .right__form__1 {
-                    margin-bottom: 60px;
-
-                    .multi-btn {
-                        flex-direction: column;
-                        align-items: center;
-
-                        div, .input-btn, input {
-                            width:100%;
-                        }
-
-                        .input-btn:first-child {
-                            margin-bottom: 7px;
-                        }
-                    }
-                }
-
-                .right__form__2 {
-                    .input-duo {
-                        flex-direction: column;
-                        align-items: center;
-
-                        .input {
-                            margin-top:4px;
-                        }
-
-                        .input, .input-btn {
-                            width:100%;
-                        }
-
-                        .input-btn input {
-                            width:100%;
-                        }
-                    }
-                }
-
-                .dish-list {
-                    height: 200px;
-                    margin-bottom: 30px;
-                }
-            }
-        }
-    }
+  }
 }

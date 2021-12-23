@@ -178,8 +178,11 @@ const AdminAccounts = () => {
                         await updateAdminWithoutPw(username, token);
                     }
                     // update bdd admin
-                    await updateAdminWithPw(username, password, token);
-                    getAdminAccountList();
+                    else {                    
+                        await updateAdminWithPw(username, password, token);
+                        getAdminAccountList();
+                    }
+                    
                 }
                 else {        
                     if (emailReg.test(email)) {
@@ -188,8 +191,10 @@ const AdminAccounts = () => {
                             await updateUserWithoutPw(username, name, firstname, email, tel, token);
                         }
                         // update bdd client
-                        await updateUserWithPw(username, password, name, firstname, email, tel, token);
-                        getClientAccountList();
+                        else {                            
+                            await updateUserWithPw(username, password, name, firstname, email, tel, token);
+                            getClientAccountList();
+                        }
                     }                    
                     else toast.error("Email non valide.");
                 }

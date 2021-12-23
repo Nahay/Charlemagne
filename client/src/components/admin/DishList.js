@@ -7,7 +7,7 @@ const DishList = ({dishByDateList, onClickDish, onClickDelete}) => {
 
   return (
     <div className="list__container">
-    {dishByDateList.map((d, i) => {
+    {dishByDateList.map((d) => {
           return (
             <div className="list__container__box" key={d._id} >
               <div className="infos-dish" onClick={() => onClickDish(d)}>

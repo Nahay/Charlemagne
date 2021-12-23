@@ -83,6 +83,14 @@ const deleteCommandListByCommand = async (commandID) => {
     }
 };
 
+const deleteAllCommandsList = async (commandID) => {
+    try {
+        await axios.delete(API_URL + "/commandsList/commands/" +commandID);
+        toast.success("Les éléments ont été supprimés de la commande.");
+    } catch(err) {
+        toast.error(err.message);
+    }
+};
 
 export {
     createCommandList,
@@ -91,6 +99,7 @@ export {
     getOneCommandListByDish,
     updateQuantity,
     deleteCommandList,
+    deleteAllCommandsList,
     deleteCommandListByCommand,
     getOneCommandListByDate
 };

@@ -137,8 +137,7 @@ const updateDishDate = async (id, numberKitchen, numberRemaining) => {
                 numberRemaining : numberRemaining
             }
         );
-        toast.success("Les quantitées ont été mises à jour !");
-    } catch(err) {
+        } catch(err) {
         toast.error(err.message);
     }
 };
@@ -146,7 +145,7 @@ const updateDishDate = async (id, numberKitchen, numberRemaining) => {
 const deleteDishDate = async (id) => {
     try {
         await axios.delete(API_URL + "/dish-date/id/" +id);
-        toast.success(`Le plat a été supprimé de cette date !`);
+        toast.success("Le plat a été supprimé de cette date !");
     } catch(err) {
         toast.error(err.message);
     }

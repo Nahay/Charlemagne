@@ -295,11 +295,11 @@ const AdminDates = () => {
                         />
                         <div className='input-time'>
                             <div className="input-time___min">
-                                <p>Heure minimale</p>
+                                <p>Heure min :</p>
                                 <input type="time" value={timeMin} onChange={handleTimeMinChange} required/>
                             </div>
                             <div className="input-time___max">
-                                <p>Heure maximale</p>
+                                <p>Heure max :</p>
                                 <input type="time" value={timeMax} onChange={handleTimeMaxChange} required/>
                             </div>
                             

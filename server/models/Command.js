@@ -1,7 +1,6 @@
 const { Schema, model } = require('mongoose');
 const { hashSync, compareSync, genSaltSync } = require('bcrypt');
 
-
 const UserSchema = new Schema({
     username: {
         type: String,
@@ -53,9 +52,9 @@ const CommandSchema = new Schema({
         type: Number,
         required: true
     },
-    time: {
-        type: Number,
-        required: true
+    timeC: {
+        type: String,
+        required: false
     },
     paid: {
         type: Boolean,

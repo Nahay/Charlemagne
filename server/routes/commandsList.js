@@ -113,5 +113,15 @@ router.delete("/command/:commandID", async (req, res) => {
     }
 });
 
+// Delete all commands from a command list
+router.delete("/commands/:commandID", async (req, res) => {
+    try {
+        const commandListToDelete = await CommandList.deleteMany({command: req.params.commandID});
+        res.json(commandListToDelete);
+    } catch(err) {
+        res.json({error: err.message});
+    }
+  });
+
 
 module.exports = router;

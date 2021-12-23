@@ -1,16 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getDishById } from '../../services/dishesService';
+import InputText from "../generic/InputText";
 
-const DishCommandList = ({dishByUser}) => {
+const DishCommandList = ({dishList, onClickDish}) => {
+  
+  const [dishesName, setDishesName] = useState([]);
 
+  useEffect(() => {
+    async function getSetDishesName() {
+      setDishesName([]);
+        dishList.forEach(async (d) => {
+          const dish = await getDishById(d.dishID);
+          setDishesName(dishesName => [...dishesName, dish.name]);
+        });
+    }
+
+    getSetDishesName();
+
+  }, [dishList]);
   return (
     <div className="list__container">
-    {dishByUser.map((d) => {
+    {dishList.map((d,i) => {
           return (
-            <div className="list__container__box" key={d._id} >
-              <div className="infos-dish">
-                <p>{d.name}</p>
-                <div className="nb-dish">
-                  <span>Quantité : {d.quantity}</span>
+            <div className="list__container__box" key={d._id} onClick={() => onClickDish(d)}>
+              <div className="infos-dish" >
+                <p>{dishesName[i]}</p>
+                <div className="dish__quantity">
+                  <p>Quantité : {d.quantity}</p>
                 </div>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 // import emailjs from 'emailjs-com';
@@ -10,7 +10,7 @@ import TextArea from '../generic/TextArea';
 
 
 const ContactForm = () => {
-    
+    const form = useRef(null);
     let day = moment(new Date()).locale('fr').format('LL');
     let time = moment(new Date()).locale('fr').format('LTS');
     const nameReg = /^[ a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'-]+$/;
@@ -55,7 +55,7 @@ const ContactForm = () => {
 
     return (
         <>
-            <form className="contact__form" onSubmit={sendEmail}>
+            <form className="contact__form" onSubmit={sendEmail} ref={form}>
                 <div className="contact__input">
                     <div className="input__name-email">
                         <InputText

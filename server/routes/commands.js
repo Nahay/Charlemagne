@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const moment = require('moment');
+require('moment/locale/fr');
 
 const { Command } = require('../models/Command');
 
@@ -25,11 +27,11 @@ router.get('/:dateC', async (req, res) => {
 
 // Create a command
 router.post('/', async (req, res) => {
-    const {user, dateC, time, paid, container, comment, total} = req.body;
+    const {user, dateC, paid, container, comment, total} = req.body;
     const command = new Command({
         user: user,
         dateC: dateC,
-        time: time,
+        timeC: moment(new Date()).locale('fr').format('LT'),
         paid: paid,
         container: container,
         comment: comment,
@@ -56,12 +58,12 @@ router.delete("/:commandId", async (req, res) => {
 
 // Update a command
 router.patch('/:commandId', async (req, res) => {
-    const { time, paid, container, comment, total } = req.body;
+    const { timeC, paid, container, comment, total } = req.body;
     try {
         const commandToUpdate = await Command.updateOne(
             { _id: req.params.commandId },
             {
-                time : time,
+                timeC : timeC,
                 paid : paid,
                 container: container, 
                 comment: comment,

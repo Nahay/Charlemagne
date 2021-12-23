@@ -9,9 +9,15 @@ import InputButton from "../../components/generic/InputButton";
 import AdminCalendar from "../../components/admin/AdminCalendar";
 
 import { getDates } from "../../services/calendarService";
-import { getCommandByDate, getCommands } from "../../services/commandsService";
+import {
+  deleteCommand,
+  getCommandByDate,
+  updateCommand
+} from "../../services/commandsService";
 import CommandsList from "../../components/admin/CommandsList";
 import DishCommandList from "../../components/admin/DishCommandList";
+import { deleteAllCommandsList, updateQuantity } from "../../services/commandsListService";
+import { getDishByDateAndDish, updateDishDate } from "../../services/dishesService";
 
 const AdminCommands = () => {
   const ref = useRef(null);
@@ -20,19 +26,23 @@ const AdminCommands = () => {
     new Date(new Date().toDateString()).getTime()
   );
 
+  const [id, setId] = useState("");
+  const [commandId, setCommandId] = useState("");
   const [name, setName] = useState("");
   const [firstname, setFirstname] = useState("");
+  const [time, setTime] = useState("");
   const [container, setContainer] = useState(false);
   const [total, setTotal] = useState("");
   const [comment, setComment] = useState("");
   const [paid, setPaid] = useState(false);
+  const [quantity, setQuantity] = useState("");
+  const [currentCommandList, setCurrentCommandList] = useState();
 
   const [dishList, setDishList] = useState([]);
   const [dateList, setDatesList] = useState([]);
   const [commandsList, setCommandsList] = useState([]);
 
   useEffect(() => {
-    console.log(commandsList);
     getDateList();
     getCommandsByDate();
   }, [date]);
@@ -47,29 +57,100 @@ const AdminCommands = () => {
     setCommandsList(commands);
   };
 
+  const getDishList = async (id) => {
+    const dishes = await getCommandByDate(date);
+    const d = dishes.filter((d) => d.user._id === id)[0].list;
+    setDishList(d);
+  };
+
   const onChangeDate = async (e) => {
     setDate(e);
+    resetInput();
     getCommandsByDate();
   };
 
-  const onClickCommand = (d) => {
-    setName(d.user.name);
-    setFirstname(d.user.firstname);
-    setContainer(d.container);
-    setTotal(d.total);
-    setComment(d.comment);
-    setPaid(d.paid);
+  const onClickCommand = ({ _id, user, container, total, timeC, comment, paid }) => {
+    getDishList(user._id);
+    setId(user._id);
+    setCommandId(_id);
+    setName(user.name);
+    setFirstname(user.firstname);
+    setContainer(container);
+    setTotal(total);
+    setTime(timeC);
+    setComment(comment);
+    setPaid(paid);
   };
 
-  const onClickDelete = (d) => {};
+  const onClickDish = (d) => {
+    setQuantity(d.quantity);
+    setCurrentCommandList(d);
+  };
+
+  const onClickDelete = async ({ _id }) => {
+    await deleteAllCommandsList(_id);
+    await deleteCommand(_id);
+    getCommandsByDate();
+    resetInput();
+  };
+
+  const onCommandSubmit = async (e) => {
+    e.preventDefault();
+
+    await updateCommand(commandId, time, paid, container, comment, total);
+
+    getCommandsByDate();
+
+    resetInput();
+  }
+
+  const onModifyQuantity = async () => {
+    const dishDate = await getDishByDateAndDish(date, currentCommandList.dishID);
+
+    if (quantity > dishDate.numberRemaining + currentCommandList.quantity) 
+      toast.error(`La quantité ne peut être supérieure à ${dishDate.numberRemaining + currentCommandList.quantity}.`);
+    else {
+      // calcul du nombre restant en faisant : nombreRestant - ( nouvelleQuantité - ancienneQuantité )
+      const numberRemaining = dishDate.numberRemaining - (quantity - currentCommandList.quantity);
+
+      // on donne la nouvelle valeur de la quantité dans le state
+      currentCommandList.quantity = parseInt(quantity);
+
+      // update le nombre restant en cuisine
+      await updateDishDate(dishDate._id, dishDate.numberKitchen, numberRemaining);
+
+      // // update la quantité dans la command list
+      await updateQuantity(currentCommandList._id, quantity);
+
+      getDishList(id);
+    }
+  }
+
+  const resetInput = () => {
+    setName("");
+    setFirstname("");
+    setContainer(false);
+    setComment("");
+    setDishList([]);
+    setTotal("");
+    setTime("");
+    setQuantity("");
+    setPaid(false);
+  };
 
   // HANDLE
+
+  const handleQuantityChange = (e) => {
+    if(Number(e.target.value) || e.target.value === "") setQuantity(e.target.value);
+  }
 
   const handleCommentChange = (e) => setComment(e.target.value);
 
   const handleNameChange = (e) => setName(e.target.value);
 
   const handleFirstnameChange = (e) => setFirstname(e.target.value);
+
+  const handleTimeChange = (e) => setTime(e.target.value);
 
   const handleCheckboxChange = (e) => (e.target.checked = true);
 
@@ -114,17 +195,21 @@ const AdminCommands = () => {
           />
         </div>
         <div className="right__form">
-          <div className="right__form__1">
+          <form className="right__form__1" onSubmit={onCommandSubmit}>
             <div className="input-duo">
               <InputText
                 value={name}
                 placeholder="Nom"
+                id="Name"
+                divId="inputName"
                 handleChange={handleNameChange}
                 readOnly
               />
               <InputText
                 value={firstname}
                 placeholder="Prénom"
+                id="firstname"
+                divId="inputFirstname"
                 handleChange={handleFirstnameChange}
                 readOnly
               />
@@ -162,21 +247,41 @@ const AdminCommands = () => {
               handleChange={handleCommentChange}
             />
 
-            <div className="commands-list">
-              {/* <DishCommandList dishByUser={}/> */}
+            <div className="commands-dish-list">
+              <DishCommandList dishList={dishList} onClickDish={onClickDish} />
+            </div>
+
+            <div className="right__form--quantity" >
+              <div className="input__quantity">
+                  <p>Quantité : </p>
+                  <InputText
+                    value={quantity}
+                    handleChange={handleQuantityChange}
+                    required={false}
+                  />
+              </div>
+              <InputButton value="Modifier" type="button" onClick={onModifyQuantity}/>
             </div>
 
             <div className="input-duo">
-              <InputText
-                value={total}
-                placeholder="Total"
-                handleChange={handleTotalChange}
-              />
-              <InputText
-                value={total}
-                placeholder="Total"
-                handleChange={handleTotalChange}
-              />
+              <div className="time__container">
+                  <div className="input__time">
+                    <p>Heure :</p>
+                    <input
+                      type="time"
+                      value={time}
+                      onChange={handleTimeChange}
+                      required />
+                  </div>
+                </div>
+                
+
+                <div className="total__container">
+                  <div className="total__content">
+                    <p>Total :</p>
+                    <InputText value={total} handleChange={handleTotalChange} />
+                  </div>
+                </div>
             </div>
 
             <div className="right__form__radio" onChange={handlePaidChange}>
@@ -200,8 +305,8 @@ const AdminCommands = () => {
               />
               <label htmlFor="y---paid">Oui</label>
             </div>
-            <InputButton value="Enregistrer" type="submit"/>
-          </div>
+            <InputButton value="Enregistrer" type="submit" />
+          </form>
         </div>
       </div>
     </div>

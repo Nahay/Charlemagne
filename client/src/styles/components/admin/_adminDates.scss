@@ -63,11 +63,12 @@
                         width: 48%;
 
                         p {
-                            font-size: 14px;
+                            white-space: nowrap;
+                            margin-right: 2%;
                         }
 
                         input {
-                            width: 50%;
+                            width: 100%;
                             height: 40px;
                         }
                     }
@@ -214,6 +215,32 @@
                         .input-btn:first-child {
                             margin-bottom: 7px;
                         }
+                    }
+
+                    .input-time {
+                        flex-direction: column;
+                        height: 100%;
+
+                        .input-time___min,
+                        .input-time___max {
+                            width: 100%;
+
+                            p {
+                                width: 150px;
+                                white-space: nowrap;
+                                margin-right: 5px;
+                            }
+                            input {
+                                width: 100%;
+                            }
+                        }
+
+                        .input-time___min {
+                            margin-bottom: 2%;
+                        }
+
+
+                    
                     }
                 }
 
