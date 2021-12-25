@@ -7,6 +7,7 @@ import InputText from "../../components/generic/InputText";
 import TextArea from "../../components/generic/TextArea";
 import InputButton from "../../components/generic/InputButton";
 import AdminCalendar from "../../components/admin/AdminCalendar";
+import Box from "../../components/generic/Box";
 
 import { getDates } from "../../services/calendarService";
 import {
@@ -17,10 +18,11 @@ import {
 import CommandsList from "../../components/admin/CommandsList";
 import DishCommandList from "../../components/admin/DishCommandList";
 import { deleteAllCommandsList, updateQuantity } from "../../services/commandsListService";
-import { getDishByDateAndDish, updateDishDate } from "../../services/dishesService";
+import { getDishByDateAndDish, getDishById, updateDishDate } from "../../services/dishesService";
 
 const AdminCommands = () => {
   const ref = useRef(null);
+  const box = useRef(null);
 
   const [date, setDate] = useState(
     new Date(new Date().toDateString()).getTime()
@@ -34,9 +36,13 @@ const AdminCommands = () => {
   const [container, setContainer] = useState(false);
   const [total, setTotal] = useState("");
   const [comment, setComment] = useState("");
+  const [emptyFields, setEmptyFields] = useState(true);
   const [paid, setPaid] = useState(false);
   const [quantity, setQuantity] = useState("");
   const [currentCommandList, setCurrentCommandList] = useState();
+
+  const [currentDelete, setCurrentDelete] = useState("");
+  const [needConfirmation, setNeedConfirmation] = useState(true);
 
   const [dishList, setDishList] = useState([]);
   const [dateList, setDatesList] = useState([]);
@@ -46,6 +52,8 @@ const AdminCommands = () => {
     getDateList();
     getCommandsByDate();
   }, [date]);
+
+
 
   const getDateList = async () => {
     const dates = await getDates();
@@ -72,6 +80,7 @@ const AdminCommands = () => {
   const onClickCommand = ({ _id, user, container, total, timeC, comment, paid }) => {
     getDishList(user._id);
     setId(user._id);
+    setEmptyFields(false);
     setCommandId(_id);
     setName(user.name);
     setFirstname(user.firstname);
@@ -87,39 +96,72 @@ const AdminCommands = () => {
     setCurrentCommandList(d);
   };
 
-  const onClickDelete = async ({ _id }) => {
-    await deleteAllCommandsList(_id);
-    await deleteCommand(_id);
+  const onClickDelete = async () => {
+
+    await deleteAllCommandsList(currentDelete);
+    await deleteCommand(currentDelete);
+    
     getCommandsByDate();
     resetInput();
+
+    box.current.style.display = "none";
+    
+    setNeedConfirmation(true);
   };
+
+  const onClickConfirmation = ({_id}) => {
+    if (needConfirmation) {
+      box.current.style.display = "flex";
+      setNeedConfirmation(false);
+    }
+    else {
+      box.current.style.display = "none";
+      setNeedConfirmation(true);
+    }
+    setCurrentDelete(_id);
+  }
 
   const onCommandSubmit = async (e) => {
     e.preventDefault();
 
-    await updateCommand(commandId, time, paid, container, comment, total);
+    if(emptyFields) toast.error("Veuillez sélectioner une commande avant de pouvoir enregistrer.");
 
-    getCommandsByDate();
+    else {
+      await updateCommand(commandId, time, paid, container, comment, total);
 
-    resetInput();
+      getCommandsByDate();
+  
+      resetInput();
+    }    
   }
 
   const onModifyQuantity = async () => {
-    const dishDate = await getDishByDateAndDish(date, currentCommandList.dishID);
 
+    if(quantity === "") {
+      toast.error("Veuillez renseigner une quantité.")
+      return;
+    }
+
+    const dishDate = await getDishByDateAndDish(date, currentCommandList.dishID);
+    const dish = await getDishById(currentCommandList.dishID);
+    
     if (quantity > dishDate.numberRemaining + currentCommandList.quantity) 
       toast.error(`La quantité ne peut être supérieure à ${dishDate.numberRemaining + currentCommandList.quantity}.`);
     else {
       // calcul du nombre restant en faisant : nombreRestant - ( nouvelleQuantité - ancienneQuantité )
       const numberRemaining = dishDate.numberRemaining - (quantity - currentCommandList.quantity);
 
+      // Calcul pour le total étant donné que la quantité change
+      // pour ne pas créer d'anomalie il est en readOnly
+      let t = total - dish.price * currentCommandList.quantity + dish.price * quantity;
+      setTotal(t);
+
       // on donne la nouvelle valeur de la quantité dans le state
       currentCommandList.quantity = parseInt(quantity);
-
       // update le nombre restant en cuisine
       await updateDishDate(dishDate._id, dishDate.numberKitchen, numberRemaining);
 
-      // // update la quantité dans la command list
+      // update la quantité dans la command list
       await updateQuantity(currentCommandList._id, quantity);
 
       getDishList(id);
@@ -173,6 +215,9 @@ const AdminCommands = () => {
 
   return (
     <div className="admin-commands">
+
+      <Box onClickConfirmation={onClickConfirmation} onClickDelete={onClickDelete} boxRef={box}/>
+
       <div className="admin-commands__left">
         <div className="left__commands-list">
           <AdminCalendar
@@ -191,7 +236,7 @@ const AdminCommands = () => {
           <CommandsList
             commandsListByDate={commandsList}
             onClickCommand={onClickCommand}
-            onClickDelete={onClickDelete}
+            onClickDelete={onClickConfirmation}
           />
         </div>
         <div className="right__form">
@@ -279,7 +324,7 @@ const AdminCommands = () => {
                 <div className="total__container">
                   <div className="total__content">
                     <p>Total :</p>
-                    <InputText value={total} handleChange={handleTotalChange} />
+                    <InputText value={total} handleChange={handleTotalChange} readOnly/>
                   </div>
                 </div>
             </div>

@@ -44,13 +44,13 @@ const OrderTable = ({data, setData}) => {
         {
             name: 'Nombre Désiré',
             cell: row => (
-                <InputText value={row.nbC} placeholder="0" handleChange={(e) => handleNbChange(e, row.id)}/>
+                <InputText value={row.nbC} required={false} placeholder="0" handleChange={(e) => handleNbChange(e, row.id)}/>
             )
         },
         {
             name: 'Total',
             selector: row => {
-                if (row.nbC !== "") return row.nbC*row.price+" €"
+                if (row.nbC !== "" && row.nbC <= row.nb) return row.nbC*row.price+" €"
                 else return "0 €"
             }
         }

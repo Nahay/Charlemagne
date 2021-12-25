@@ -3,18 +3,18 @@ import { toast } from 'react-toastify';
 import API_URL from '../app-config';
 
 
-const createCommand = async (user, dateC, time, paid, container, comment, total) => {
+const createCommand = async (user, dateC, timeC, paid, container, comment, total) => {
     try {
-        await axios.post(API_URL + "/commands", {
+        const { data } = await axios.post(API_URL + "/commands", {
             user,
             dateC,
-            time,
+            timeC,
             paid,
             container,
             comment,
             total
         });
-        toast.success("La commande a été créée !");
+        return data;
     } catch(err) {
         toast.error(err.message);
     }

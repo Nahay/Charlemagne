@@ -54,7 +54,7 @@ const CommandSchema = new Schema({
     },
     timeC: {
         type: String,
-        required: false
+        required: true
     },
     paid: {
         type: Boolean,

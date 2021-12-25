@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import InputText from '../../components/generic/InputText';
 import InputButton from '../../components/generic/InputButton';
 import TextArea from '../../components/generic/TextArea';
@@ -7,13 +7,15 @@ import { toast } from 'react-toastify';
 
 import { getCountByName, getDishes, updateDish, createDish, deleteDish, deleteAllDishesDish } from "../../services/dishesService";
 import { getOneCommandListByDish } from '../../services/commandsListService';
+import Box from '../../components/generic/Box';
 
 
 const AdminDishes = () => {
+    const box = useRef(null);
 
-    const [id, setId] = useState('');
+    const [id, setId] = useState("");
     const [type, setType] = useState('e');
-    const [price, setPrice] = useState(null);
+    const [price, setPrice] = useState("");
     const [name, setName] = useState("");
     const [previousName, setPreviousName] = useState("");
     const [desc, setDesc] = useState("");
@@ -21,6 +23,8 @@ const AdminDishes = () => {
     const [create, setCreate] = useState(true);
     const [dishList, setDishList] = useState([]);
 
+    
+    const [needConfirmation, setNeedConfirmation] = useState(true);
 
     useEffect(() => {
       getDishList();
@@ -87,16 +91,31 @@ const AdminDishes = () => {
 
     // DB -------------------------------------------------------------------
 
-    const onClickDelete = async (id) => {
+    const onClickDelete = async () => {
         const dish = await getOneCommandListByDish(id);
-        if (dish === []) {
+        if (!dish) {
             await deleteDish(id);
             await deleteAllDishesDish(id);
             onClickNewDish();
             getDishList();
         }
-        else toast.error("Le plat appartient à une commande, vous ne pouvez pas le supprimer.");
+        else toast.error("Le plat appartient à une commande, vous ne pouvez pas le supprimer.");        
+        box.current.style.display = "none";    
+        setNeedConfirmation(true);
     }
+
+    const onClickConfirmation = (e) => {
+        if (needConfirmation) {
+          box.current.style.display = "flex";
+          setNeedConfirmation(false);
+        }
+        else {
+          box.current.style.display = "none";
+          setNeedConfirmation(true);
+        }
+        setId(e);
+    }
+
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -142,13 +161,14 @@ const AdminDishes = () => {
 
     return (
         <div className="admin-dishes">
+            <Box onClickConfirmation={onClickConfirmation} onClickDelete={onClickDelete} boxRef={box}/>
             <div className="admin-dishes__left">
                 <div className="left__dishes-list">
                     
                     <AllDishesList
                         dishList={dishList}
                         onClickDish={onClickDish}
-                        onClickDelete={onClickDelete}
+                        onClickDelete={onClickConfirmation}
                     />
 
                 </div>

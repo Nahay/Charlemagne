@@ -11,11 +11,13 @@ import AdminCalendar from "../../components/admin/AdminCalendar";
 
 import {getDates, updateDate, getDateByDate, createDate, deleteDate} from '../../services/calendarService';
 import {getDishes, createDishDate, getDishByDate, deleteAllDishesDate, deleteDishDate, updateDishDate} from '../../services/dishesService';
+import Box from '../../components/generic/Box';
 
 
 const AdminDates = () => {
 
     const ref = useRef(null);
+    const box = useRef(null);
 
     const [date, setDate] = useState(new Date(new Date().toDateString()).getTime());
     const [dateList, setDatesList] = useState([]);
@@ -33,9 +35,13 @@ const AdminDates = () => {
     const [nbR, setNbR] = useState("");
     const [timeMin, setTimeMin] = useState("");
     const [timeMax, setTimeMax] = useState("");
+    const [currentCommandList, setCurrentCommandList] = useState({});
+    const [deletedDate, setDeletedDate] = useState(true);
 
     const [select, setSelect] = useState("0");
     const [dishList, setDishList] = useState([]);
+
+    const [needConfirmation, setNeedConfirmation] = useState(true);
 
 
     useEffect(() => {
@@ -161,7 +167,6 @@ const AdminDates = () => {
 
         if (!dateExists) {
             createDate(date, visibility, comment, timeMin, timeMax);
-            console.log("ok");
             setDateExists(true);
             getDateList();
         }
@@ -169,8 +174,7 @@ const AdminDates = () => {
     }
 
 
-    const deleteAndSetDate = async () => {
-
+    const deleteAndSetDate = async (e) => {
         let haveCommand = false;
         dishByDateList.forEach(d => {
             if (d.numberKitchen !== d.numberRemaining) haveCommand = true;
@@ -183,18 +187,35 @@ const AdminDates = () => {
             onChangeDate(new Date(new Date().toDateString()).getTime());
         }
         else toast.error("Il y a une commande à cette date, vous ne pouvez pas la supprimer.");
+
+        box.current.style.display = "none";    
+        setNeedConfirmation(true);
+    }
+
+    const onClickConfirmation = (e) => {
+        if (needConfirmation) {
+          box.current.style.display = "flex";
+          setNeedConfirmation(false);
+        }
+        else {
+          box.current.style.display = "none";
+          setNeedConfirmation(true);
+        }
+
+        if(e.dateC === date) {
+            setCurrentCommandList(e);
+            setDeletedDate(false);
+        }
+        else setDeletedDate(true);
     }
 
     const onDateSubmit = async (e) => {
         e.preventDefault();
-        console.log(e);
         saveDate(); 
-
     }
 
     const onDishSubmit = async (e) => {
-        e.preventDefault();
-        
+        e.preventDefault();        
         // si on a sélectionné qqe chose :
         if (select !== "0") {
 
@@ -239,12 +260,14 @@ const AdminDates = () => {
         else toast.error(`Vous ne pouvez pas mettre un nombre inférieur au nombre de commandes qui est de : ${nbCommande}.`);
     }
 
-    const onClickDelete = async ({_id, numberKitchen, numberRemaining}) => {
-        if (numberKitchen === numberRemaining) {
-            await deleteDishDate(_id);
+    const onClickDelete = async () => {
+        if (currentCommandList.numberKitchen === currentCommandList.numberRemaining) {
+            await deleteDishDate(currentCommandList._id);
             getDishByDateList(date);
         }
-        else toast.error("Ce plat a déjà été commandé, vous ne pouvez pas le supprimer.");
+        else toast.error("Ce plat a déjà été commandé, vous ne pouvez pas le supprimer.");        
+        box.current.style.display = "none";    
+        setNeedConfirmation(true);
     }
 
 
@@ -252,6 +275,7 @@ const AdminDates = () => {
 
     return (
         <div className="admin-dates">
+            <Box onClickConfirmation={onClickConfirmation} onClickDelete={deletedDate ? deleteAndSetDate : onClickDelete} boxRef={box}/>
             <div className="admin-dates__left">
                 <div className="left__dates-list">
                     <AdminCalendar
@@ -308,7 +332,7 @@ const AdminDates = () => {
                             <div className="multi-btn">
                                     <InputButton value="Enregistrer" type="submit"/>
 
-                                    <div onClick={deleteAndSetDate}>
+                                    <div onClick={onClickConfirmation}>
                                         <InputButton type="button" value="Supprimer"/>
                                     </div>                                    
                             </div>
@@ -338,7 +362,7 @@ const AdminDates = () => {
                         <DishList
                             dishByDateList={dishByDateList}
                             onClickDish={onClickDish}
-                            onClickDelete={onClickDelete}
+                            onClickDelete={onClickConfirmation}
                         />
                     </div>
                 </div>

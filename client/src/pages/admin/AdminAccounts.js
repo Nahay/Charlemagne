@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { toast } from 'react-toastify';
 import { faUser, faUserCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,13 +8,14 @@ import InputButton from '../../components/generic/InputButton';
 import InputNumber from '../../components/generic/InputNumber';
 import InputEmail from '../../components/generic/InputEmail';
 import AccountList from '../../components/admin/AccountList';
+import Box from "../../components/generic/Box";
 
 import { createUser, deleteUserByUsername, getUsers, updateUserWithoutPw, updateUserWithPw } from '../../services/usersService';
 import { createAdmin, deleteAdminByUsername, getAdmins, updateAdminWithoutPw, updateAdminWithPw} from '../../services/adminsService';
 
 
 const AdminAccounts = () => {
-
+    const box = useRef(null);
     const token = localStorage.getItem("adminToken");
 
     const [admin, setAdmin] = useState(false);
@@ -27,6 +28,7 @@ const AdminAccounts = () => {
 
     const [create, setCreate] = useState(true);
     const [watchClients, setWatchClients] = useState(true);
+    const [needConfirmation, setNeedConfirmation] = useState(true);
     const [clientAccountList, setClientAccountList] = useState([]);
     const [adminAccountList, setAdminAccountList] = useState([]);
 
@@ -35,7 +37,6 @@ const AdminAccounts = () => {
 
 
     useEffect(() => {
-
         const token = localStorage.getItem("adminToken");
 
         async function getClientAccountList() {
@@ -127,8 +128,22 @@ const AdminAccounts = () => {
         setAdminAccountList(admins.admins);
     }
 
-    const onClickDelete = async (username) => {
+    const onClickConfirmation = (username) => {
+        if (needConfirmation) {
+          box.current.style.display = "flex";
+          setNeedConfirmation(false);
+        }
+        else {
+          box.current.style.display = "none";
+          setNeedConfirmation(true);
+        }
+        // pas spécialement utile dans cette situation
+        setUsername(username);
+    }
 
+
+    const onClickDelete = async () => {
+        
         if (watchClients) {
             await deleteUserByUsername(username, token);
             getClientAccountList();
@@ -136,7 +151,9 @@ const AdminAccounts = () => {
         else {
             await deleteAdminByUsername(username, token);
             getAdminAccountList();
-        } 
+        }
+        box.current.style.display = "none";
+        setNeedConfirmation(true);
     }
 
     const onSubmit = async (e) => {
@@ -215,6 +232,8 @@ const AdminAccounts = () => {
     return (
         <div className="admin-accounts">
 
+            <Box onClickConfirmation={onClickConfirmation} onClickDelete={onClickDelete} boxRef={box}/>
+
             <div className="admin-accounts__left">
                 <div className="left__account-list">
 
@@ -234,7 +253,7 @@ const AdminAccounts = () => {
                         accountList={watchClients ? clientAccountList : adminAccountList}
                         onClickClientAccount={onClickClientAccount}
                         onClickAdminAccount={onClickAdminAccount}
-                        onClickDelete={onClickDelete}
+                        onClickDelete={onClickConfirmation}
                     />
 
                 </div>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { getDishById } from '../../services/dishesService';
-import InputText from "../generic/InputText";
 
 const DishCommandList = ({dishList, onClickDish}) => {
   
@@ -18,6 +17,7 @@ const DishCommandList = ({dishList, onClickDish}) => {
     getSetDishesName();
 
   }, [dishList]);
+  
   return (
     <div className="list__container">
     {dishList.map((d,i) => {

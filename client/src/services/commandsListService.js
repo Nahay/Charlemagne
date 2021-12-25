@@ -10,7 +10,6 @@ const createCommandList = async (command, dishID, quantity) => {
             dishID,
             quantity
         });
-        toast.success("L'élément de la commande a été créé !");
     } catch(err) {
         toast.error(err.message);
     }

@@ -13,7 +13,7 @@ const CommandsList = ({commandsListByDate, onClickCommand, onClickDelete}) => {
               <div className="infos-commands" onClick={() => onClickCommand(d)}>
                 <p>{d.user.name} </p>
                 <p> {d.user.firstname} </p>
-                <p>Commandé à {d.timeC}</p>
+                <p>Commandé pour {d.timeC}</p>
               </div>
               <div className="icon-delete" onClick={() => onClickDelete(d)}>
                 <FontAwesomeIcon icon={faTrashAlt} size="sm"/>

@@ -18,7 +18,6 @@ const Order = () => {
   const [dishByDateList, setDishByDateList] = useState([]);
   const [tableActive, setTableActive] = useState(true);
   const [date, setDate] = useState(new Date().getTime());
-  const [user, setUser] = useState({});
 
   useEffect(() => {
     getSetDates();

@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const moment = require('moment');
-require('moment/locale/fr');
 
 const { Command } = require('../models/Command');
 
@@ -27,11 +25,11 @@ router.get('/:dateC', async (req, res) => {
 
 // Create a command
 router.post('/', async (req, res) => {
-    const {user, dateC, paid, container, comment, total} = req.body;
+    const {user, dateC, timeC, paid, container, comment, total} = req.body;
     const command = new Command({
         user: user,
         dateC: dateC,
-        timeC: moment(new Date()).locale('fr').format('LT'),
+        timeC: timeC,
         paid: paid,
         container: container,
         comment: comment,
@@ -42,6 +40,7 @@ router.post('/', async (req, res) => {
         const savedCommand = await command.save();
         res.json(savedCommand);
     } catch(err) {
+        console.log(err);
         res.json({error: err.message});
     }
 });

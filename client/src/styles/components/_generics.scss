@@ -263,3 +263,64 @@ input[type="time"] {
     width: 100%;
   }
 }
+
+// --------------- CONFIRMATION BOX -----------------------------
+.confirmation__container {
+  transition: all .5s ease;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  inset: 0;
+  z-index: 2;
+  
+  .confirmation-box__container {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    height: fit-content;
+    z-index: 2;
+
+    .confirmation-box__content {
+      position: relative;
+      width: 550px;
+      height: 250px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
+      background: $color-black;
+      border-radius: 15px;
+      // border-bottom: 2px solid $color-primary;
+      // border-top: 2px solid $color-primary;
+      p {
+        color: white;
+      }
+  
+      .content__buttons {
+        display: flex;
+        justify-content: space-evenly;
+        width: 90%;
+
+        .input-btn {
+          input {
+            color: white;
+            background: $color-primary;
+          }
+        }
+      }
+    }
+  }
+  
+  .confirmation__background {
+    position: absolute;
+    background:rgba(43, 43, 43, 0.8);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    height: 100%;
+  }
+}
