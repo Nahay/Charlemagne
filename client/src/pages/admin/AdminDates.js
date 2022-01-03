@@ -275,7 +275,7 @@ const AdminDates = () => {
 
     return (
         <div className="admin-dates">
-            <Box onClickConfirmation={onClickConfirmation} onClickDelete={deletedDate ? deleteAndSetDate : onClickDelete} boxRef={box}/>
+            <Box onClickConfirmation={onClickConfirmation} onClickDelete={deletedDate ? deleteAndSetDate : onClickDelete} message={deletedDate ? "Voulez-vous vraiment supprimer cette date ?" : "Voulez-vous vraiment supprimer le plat de cette date ?"} boxRef={box}/>
             <div className="admin-dates__left">
                 <div className="left__dates-list">
                     <AdminCalendar

@@ -1,8 +1,17 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { decodeToken } from 'react-jwt';
 
 
 const HeaderBody = ({toggle}) => {
+
+    const isLogged = () => { 
+        const userDecoded = decodeToken(localStorage.getItem("userToken"));
+
+        if (userDecoded) return true;
+        return false;
+    }
+
 
     return (
         <div className = "header__body">
@@ -19,6 +28,18 @@ const HeaderBody = ({toggle}) => {
                     onClick={toggle}>
                         Commander
                 </NavLink>
+
+                {isLogged() && 
+
+                <NavLink
+                    exact to="/history"
+                    activeClassName="active-link"
+                    onClick={toggle}>
+                        Historique
+                </NavLink>
+                
+                }    
+
                 <NavLink
                     exact to="/contact"
                     activeClassName="active-link"

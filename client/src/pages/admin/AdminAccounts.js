@@ -128,7 +128,7 @@ const AdminAccounts = () => {
         setAdminAccountList(admins.admins);
     }
 
-    const onClickConfirmation = (username) => {
+    const onClickConfirmation = () => {
         if (needConfirmation) {
           box.current.style.display = "flex";
           setNeedConfirmation(false);
@@ -137,8 +137,6 @@ const AdminAccounts = () => {
           box.current.style.display = "none";
           setNeedConfirmation(true);
         }
-        // pas spécialement utile dans cette situation
-        setUsername(username);
     }
 
 
@@ -232,7 +230,7 @@ const AdminAccounts = () => {
     return (
         <div className="admin-accounts">
 
-            <Box onClickConfirmation={onClickConfirmation} onClickDelete={onClickDelete} boxRef={box}/>
+            <Box onClickConfirmation={onClickConfirmation} onClickDelete={onClickDelete} boxRef={box} message={watchClients ? "Voulez-vous vraiment supprimer cet utilisateur ?" : "Voulez-vous vraiment supprimer cet administrateur"}/>
 
             <div className="admin-accounts__left">
                 <div className="left__account-list">

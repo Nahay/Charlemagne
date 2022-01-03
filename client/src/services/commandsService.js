@@ -38,6 +38,15 @@ const getCommandByDate = async (dateC) => {
     }
 };
 
+const getCommandByUser = async (user) => {
+    try {
+        const { data } = await axios.get(API_URL + "/commands/user/" + user);
+        return data;
+    } catch(err) {
+        toast.error(err.message);
+    }
+};
+
 const updateCommand = async (id, timeC, paid, container, comment, total) => {
     try {
         await axios.patch(
@@ -69,6 +78,7 @@ export {
     createCommand,
     getCommands,
     getCommandByDate,
+    getCommandByUser,
     updateCommand,
     deleteCommand
 };

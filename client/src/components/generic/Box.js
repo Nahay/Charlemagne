@@ -1,14 +1,14 @@
 import React from "react";
 import InputButton from "./InputButton";
 
-const Box = ({onClickConfirmation, onClickDelete, boxRef}) => {
+const Box = ({onClickConfirmation, onClickDelete, boxRef, message}) => {
 
   return (
     <div className="confirmation__container" ref={boxRef}>      
         <div className="confirmation-box__container">
             <div className="confirmation-box__content">
 
-                <p>Voulez-vous vraiment supprimer cela ?</p>
+                <p>{message}</p>
 
                 <div className="content__buttons">
 

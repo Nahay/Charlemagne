@@ -23,6 +23,16 @@ router.get('/:dateC', async (req, res) => {
     }
 });
 
+// Get command by user
+router.get('/user/:user', async (req, res) => {
+    try {
+        const command = await Command.find({ user: req.params.user});
+        res.json(command);
+    } catch(err) {
+        res.json({error: err.message});
+    }
+});
+
 // Create a command
 router.post('/', async (req, res) => {
     const {user, dateC, timeC, paid, container, comment, total} = req.body;

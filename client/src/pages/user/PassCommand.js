@@ -3,18 +3,18 @@ import { useHistory, useParams } from "react-router-dom";
 import moment from "moment";
 import 'moment/locale/fr';
 import { decodeToken } from 'react-jwt';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 
-import TextArea from '../components/generic/TextArea';
-import InputButton from '../components/generic/InputButton';
-import OrderTable from "../components/order/OrderTable";
+import TextArea from '../../components/generic/TextArea';
+import InputButton from '../../components/generic/InputButton';
+import OrderTable from "../../components/order/OrderTable";
 
-import { getDishByDate, updateDishDate, getDishByDateAndDish } from "../services/dishesService";
-import { getParam } from '../services/paramsService';
-import { getUserById } from '../services/usersService'; 
-import { getDateByDate } from "../services/calendarService";
-import { createCommand } from "../services/commandsService";
-import { createCommandList } from "../services/commandsListService";
+import { getDishByDate, updateDishDate, getDishByDateAndDish } from "../../services/dishesService";
+import { getParam } from '../../services/paramsService';
+import { getUserById } from '../../services/usersService'; 
+import { getDateByDate } from "../../services/calendarService";
+import { createCommand } from "../../services/commandsService";
+import { createCommandList } from "../../services/commandsListService";
 
 
 const PassCommand = () => {
@@ -46,11 +46,23 @@ const PassCommand = () => {
       }
 
       async function getCurrentUser() {
+
         const userDecoded = decodeToken(localStorage.getItem("userToken"));
-        const user = await getUserById(userDecoded._id);
-        setUserId(user._id);
-        setFirstname(user.firstname);
-        setName(user.name);
+
+        if (userDecoded) {
+
+          const user = await getUserById(userDecoded._id);
+
+          // it returns an object with { success: true, user { all the user's info } }
+          if (user.success) {
+
+            const { _id, firstname, name } = user.user;
+            setUserId(_id);
+            setFirstname(firstname);
+            setName(name);
+            
+          }
+        }
       }
 
       async function getTimeLimit() {

@@ -39,7 +39,7 @@ const AdminCommands = () => {
   const [emptyFields, setEmptyFields] = useState(true);
   const [paid, setPaid] = useState(false);
   const [quantity, setQuantity] = useState("");
-  const [currentCommandList, setCurrentCommandList] = useState();
+  const [currentCommandList, setCurrentCommandList] = useState([]);
 
   const [currentDelete, setCurrentDelete] = useState("");
   const [needConfirmation, setNeedConfirmation] = useState(true);
@@ -52,8 +52,6 @@ const AdminCommands = () => {
     getDateList();
     getCommandsByDate();
   }, [date]);
-
-
 
   const getDateList = async () => {
     const dates = await getDates();
@@ -216,7 +214,7 @@ const AdminCommands = () => {
   return (
     <div className="admin-commands">
 
-      <Box onClickConfirmation={onClickConfirmation} onClickDelete={onClickDelete} boxRef={box}/>
+      <Box onClickConfirmation={onClickConfirmation} onClickDelete={onClickDelete} boxRef={box} message="Voulez-vous vraiment supprimer cette commande ?"/>
 
       <div className="admin-commands__left">
         <div className="left__commands-list">

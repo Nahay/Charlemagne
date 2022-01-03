@@ -161,7 +161,7 @@ const AdminDishes = () => {
 
     return (
         <div className="admin-dishes">
-            <Box onClickConfirmation={onClickConfirmation} onClickDelete={onClickDelete} boxRef={box}/>
+            <Box onClickConfirmation={onClickConfirmation} onClickDelete={onClickDelete} boxRef={box} message="Voulez-vous vraiment supprimer ce plat ?"/>
             <div className="admin-dishes__left">
                 <div className="left__dishes-list">
                     
