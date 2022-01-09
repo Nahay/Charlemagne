@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import DataTable, { createTheme } from 'react-data-table-component';
 
+import { getDishById } from "../../services/dishesService";
 
 const Table = ({dishByDateList}) => {
 
@@ -15,10 +16,9 @@ const Table = ({dishByDateList}) => {
             if (dishByDateList !== []) {
     
                 dishByDateList.forEach(async d => {
-    
                     setDishesList(dishesList =>
                         [...dishesList,
-                            {type: getTypeName(d.idDish.type), name: d.idDish.name, nb: d.numberRemaining}
+                            {type: getTypeName(d.idDish.type), name: d.idDish.name, nb: d.numberRemaining, description: d.idDish.description }
                         ]
                     );
                 });
@@ -51,7 +51,16 @@ const Table = ({dishByDateList}) => {
         },
         {
             name: 'Nom',
-            selector: row => row.name,
+            cell: row => (
+                <div className="dish__information">
+                     <span>{row.name}</span>
+                    <div className="dish__description">
+                            <div className="dish__description__content">
+                                <p>Description : <br/>{row.description}</p>
+                            </div>
+                        </div>
+                </div>               
+            ),
             sortable: true,
         },
         {

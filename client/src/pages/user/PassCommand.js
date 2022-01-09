@@ -145,15 +145,14 @@ const PassCommand = () => {
     });
     
     if(!wrongCommand){
-
       // Créer la commande si aucun des champs entrés est faux
       const command = await createCommand(userId, parseInt(date), timeC, false, container, comment, total);
-
       // Parcours de la liste des commandes et créer chacune d'entre elle
       commandList.forEach(async (d) => {
+       
         await createCommandList(command._id, d._id, parseInt(d.nbC));
         const dishDate = await getDishByDateAndDish(date, d._id);
-
+        console.log({d, dishDate});
         await updateDishDate(dishDate._id, dishDate.numberKitchen, dishDate.numberRemaining - parseInt(d.nbC));
       });
       

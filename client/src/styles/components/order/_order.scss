@@ -55,12 +55,66 @@
         width : 50%;
         display : flex;
         justify-content: center;
+        align-items: center;
         background: $color-secondary;
         overflow-y: scroll;
 
         .day-details {
             margin-top: 50px;
             margin-bottom: 50px;
+            
+
+            .table__container {
+
+                div:first-child {
+                    overflow: visible;
+                }
+
+                .dish__information {
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    position: relative;
+
+                    &:hover > .dish__description {
+                        display: block;
+                    }
+                    .dish__description {
+                        display: none;
+                        position: absolute;
+                        
+                        .dish__description__content {                      
+                            position: relative;
+                            display: flex;
+                            flex-direction: column;
+                            bottom: 115px;
+                            right: 50px;
+                            background: $color-primary;
+                            width: 250px;
+                            height: 150px;
+                            border-radius: 10px; 
+                            padding: 20px;
+
+                            &::after {
+                                position: absolute;
+                                content: "";
+                                height: 15px;
+                                width: 15px;
+                                background: $color-primary;
+                                top: 190px;
+                                left: 60px;
+                                transform: rotate(180deg);
+                                clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+                                
+                            }
+                        }
+
+                        
+                    }
+                }
+            }
         }
     }
 

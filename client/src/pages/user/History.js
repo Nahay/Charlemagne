@@ -39,25 +39,32 @@ const History = () => {
 
     },[]);
 
+    const onClickDish = () => {
+        
+    }
+
     // HANDLE ------------------------------------------------------------
 
     const handleOrderClick = async (id) => {
         const commands = await getCommandListByCommand(id);
         setDishList(commands);
-        console.log(commands);
     }
 
     return (
-        <div className="history__container">
-            <p>Voici l'historique de vos commandes.</p>
+        <div className="history__container">            
             <div className="history__content">
 
-                <div className="content__left">
-                    <OrderList orderListByUser={orderList} handleClick={handleOrderClick} />
+                <p>Historique de vos commandes :</p>
+
+                <div className="content__list">
+                    <div className="content__left">
+                        <OrderList orderListByUser={orderList} handleClick={handleOrderClick} />
+                    </div>
+                    <div className="content__right">
+                        <DishCommandList dishList={dishList} onClickDish={onClickDish}/>
+                    </div>
                 </div>
-                <div className="content__right">
-                    <DishCommandList dishList={dishList} />
-                </div>
+                
             </div>
         </div>
     );
