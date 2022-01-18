@@ -59,8 +59,11 @@ router.get("/", async (req, res) => {
 // User by id
 router.get('/:userId', async (req, res) => {
     try {
+        // no token here coz it was needed in another file without being admin
+        // could be fixed by adding another get but flemme
         const user = await User.findById(req.params.userId);
-        res.json({success: true, user});
+        if (user) return res.json({success: true, user});
+        return res.json({success: false, message: "No User was founded"});
     } catch(err) {
         res.json({ error: err.message, success: false });
     }
@@ -73,7 +76,9 @@ router.get("/user/:username", async (req, res) => {
 
       const userFound = await User.findOne({username: req.params.username});
   
-      res.json({ success: true, message: "Valid token", adminRequesting: adminRequesting._id, userFound });
+      if (userFound) return res.json({ success: true, message: "Valid token", adminRequesting: adminRequesting._id, userFound });
+      return res.json({success: false, message: "No User was founded"});
+
     } catch (err) {
       console.log(err);
       res.json({ error: err.message, success: false });
@@ -84,27 +89,12 @@ router.get("/user/:username", async (req, res) => {
 
 // Update user by id
 router.patch('/:userId', async (req, res) => {
-    const { password } = req.body;
-    let user = new User();
-    try {
-        const adminRequesting = await getRequestingAdmin(req, res);
-
-        const userUpdated = await User.updateOne( { _id: req.params.userId }, { password: user.generateHash(password) } );
-        res.json({ success: true, message: "User updated successfully", adminRequesting: adminRequesting._id, userUpdated })
-    } catch(err) {
-        console.log(err);
-        res.json({error: err.message});
-    }
-});
-
-// Update user by username (with password)
-router.patch('/userPW/:userUsername', async (req, res) => {
     const { password, name, firstname, email, tel } = req.body;
     let user = new User();
     try {
         const adminRequesting = await getRequestingAdmin(req, res);
 
-        const userUpdated = await User.updateOne( { username: req.params.userUsername }, { password: user.generateHash(password), name, firstname, email, tel } );
+        const userUpdated = await User.updateOne( { _id: req.params.userId }, { password: user.generateHash(password), name, firstname, email, tel } );
         res.json({ success: true, message: "User updated successfully", adminRequesting: adminRequesting._id, userUpdated })
     } catch(err) {
         console.log(err);
@@ -112,13 +102,13 @@ router.patch('/userPW/:userUsername', async (req, res) => {
     }
 });
 
-// Update user by username (without password)
-router.patch('/userNPW/:userUsername', async (req, res) => {
+// Update user by id (without password)
+router.patch('/usernpw/:id', async (req, res) => {
     const { name, firstname, email, tel } = req.body;
     try {
         const adminRequesting = await getRequestingAdmin(req, res);
 
-        const userUpdated = await User.updateOne( { username: req.params.userUsername }, { name, firstname, email, tel } );
+        const userUpdated = await User.updateOne( { _id: req.params.id }, { name, firstname, email, tel } );
         res.json({ success: true, message: "User updated successfully", adminRequesting: adminRequesting._id, userUpdated })
     } catch(err) {
         console.log(err);
@@ -160,13 +150,13 @@ router.post("/signin", async (req, res) => {
     const { username, password } = req.body;
     
     // if the fields are empty => error
-    if (!username) res.json({ success: false, message: "Error: Username cannot be blank."});
-    if (!password) res.json({ success: false, message: "Error: Password cannot be blank."});
+    if (!username) return res.json({ success: false, message: "Error: Username cannot be blank."});
+    if (!password) return res.json({ success: false, message: "Error: Password cannot be blank."});
   
     try {
       const user = await User.findOne({ username: username });  
       // Teste si le mot de passe vaut celui qui est hashé
-      if (!user.validPassword(password)) res.json({ success: false, message: "Error: Invalid password while testing" });
+      if (!user.validPassword(password)) return res.json({ success: false, message: "Error: Invalid password while testing" });
       // ajoute les valeurs assignées dans le token
       const token = jwt.sign({ _id: user._id,  username, name: user.name, firstname: user.firstname, auth: true }, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
       res.json({ success: true, message: "Valid sign in", token });

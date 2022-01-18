@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { toast } from 'react-toastify';
-import { faUser, faUserCog } from '@fortawesome/free-solid-svg-icons';
+import { faLongArrowAltDown, faUser, faUserCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { decodeToken } from 'react-jwt';
 
 import InputText from '../../components/generic/InputText';
 import InputButton from '../../components/generic/InputButton';
@@ -10,15 +11,18 @@ import InputEmail from '../../components/generic/InputEmail';
 import AccountList from '../../components/admin/AccountList';
 import Box from "../../components/generic/Box";
 
-import { createUser, deleteUserByUsername, getUsers, updateUserWithoutPw, updateUserWithPw } from '../../services/usersService';
-import { createAdmin, deleteAdminByUsername, getAdmins, updateAdminWithoutPw, updateAdminWithPw} from '../../services/adminsService';
+import { createUser, deleteUser, getUsers, updateUser, updateUserNoPw, getUserByUsername } from '../../services/usersService';
+import { createAdmin, deleteAdminByUsername, getAdminById, getAdminByUsername, getAdmins, updateAdmin } from '../../services/adminsService';
 
 
 const AdminAccounts = () => {
     const box = useRef(null);
     const token = localStorage.getItem("adminToken");
 
+    const [currentAdmin, setCurrentAdmin] = useState({});
     const [admin, setAdmin] = useState(false);
+
+    const [id, setId] = useState("");
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [name, setName] = useState("");
@@ -36,7 +40,7 @@ const AdminAccounts = () => {
     const emailReg = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
 
-    useEffect(() => {
+    useEffect(() => { 
         const token = localStorage.getItem("adminToken");
 
         async function getClientAccountList() {
@@ -54,7 +58,26 @@ const AdminAccounts = () => {
 
     }, []);
     
+    useEffect(() => {
 
+      async function getCurrentAdmin() {
+  
+          const adminDecoded = decodeToken(localStorage.getItem("adminToken"));
+  
+          if (adminDecoded) {  
+            const admin = await getAdminById(adminDecoded._id, token);
+            // it returns an object with { success: true, user { all the user's info } }
+            if (admin.success) {  
+              const { _id, username } = admin.admin;
+              setCurrentAdmin({_id, username});              
+            }
+          }
+        }
+
+        getCurrentAdmin();
+  
+      }, []);
+  
     // RESET VALUES -----------------------------------------------------
 
     const resetValues = () => {
@@ -69,7 +92,8 @@ const AdminAccounts = () => {
         setTel("");
     }
 
-    const onClickClientAccount = ({ email, username, name, firstname, tel }) => {
+    const onClickClientAccount = ({ _id, email, username, name, firstname, tel }) => {
+        setId(_id);
         setAdmin(false);
         setCreate(false);
         setEmail(email);
@@ -80,8 +104,9 @@ const AdminAccounts = () => {
         setTel(tel);
     }
 
-    const onClickAdminAccount = (username) => {
+    const onClickAdminAccount = (username, _id) => {
         setAdmin(true);
+        setId(_id);
         setCreate(false);
         setUsername(username);
         setPassword("");
@@ -128,9 +153,10 @@ const AdminAccounts = () => {
         setAdminAccountList(admins.admins);
     }
 
-    const onClickConfirmation = () => {
+    const onClickConfirmation = (e) => {
         if (needConfirmation) {
           box.current.style.display = "flex";
+          setUsername(e);
           setNeedConfirmation(false);
         }
         else {
@@ -141,14 +167,24 @@ const AdminAccounts = () => {
 
 
     const onClickDelete = async () => {
-        
         if (watchClients) {
-            await deleteUserByUsername(username, token);
+            await deleteUser(id, token);
             getClientAccountList();
         }
         else {
+            console.log(username);
+            console.log(id);
+            if (currentAdmin.username === username) {
+                toast.error("Vous ne pouvez pas supprimer le compte sur lequel vous êtes connectés !")
+                return;
+            }
+            // setAdmin(true);
+            
             await deleteAdminByUsername(username, token);
+            setCreate(true);
+            setUsername("");
             getAdminAccountList();
+            
         }
         box.current.style.display = "none";
         setNeedConfirmation(true);
@@ -165,19 +201,34 @@ const AdminAccounts = () => {
 
                 if (admin) {
 
-                    // ajout bdd admin
-                    await createAdmin(username, password, token);
-                    getAdminAccountList();
-                    resetValues();
+                    // test s'il existe déjà un administrateur avec le nom d'utilisateur entré
+                    const adminAlreadyExist = await getAdminByUsername(username, token);
+
+                    if (adminAlreadyExist.success) toast.error("Il existe déjà un compte administrateur possédant ce nom d'utilisateur.");
+
+                    else {                        
+                        // ajout bdd admin
+                        await createAdmin(username, password, token);
+                        getAdminAccountList();
+                        resetValues();
+                    }                   
                 }
+
                 else {
         
                     if (emailReg.test(email)) {
 
-                        // ajout bdd client
-                        await createUser(username, password, name, firstname, email, tel, token);
-                        getClientAccountList();
-                        resetValues();
+                        // test s'il existe déjà un utilisateur avec le nom d'utilisateur entré
+
+                        const userAldreadyExist = await getUserByUsername(username, token);
+                        if (userAldreadyExist.success) toast.error("Il existe déjà un compte utilisateur possédant ce nom d'utilisateur.");
+
+                        else {
+                            // ajout bdd client
+                            await createUser(username, password, name, firstname, email, tel, token);
+                            getClientAccountList();
+                            resetValues();
+                        }                       
                     }
                     
                     else toast.error("Email non valide.");
@@ -186,15 +237,15 @@ const AdminAccounts = () => {
 
             // modification d'un utilisateur
             else {
+
                 if (admin) {
                     // mot de passe inchangé
-                    if (password === "") {
-                        // update bdd admin sans mdp
-                        await updateAdminWithoutPw(username, token);
-                    }
+                    if (password === "") toast.error("Il faut entrer un mot de passe !");
+
                     // update bdd admin
-                    else {                    
-                        await updateAdminWithPw(username, password, token);
+                    else {
+                        await updateAdmin(id, password, token);
+                        resetValues();
                         getAdminAccountList();
                     }
                     
@@ -203,13 +254,14 @@ const AdminAccounts = () => {
                     if (emailReg.test(email)) {
                         if (password === "") {
                             // update bdd client sans mdp
-                            await updateUserWithoutPw(username, name, firstname, email, tel, token);
+                            await updateUserNoPw(id, name, firstname, email, tel, token);
                         }
                         // update bdd client
                         else {                            
-                            await updateUserWithPw(username, password, name, firstname, email, tel, token);
-                            getClientAccountList();
+                            await updateUser(id, password, name, firstname, email, tel, token);
                         }
+                        getClientAccountList();
+                        resetValues();
                     }                    
                     else toast.error("Email non valide.");
                 }
@@ -296,6 +348,7 @@ const AdminAccounts = () => {
                                     value={username}
                                     placeholder="Nom d'utilisateur*"
                                     handleChange={handleUsername}
+                                    readOnly={create ? false : true}
                                 />
                                 <InputText
                                     value={password}
@@ -309,15 +362,11 @@ const AdminAccounts = () => {
                         :
                             
                             <div className="admin-form">
-                                <InputEmail
-                                    value={email}
-                                    placeholder="Email*"
-                                    handleChange={handleEmail}
-                                />
                                 <InputText
                                     value={username}
                                     placeholder="Nom d'utilisateur*"
                                     handleChange={handleUsername}
+                                    readOnly={create ? false : true}
                                 />
                                 <InputText
                                     value={password}
@@ -325,6 +374,12 @@ const AdminAccounts = () => {
                                     required={create ? true : false}
                                     handleChange={handlePassword}
                                 />
+
+                                <InputEmail
+                                    value={email}
+                                    placeholder="Email*"
+                                    handleChange={handleEmail}
+                                />                                
                                 <InputText
                                     value={name}
                                     placeholder="Nom*"
@@ -352,6 +407,6 @@ const AdminAccounts = () => {
             </div>
         </div>
     );
-};
+}
 
 export default AdminAccounts;

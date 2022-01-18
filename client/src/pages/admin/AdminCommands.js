@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import moment from "moment";
 import "moment/locale/fr";
-
+import { CSVLink } from "react-csv";
 import InputText from "../../components/generic/InputText";
 import TextArea from "../../components/generic/TextArea";
 import InputButton from "../../components/generic/InputButton";
@@ -19,6 +19,7 @@ import CommandsList from "../../components/admin/CommandsList";
 import DishCommandList from "../../components/admin/DishCommandList";
 import { deleteAllCommandsList, updateQuantity } from "../../services/commandsListService";
 import { getDishByDateAndDish, getDishById, updateDishDate } from "../../services/dishesService";
+import { getUserById } from "../../services/usersService";
 
 const AdminCommands = () => {
   const ref = useRef(null);
@@ -47,6 +48,7 @@ const AdminCommands = () => {
   const [dishList, setDishList] = useState([]);
   const [dateList, setDatesList] = useState([]);
   const [commandsList, setCommandsList] = useState([]);
+  const [reformatList, setReformatList] = useState([]);
 
   useEffect(() => {
     getDateList();
@@ -61,7 +63,24 @@ const AdminCommands = () => {
   const getCommandsByDate = async () => {
     const commands = await getCommandByDate(date);
     setCommandsList(commands);
+    const reformat = await reformatCommands(commands);
+    const tab = [];
+    tab.push(...reformat, {"TOTAL": `=SUM(E2:E${reformat.length + 1})&""€""`});
+    setReformatList(tab);
   };
+
+  const reformatCommands = async(commands) => {
+    return Promise.all(commands.map(async (command) => {
+      const obj = {};
+      const user = await getUserById(command.user._id);
+      obj["NOM"] = user.user.name;
+      obj["PRÉNOM"] = user.user.firstname;
+      obj["COMMENTAIRE"] = command.comment; 
+      obj["HEURE"] = command.timeC; 
+      obj["TOTAL"] = command.total + " €";
+      return obj;
+    }));
+  }
 
   const getDishList = async (id) => {
     const dishes = await getCommandByDate(date);
@@ -223,6 +242,12 @@ const AdminCommands = () => {
             dateList={dateList}
             onChangeDate={onChangeDate}
           />
+          
+          { commandsList.length > 0 &&
+          <div className="csv__download">
+            <CSVLink data={reformatList} filename={`RAPPORT-${moment(date).format("DD-MM-YYYY")}`}>Télécharger le rapport de cette date</CSVLink>
+          </div>
+          }
         </div>
       </div>
 

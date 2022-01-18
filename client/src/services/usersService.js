@@ -48,27 +48,18 @@ const createUser = async (username, password, name, firstname, email, tel, token
 }
 // UPDATE -----------------------------------------------------------------------------------------------------------------------------------
 
-const updateUserById = async (id, username, password, name, firstname, email, tel, token) => {
+const updateUser = async (id, password, name, firstname, email, tel, token) => {
     try {
-        await axios.patch(API_URL + "/users/" +id, { username, password, name, firstname, email, tel }, config(token));
+        await axios.patch(API_URL + "/users/" +id, { password, name, firstname, email, tel }, config(token));
         toast.success("L'utilisateur a été mis à jour !");
     } catch(err) {
         toast.error(err.message);
     }
 }
 
-const updateUserWithPw = async (username, password, name, firstname, email, tel, token) => {
+const updateUserNoPw = async (id, name, firstname, email, tel, token) => {
     try {
-        await axios.patch(API_URL + "/users/userPW/" +username, { username, password, name, firstname, email, tel }, config(token));
-        toast.success("L'utilisateur a été mis à jour !");
-    } catch(err) {
-        toast.error(err.message);
-    }
-}
-
-const updateUserWithoutPw = async (username, name, firstname, email, tel, token) => {
-    try {
-        await axios.patch(API_URL + "/users/userNPW/" +username, { username, name, firstname, email, tel }, config(token));
+        await axios.patch(API_URL + "/users/usernpw/" +id, { name, firstname, email, tel }, config(token));
         toast.success("L'utilisateur a été mis à jour !");
     } catch(err) {
         toast.error(err.message);
@@ -115,9 +106,8 @@ export {
     getUserById,
     getUsers,
     createUser,
-    updateUserById,
-    updateUserWithPw,
-    updateUserWithoutPw,
+    updateUser,
+    updateUserNoPw,
     deleteUser,
     deleteUserByUsername
 }

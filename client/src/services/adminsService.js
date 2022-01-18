@@ -49,31 +49,11 @@ const getAdminById = async (id, token) => {
 
 // UPDATE & DELETE ---------------------------------------------------------------------------------------------------------------------------------------
 
-const updateAdminById = async (id, password, token) => {
+const updateAdmin = async (id, password, token) => {
     try {
         await axios.patch(API_URL + "/admins/" +id, { password }, config(token));
         toast.success("L'administrateur a été mis à jour !");
     } catch(err) {
-        toast.error(err.message);
-    }
-}
-
-const updateAdminWithPw = async (username, password, token) => {
-    try {
-        await axios.patch(API_URL + "/admins/adminPW/" +username, { password }, config(token));
-        toast.success("L'administrateur a été mis à jour !");
-    } catch(err) {
-        console.log(err);
-        toast.error(err.message);
-    }
-}
-
-const updateAdminWithoutPw = async (username, token) => {
-    try {
-        await axios.patch(API_URL + "/admins/adminNPW/" +username, config(token));
-        toast.success("L'administrateur a été mis à jour !");
-    } catch(err) {
-        console.log(err);
         toast.error(err.message);
     }
 }
@@ -112,9 +92,7 @@ const adminSignIn = async (username, password) => {
 
 export {
     createAdmin,
-    updateAdminById,
-    updateAdminWithPw,
-    updateAdminWithoutPw,
+    updateAdmin,
     getAdminById,
     getAdminByUsername,
     adminSignIn,

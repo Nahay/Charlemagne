@@ -62,7 +62,9 @@ router.get('/:adminId', async (req, res) => {
         const adminRequesting = await getRequestingAdmin(req, res); 
         
         const admin = await Admin.findById(req.params.adminId);
-        res.json({success: true, adminRequesting: adminRequesting._id, admin });
+
+        if(admin) return res.json({success: true, adminRequesting: adminRequesting._id, admin });
+        return res.json({success: false, message: "No Admin was founded"});
     } catch(err) {
         res.send({ error: err.message, success: false });
     }
@@ -73,8 +75,11 @@ router.get("/admin/:adminUsername", async (req, res) => {
     try {
       const adminRequesting = await getRequestingAdmin(req, res);  
 
-      const adminFound = await Admin.findOne({username: req.params.adminUsername});  
-      res.json({ success: true, message: "Valid token", adminRequesting: adminRequesting._id, adminFound });
+      const adminFound = await Admin.findOne({username: req.params.adminUsername});
+
+      if (adminFound) return res.json({ success: true, message: "Valid token", adminRequesting: adminRequesting._id, adminFound });
+      return res.json({success: false, message: "No Admin was founded"});
+
     } catch (err) {
       console.log(err);
       res.json({ error: err.message, success: false });
@@ -98,32 +103,6 @@ router.patch('/:adminId', async (req, res) => {
     }
 });
 
-// Update by username with password
-router.patch('/adminPW/:adminUsername', async (req, res) => {
-    const { password } = req.body;
-    let admin = new Admin();
-    try {
-        const adminRequesting = await getRequestingAdmin(req, res);
-
-        const adminUpdated = await Admin.updateOne( { username: req.params.adminUsername }, { password: admin.generateHash(password) } );
-        res.json({ success: true, message: "Admin updated successfully", adminRequesting: adminRequesting._id, adminUpdated })
-    } catch(err) {
-        console.log(err);
-        res.json({error: err.message});
-    }
-});
-// Update by username with password
-router.patch('/adminNPW/:adminUsername', async (req, res) => {
-    try {
-        const adminRequesting = await getRequestingAdmin(req, res);
-
-        const adminUpdated = await Admin.updateOne( { username: req.params.adminUsername } );
-        res.json({ success: true, message: "Admin updated successfully", adminRequesting: adminRequesting._id, adminUpdated })
-    } catch(err) {
-        console.log(err);
-        res.json({error: err.message});
-    }
-});
 
 // Delete an admin
 router.delete('/:adminId', async (req, res) => {
@@ -157,13 +136,13 @@ router.post("/signin", async (req, res) => {
     const { username, password } = req.body;
     
     // if the fields are empty => error
-    if (!username) res.json({ success: false, message: "Error: Username cannot be blank."});
-    if (!password) res.json({ success: false, message: "Error: Password cannot be blank."});
+    if (!username) return res.json({ success: false, message: "Error: Username cannot be blank."});
+    if (!password) return res.json({ success: false, message: "Error: Password cannot be blank."});
   
     try {
       const admin = await Admin.findOne({ username });  
       // Compare le mot de passe entré avec le hash
-      if (!admin.validPassword(password)) res.json({ success: false, message: "Error: Invalid password while testing" });
+      if (!admin.validPassword(password)) return res.json({ success: false, message: "Error: Invalid password while testing" });
       // ajoute les valeurs assignées dans le token
       const token = jwt.sign({ _id: admin._id, auth: true }, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
       res.json({ success: true, message: "Valid sign in", token });
