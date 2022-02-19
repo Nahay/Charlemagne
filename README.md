@@ -10,7 +10,7 @@ Le site Charlemagne est un site de ventes à emporter pour le restaurant scolair
 
 <br/>
 <p align="center">
-    <img src="https://raw.githubusercontent.com/Nahay/Portfolio/master/src/assets/Projects/Charlemagne/Utilisateur/Accueil_Connect%C3%A9.png" alt="Charlemagne Logo"/>
+    <img src="https://raw.githubusercontent.com/Nahay/Assets/master/Charlemagne/Client/Accueil_Connecte.png" alt="Charlemagne Accueil"/>
 </p>
 
 <br/>
