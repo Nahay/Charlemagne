@@ -8,7 +8,7 @@ import TextArea from '../../components/generic/TextArea';
 import AllDishesList from '../../components/admin/AllDishesList';
 import Box from '../../components/generic/Box';
 
-import { getCountByName, getDishes, updateDish, createDish, deleteDish, deleteAllDishesDish } from "../../services/dishesService";
+import { getCountByName, getVisibleDishes, updateDish, createDish, hideDish, deleteAllDishesDish } from "../../services/dishesService";
 import { getOneCommandListByDish } from '../../services/commandsListService';
 
 
@@ -35,16 +35,16 @@ const AdminDishes = () => {
 
 
     useEffect(() => {
-      getDishList();
+
+      getDishList('e');
+      
     }, []);
   
-    const getDishList = async () => {
-        const dishes = await getDishes();
+    const getDishList = async (t) => {
+        const dishes = await getVisibleDishes();
         setDishList(dishes);
 
-        const newList = dishes.filter(d => d.type === type)
-        setFiltered(newList);
-        e.current.style.background = "rgb(255, 97, 79)";
+        filterDishes(t, dishes);
     }
 
 
@@ -106,13 +106,14 @@ const AdminDishes = () => {
     const onClickDelete = async () => {
         const dish = await getOneCommandListByDish(id);
         if (!dish) {
-            await deleteDish(id);
+            console.log(id);
+            await hideDish(id);
             await deleteAllDishesDish(id);
             onClickNewDish();
-            getDishList();
+            getDishList('e');
         }
         else toast.error("Le plat appartient à une commande, vous ne pouvez pas le supprimer.");        
-        box.current.style.display = "none";    
+        box.current.style.display = "none";
         setNeedConfirmation(true);
     }
 
@@ -140,7 +141,7 @@ const AdminDishes = () => {
                 if (count !== 1) {
                     await createDish(name, price, desc, type);
                     onClickNewDish();
-                    getDishList();
+                    getDishList(type);
                 }
                 else toast.error("Ce nom existe déjà.");
             }
@@ -152,14 +153,14 @@ const AdminDishes = () => {
                     if (count !== 1) {
                         await updateDish(id, name, price, desc, type);
                         setPreviousName(name);
-                        getDishList();
+                        getDishList(type);
                     }
                     else toast.error("Ce nom existe déjà.");
                 }
                 else {
                     await updateDish(id, name, price, desc, type);
                     setPreviousName(name);
-                    getDishList();
+                    getDishList(type);
                 }
             }
 
@@ -168,8 +169,8 @@ const AdminDishes = () => {
         }
     }
 
-    const filterDishes = (type) => {
-        const newList = dishList.filter(d => d.type === type)
+    const filterDishes = (type, list) => {
+        const newList = list.filter(d => d.type === type);
         setFiltered(newList);
 
         e.current.style.background = "none";
@@ -191,9 +192,9 @@ const AdminDishes = () => {
                 <div className="left__dishes-list">
 
                     <div className="left__icons">
-                        <input value="Entrée" ref={e} onClick={() => filterDishes("e")} readOnly/>
-                        <input value="Plats" ref={p} onClick={() => filterDishes("p")} readOnly/>
-                        <input value="Dessert" ref={d} onClick={() => filterDishes("d")} readOnly/>
+                        <input value="Entrées" ref={e} onClick={() => filterDishes("e", dishList)} readOnly/>
+                        <input value="Plats" ref={p} onClick={() => filterDishes("p", dishList)} readOnly/>
+                        <input value="Desserts" ref={d} onClick={() => filterDishes("d", dishList)} readOnly/>
                     </div>
                     
                     <AllDishesList
@@ -240,22 +241,36 @@ const AdminDishes = () => {
                         />
                         <label htmlFor="d">Dessert</label>
                     </div>
-                    <InputText
-                        value={name}
-                        placeholder="Nom du plat*"
-                        handleChange={handleNameChange}
-                    />
-                    <InputText
-                        value={price}
-                        placeholder="Prix*"
-                        handleChange={handlePriceChange}
-                    /> 
-                    <TextArea
-                        value={desc}
-                        placeholder="Description"
-                        required={false}
-                        handleChange={handleDescChange}
-                    />
+                    <div className="input-label">
+                        <label>Nom du plat :</label>
+                        <InputText
+                            value={name}
+                            placeholder="Nom du plat*"
+                            handleChange={handleNameChange}
+                        />
+                    </div>                   
+
+                    <div className="input-label">
+                        <label>Prix :</label>
+                        <InputText
+                            value={price}
+                            placeholder="Prix*"
+                            handleChange={handlePriceChange}
+                        /> 
+                    </div>
+
+                    <div className="input-label">
+                        <label>Description du plat (facultative):</label>
+                        <TextArea
+                            value={desc}
+                            placeholder="Description"
+                            required={false}
+                            handleChange={handleDescChange}
+                        />
+                    </div>
+                    
+                    
+                    
                     <InputButton value={create? "Créer" : "Enregistrer"} type="submit"/>
                 </form>
             </div>

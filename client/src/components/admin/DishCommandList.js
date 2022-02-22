@@ -25,7 +25,7 @@ const DishCommandList = ({dishList, onClickDish}) => {
     <div className="list__container">
     {dishList.map((d,i) => {
           return (
-            <div className="list__container__box" key={d._id} onClick={() => onClickDish()}>
+            <div className="list__container__box" key={d._id} onClick={() => onClickDish(d)}>
 
               <div className="dish__comment hidden">
                 <p>{dishesName[i]}</p>

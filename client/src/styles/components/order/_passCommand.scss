@@ -74,7 +74,13 @@
 
             .textarea {
                 width:50%;
+                height: fit-content;
+                
                 margin-bottom: 0;
+
+                textarea {
+                    max-height: 130px;
+                }
             }
 
             .checkbox__container {
@@ -136,6 +142,42 @@
             justify-content: flex-end;
             margin-top:20px;
             margin-bottom:40px;
+        }
+    }
+    @media (max-width: 1140px) {
+        .container__comm-others {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+
+            .textarea {
+                width: 100% !important;
+            }
+
+            .others__total {
+                p {
+                    justify-content: center;
+                }
+            }
+
+            .checkbox__container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .time__container {
+                .time__text {
+                    align-items: center !important;
+                    justify-content: center;
+                    width: 40% !important;
+                }
+                input {
+                    width: 60%;
+                    height: 50px;
+                }
+            }
+
         }
     }
 }

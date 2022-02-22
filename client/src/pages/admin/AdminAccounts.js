@@ -344,58 +344,93 @@ const AdminAccounts = () => {
                         { admin ?
 
                             <div className="admin-form">
-                                <InputText
-                                    value={username}
-                                    placeholder="Nom d'utilisateur*"
-                                    handleChange={handleUsername}
-                                    readOnly={create ? false : true}
-                                />
-                                <InputText
-                                    value={password}
-                                    placeholder={create ? "Mot de passe*" : "Changer mot de passe"}
-                                    required={create ? true : false}
-                                    handleChange={handlePassword}
-                                />
+
+                                <div className="input-label">
+                                    <label>Nom d'utilisateur :</label>
+                                    <InputText
+                                        value={username}
+                                        placeholder="Nom d'utilisateur*"
+                                        handleChange={handleUsername}
+                                        readOnly={create ? false : true}
+                                    />
+                                </div>
+
+                                <div className="input-label">
+                                    <label>Mot de passe :</label>
+                                    <InputText
+                                        value={password}
+                                        placeholder={create ? "Mot de passe*" : "Changer mot de passe"}
+                                        required={create ? true : false}
+                                        handleChange={handlePassword}
+                                    />
+                                </div>
+                                
                                 <InputButton value={create? "Créer" : "Enregistrer"} type="submit"/>
                             </div>
                         
                         :
                             
                             <div className="admin-form">
-                                <InputText
-                                    value={username}
-                                    placeholder="Nom d'utilisateur*"
-                                    handleChange={handleUsername}
-                                    readOnly={create ? false : true}
-                                />
-                                <InputText
-                                    value={password}
-                                    placeholder={create ? "Mot de passe*" : "Changer mot de passe"}
-                                    required={create ? true : false}
-                                    handleChange={handlePassword}
-                                />
+                                <div className="input-label">
+                                    <label>Nom d'utilisateur :</label>
+                                    <InputText
+                                        value={username}
+                                        placeholder="Nom d'utilisateur*"
+                                        handleChange={handleUsername}
+                                        readOnly={create ? false : true}
+                                    />
+                                </div>
 
-                                <InputEmail
-                                    value={email}
-                                    placeholder="Email*"
-                                    handleChange={handleEmail}
-                                />                                
-                                <InputText
-                                    value={name}
-                                    placeholder="Nom*"
-                                    handleChange={handleName}
-                                />
-                                <InputText
-                                    value={firstname}
-                                    placeholder="Prénom*"
-                                    handleChange={handleFirstname}
-                                />
-                                <InputNumber
-                                    value={tel}
-                                    placeholder="Tel"
-                                    required={false}
-                                    handleChange={handleTel}
-                                />
+                                <div className="input-label">
+                                    <label>Mot de passe :</label>
+                                    <InputText
+                                        value={password}
+                                        placeholder={create ? "Mot de passe*" : "Changer mot de passe"}
+                                        required={create ? true : false}
+                                        handleChange={handlePassword}
+                                    />
+                                </div>
+
+                                <div className="input-label">
+                                    <label>Email :</label>
+                                    <InputEmail
+                                        value={email}
+                                        placeholder="Email*"
+                                        handleChange={handleEmail}
+                                    />  
+                                </div>
+
+                                <div className="input-label">
+                                    <label>Nom :</label>
+                                    <InputText
+                                        value={name}
+                                        placeholder="Nom*"
+                                        handleChange={handleName}
+                                    />
+                                </div>
+
+                                <div className="input-label">
+                                    <label>Prénom:</label>
+                                    <InputText
+                                        value={firstname}
+                                        placeholder="Prénom*"
+                                        handleChange={handleFirstname}
+                                    />
+                                </div>
+
+                                <div className="input-label">
+                                    <label>Tél :</label>
+                                    <InputNumber
+                                        value={tel}
+                                        placeholder="Tel"
+                                        required={false}
+                                        handleChange={handleTel}
+                                    />
+                                </div>
+                                                             
+                               
+                              
+                               
                                 <InputButton value={create? "Créer" : "Enregistrer"} type="submit"/>
                             </div>
 

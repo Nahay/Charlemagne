@@ -77,13 +77,18 @@
                     justify-content: flex-start;
                     align-items: center;
                     position: relative;
+                    
 
                     &:hover > .dish__description {
-                        display: block;
+                        visibility: visible;
+                        opacity: 1;
                     }
+
                     .dish__description {
-                        display: none;
+                        visibility: hidden;
+                        opacity: 0;
                         position: absolute;
+                        transition: visibility 0.15s, opacity 0.4s linear;
                         
                         .dish__description__content {                      
                             position: relative;

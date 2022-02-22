@@ -220,7 +220,7 @@ const PassCommand = () => {
               />
               <label htmlFor="container">J'amène mes propres contenants</label>
             </div>
-            <div>
+            <div className="checkbox__container">
               <input
                 type="checkbox"
                 id="confirm-email"

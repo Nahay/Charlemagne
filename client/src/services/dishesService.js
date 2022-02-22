@@ -29,6 +29,15 @@ const getDishes = async () => {
     }
 };
 
+const getVisibleDishes = async () => {
+    try {
+        const { data } = await axios.get(API_URL + "/dishes/visible");
+        return data;
+    } catch(err) {
+        toast.error(err.message);
+    }
+};
+
 const getDishByName = async (name) => {
     try {
         const { data } = await axios.get(API_URL + "/dishes/name/" +name);
@@ -75,7 +84,7 @@ const updateDish = async (id, name, price, desc, type) => {
 
 const deleteDish = async (id) => {
     try {
-        const { data } = await axios.delete(API_URL + "/dishes/" +id);
+        const { data } = await axios.post(API_URL + "/dishes/" +id, {visible: false});
         toast.success(`Le plat ${data.name} a été supprimé !`);
     }
     catch(err) {
@@ -83,6 +92,15 @@ const deleteDish = async (id) => {
     }
 };
 
+const hideDish = async (id) => {
+    try {
+        const { data } = await axios.patch(API_URL + "/dishes/hide/" +id);
+        toast.success(`Le plat a été supprimé !`);
+    }
+    catch(err) {
+        toast.error(err.message);
+    }
+};
 // DISH DATE
 
 const createDishDate = async (dateC, idDish, numberKitchen) => {
@@ -177,9 +195,10 @@ export {
     getDishByName,
     getCountByName,
     getDishes,
+    getVisibleDishes,
     getDishByDateAndDish,
     deleteDish,
-
+    hideDish,
     createDishDate,
     deleteAllDishesDate,
     getDishByDate,
