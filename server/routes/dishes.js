@@ -14,6 +14,17 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Get all visible dishes
+router.get("/visible", async (req, res) => {
+  try {
+    const dishes = await Dish.find({visible: true}).sort('name');
+    res.json(dishes);
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+});
+
+
 // Get dish by id
 router.get("/:dishId", async (req, res) => {
   try {
@@ -80,6 +91,21 @@ router.patch('/:dishId', async (req, res) => {
       res.json(dishToUpdate);
   } catch(err) {
       console.log(err);
+      res.json({error: err.message});
+  }
+});
+
+// Hide a dish
+router.patch("/hide/:dishId", async (req, res) => {
+  try {
+      const dishToDelete = await Dish.updateOne(
+        {_id: req.params.dishId },
+        {
+          visible: false
+        }
+        );
+      res.json(dishToDelete);
+  } catch(err) {
       res.json({error: err.message});
   }
 });

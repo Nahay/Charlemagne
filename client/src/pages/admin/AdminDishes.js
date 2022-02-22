@@ -8,7 +8,7 @@ import TextArea from '../../components/generic/TextArea';
 import AllDishesList from '../../components/admin/AllDishesList';
 import Box from '../../components/generic/Box';
 
-import { getCountByName, getVisibleDishes, updateDish, createDish, hideDish, deleteAllDishesDish } from "../../services/dishesService";
+import { getCountByName, getDishes, updateDish, createDish, deleteDish, deleteAllDishesDish } from "../../services/dishesService";
 import { getOneCommandListByDish } from '../../services/commandsListService';
 
 
@@ -35,16 +35,27 @@ const AdminDishes = () => {
 
 
     useEffect(() => {
-
-      getDishList('e');
-      
+        getDishList('e');
     }, []);
-  
-    const getDishList = async (t) => {
-        const dishes = await getVisibleDishes();
+
+    const getDishList = async (fType) => {
+        const dishes = await getDishes();
         setDishList(dishes);
 
-        filterDishes(t, dishes);
+        filterDishes(fType, dishes);
+    }
+
+    const filterDishes = (fType, list) => {
+        const newList = list.filter(d => d.type === fType)
+        setFiltered(newList);
+
+        e.current.style.background = "none";
+        p.current.style.background = "none";
+        d.current.style.background = "none";
+
+        if (fType === "e") { e.current.style.background = "rgb(255, 97, 79)" }
+        else if (fType === "p") { p.current.style.background = "rgb(255, 97, 79)" }
+        else d.current.style.background = "rgb(255, 97, 79)";
     }
 
 
@@ -66,18 +77,14 @@ const AdminDishes = () => {
         }
     }
 
-    const handleNameChange = (e) => {
-        setName(e.target.value);
-    }
+    const handleNameChange = (e) => { setName(e.target.value) }
 
     const handlePriceChange = (e) => {
         const val = e.target.value;
         if(Number(val) || val === "") setPrice(val);
     }
 
-    const handleDescChange = (e) => {
-        setDesc(e.target.value);
-    }
+    const handleDescChange = (e) => { setDesc(e.target.value) }
 
 
     // SET STATES ------------------------------------------------------------
@@ -106,14 +113,16 @@ const AdminDishes = () => {
     const onClickDelete = async () => {
         const dish = await getOneCommandListByDish(id);
         if (!dish) {
-            console.log(id);
-            await hideDish(id);
+            const fType = await deleteDish(id);
             await deleteAllDishesDish(id);
+
             onClickNewDish();
-            getDishList('e');
+
+            await getDishList(fType);
+            
         }
-        else toast.error("Le plat appartient à une commande, vous ne pouvez pas le supprimer.");        
-        box.current.style.display = "none";
+        else toast.error("Le plat appartient à une commande, vous ne pouvez pas le supprimer.");
+        box.current.style.display = "none";    
         setNeedConfirmation(true);
     }
 
@@ -141,7 +150,7 @@ const AdminDishes = () => {
                 if (count !== 1) {
                     await createDish(name, price, desc, type);
                     onClickNewDish();
-                    getDishList(type);
+                    await getDishList(type);
                 }
                 else toast.error("Ce nom existe déjà.");
             }
@@ -153,33 +162,18 @@ const AdminDishes = () => {
                     if (count !== 1) {
                         await updateDish(id, name, price, desc, type);
                         setPreviousName(name);
-                        getDishList(type);
+                        await getDishList(type);
                     }
                     else toast.error("Ce nom existe déjà.");
                 }
                 else {
                     await updateDish(id, name, price, desc, type);
                     setPreviousName(name);
-                    getDishList(type);
+                    await getDishList(type);
                 }
             }
 
-        } catch(err) {
-            toast.error("Il y a eu une erreur.");
-        }
-    }
-
-    const filterDishes = (type, list) => {
-        const newList = list.filter(d => d.type === type);
-        setFiltered(newList);
-
-        e.current.style.background = "none";
-        p.current.style.background = "none";
-        d.current.style.background = "none";
-
-        if (type === "e") { e.current.style.background = "rgb(255, 97, 79)" }
-        else if (type === "p") { p.current.style.background = "rgb(255, 97, 79)" }
-        else d.current.style.background = "rgb(255, 97, 79)";
+        } catch(err) { toast.error("Il y a eu une erreur.") }
     }
 
 
@@ -192,9 +186,9 @@ const AdminDishes = () => {
                 <div className="left__dishes-list">
 
                     <div className="left__icons">
-                        <input value="Entrées" ref={e} onClick={() => filterDishes("e", dishList)} readOnly/>
+                        <input value="Entrée" ref={e} onClick={() => filterDishes("e", dishList)} readOnly/>
                         <input value="Plats" ref={p} onClick={() => filterDishes("p", dishList)} readOnly/>
-                        <input value="Desserts" ref={d} onClick={() => filterDishes("d", dishList)} readOnly/>
+                        <input value="Dessert" ref={d} onClick={() => filterDishes("d", dishList)} readOnly/>
                     </div>
                     
                     <AllDishesList
@@ -241,36 +235,25 @@ const AdminDishes = () => {
                         />
                         <label htmlFor="d">Dessert</label>
                     </div>
-                    <div className="input-label">
-                        <label>Nom du plat :</label>
-                        <InputText
-                            value={name}
-                            placeholder="Nom du plat*"
-                            handleChange={handleNameChange}
-                        />
-                    </div>                   
-
-                    <div className="input-label">
-                        <label>Prix :</label>
-                        <InputText
-                            value={price}
-                            placeholder="Prix*"
-                            handleChange={handlePriceChange}
-                        /> 
-                    </div>
-
-                    <div className="input-label">
-                        <label>Description du plat (facultative):</label>
-                        <TextArea
-                            value={desc}
-                            placeholder="Description"
-                            required={false}
-                            handleChange={handleDescChange}
-                        />
-                    </div>
-                    
-                    
-                    
+                    <span>Nom :</span>
+                    <InputText
+                        value={name}
+                        placeholder="Nom du plat*"
+                        handleChange={handleNameChange}
+                    />
+                    <span>Prix :</span>
+                    <InputText
+                        value={price}
+                        placeholder="Prix*"
+                        handleChange={handlePriceChange}
+                    />
+                    <span>Description (facultative) :</span>
+                    <TextArea
+                        value={desc}
+                        placeholder="Description"
+                        required={false}
+                        handleChange={handleDescChange}
+                    />
                     <InputButton value={create? "Créer" : "Enregistrer"} type="submit"/>
                 </form>
             </div>

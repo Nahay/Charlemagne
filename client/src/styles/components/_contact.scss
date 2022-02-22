@@ -65,6 +65,11 @@
         }
 
         .contact__input {
+          .input-tel {
+            width:15%;
+            margin-top:4px;
+          }
+
           .input__btn {
             width: 100%;
             display: flex;

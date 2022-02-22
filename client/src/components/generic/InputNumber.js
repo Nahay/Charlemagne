@@ -7,7 +7,7 @@ const InputNumber = ({value, placeholder, required, handleChange}) => {
   if (required === undefined) required = true;
 
   return (
-    <div className={"input"}>
+    <div className={"input input-tel"}>
 
       {required ?
 

@@ -35,7 +35,7 @@ const Home = () => {
         <div className="home">
             <BackgroundSlider images={imgList} duration={4} transition={1}/>
             <div className = "home__left">
-                <h1>Bienvenue au restaurant<br/>Le Charlemagne</h1>
+                <h1>Bienvenue<br/>au restaurant<br/>Le Charlemagne</h1>
 
                 <p className = "home__subtitle" id = "home__subtitle">{welcomeMess}</p>
                 

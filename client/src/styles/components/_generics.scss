@@ -15,6 +15,7 @@
     transition: 0.5s;
     color: white;
     overflow: hidden;
+
     &::after {
       z-index: -1;
       content: "";
@@ -28,23 +29,15 @@
       transform: skewX(-10deg);
     }
 
-    &:hover::after {
-      width: 110%;
-    }
+    &:hover::after { width: 110% }
 
-    &:hover {
-      color: white;
-    }
+    &:hover { color: white }
   }
 }
 
 // ----------------- LOGO ---------------------------------
 
-.logo {
-  img {
-    width: 100px;
-  }
-}
+.logo { img { width: 100px } }
 
 // ----------------- TIME ---------------------------------
 
@@ -57,14 +50,13 @@
 
   p:nth-child(1) {
     color: $color-primary;
-    font-size: 4em;
-    transition: all 0.3s ease-out;
+    font-size: 4vw;
+    
   }
 
   p:nth-child(2) {
-    font-size: 25px;
+    font-size: 2vw;
     color: $color-grey;
-    transition: all 0.3s ease-out;
   }
 }
 
@@ -103,25 +95,17 @@
 
 .input,
 .input-email {
-  &::after {
-    top: 48px;
-  }
+  &::after { top: 48px }
 
-  &:focus-within::after {
-    width: 100%;
-  }
+  &:focus-within::after { width: 100% }
 }
 
 .textarea {
   display: inline;
 
-  &::after {
-    bottom: 5px;
-  }
+  &::after { bottom: 5px }
 
-  &:focus-within::after {
-    width: 100%;
-  }
+  &:focus-within::after { width: 100% }
 
   textarea {
     padding: 20px;
@@ -135,9 +119,7 @@
     // margin pour que le after soit bien en bas
     margin-bottom: 0;
 
-    &:focus::-webkit-resizer {
-      background: #2b2b2b;
-    }
+    &:focus::-webkit-resizer { background: #2b2b2b }
 
   }
 }

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import "moment/locale/fr";
 import { CSVLink } from "react-csv";
+
 import InputText from "../../components/generic/InputText";
 import TextArea from "../../components/generic/TextArea";
 import InputButton from "../../components/generic/InputButton";
@@ -40,7 +41,6 @@ const AdminCommands = () => {
   const [paid, setPaid] = useState(false);
   const [quantity, setQuantity] = useState("");
   const [currentCommandList, setCurrentCommandList] = useState([]);
-  const [dishClicked, setDishClicked] = useState(false);
 
   const [currentDelete, setCurrentDelete] = useState("");
   const [needConfirmation, setNeedConfirmation] = useState(true);
@@ -85,7 +85,7 @@ const AdminCommands = () => {
 
   const getDishList = async (id) => {
     const dishes = await getCommandByDate(date);
-    const d = dishes.filter((d) => d._id === id)[0].list;
+    const d = dishes.filter((d) => d.user._id === id)[0].list;
     setDishList(d);
   }
 
@@ -96,8 +96,8 @@ const AdminCommands = () => {
   }
 
   const onClickCommand = ({ _id, user, container, total, timeC, comment, paid }) => {
-    getDishList(_id);
-    setId(_id);
+    getDishList(user._id);
+    setId(user._id);
     setEmptyFields(false);
     setCommandId(_id);
     setName(user.name);
@@ -112,7 +112,6 @@ const AdminCommands = () => {
   const onClickDish = (d) => {
     setQuantity(d.quantity);
     setCurrentCommandList(d);
-    setDishClicked(true);
   }
 
   const onClickDelete = async () => {
@@ -183,8 +182,6 @@ const AdminCommands = () => {
       // update la quantité dans la command list
       await updateQuantity(currentCommandList._id, quantity);
 
-      setDishClicked(false);
-      setQuantity("");
       getDishList(id);
     }
   }
@@ -222,15 +219,15 @@ const AdminCommands = () => {
     if (Number(val) || val === "") setTotal(val);
   }
 
-  // const handlePaidChange = (e) => {
-  //   if (e.target.id === "y---paid") setPaid(true);
-  //   else setPaid(false);
-  // }
+  const handlePaidChange = (e) => {
+    if (e.target.id === "y---paid") setPaid(true);
+    else setPaid(false);
+  }
 
   const handleContainerChange = (e) => {
     if (e.target.id === "y---container") setContainer(true);
     else setContainer(false);
-  } 
+  }
 
 
   // RENDER ----------------------------------------------------------------
@@ -286,38 +283,23 @@ const AdminCommands = () => {
                 handleChange={handleFirstnameChange}
                 readOnly
               />
-            </div>            
-
-            <div className="commands-dish-list">
-              <DishCommandList dishList={dishList} onClickDish={(d) => onClickDish(d)} />
             </div>
 
-            {dishClicked ? 
+            <div className="commands-dish-list">
+              <DishCommandList dishList={dishList} onClickDish={onClickDish} />
+            </div>
+
             <div className="right__form--quantity" >
               <div className="input__quantity">
                   <p>Quantité : </p>
                   <InputText
                     value={quantity}
                     handleChange={handleQuantityChange}
-                    placeholder="0"
                     required={false}
                   />
               </div>
               <InputButton value="Modifier" type="button" onClick={onModifyQuantity}/>
             </div>
-            :
-            <div className="right__form--quantity disabled" >
-              <div className="input__quantity">
-                  <p>Quantité : </p>
-                  <div className="input">
-                    <input type="text" value={quantity} onChange={handleQuantityChange} placeholder="0" disabled/>
-                  </div>
-              </div>
-              <div className="input-btn">
-                  <input type="button" value="Modifier" disabled/>
-              </div>
-            </div>
-            }
 
             <div className="container_radio_duo">
               <div
@@ -356,16 +338,17 @@ const AdminCommands = () => {
                       onChange={handleTimeChange}
                       required />
                   </div>
-              </div>              
-
-              <div className="total__container">
-                <div className="total__content">
-                  <p>Total :</p>
-                  <InputText value={total} handleChange={handleTotalChange} readOnly/>
                 </div>
-              </div>
-            </div>
+                
 
+                <div className="total__container">
+                  <div className="total__content">
+                    <p>Total :</p>
+                    <InputText value={total} handleChange={handleTotalChange} readOnly/>
+                  </div>
+                </div>
+            </div>
+            
             <TextArea
               value={comment}
               placeholder="Commentaire"
@@ -373,34 +356,7 @@ const AdminCommands = () => {
               handleChange={handleCommentChange}
             />
 
-            <div className="input-btn---save">
-              <InputButton value="Enregistrer" type="submit" />
-            </div>
-
-            {/* <div className="container_radio_duo">
-              <div className="right__form__radio" onChange={handlePaidChange}>
-                <span>Payée ?</span>
-                <input
-                  type="radio"
-                  value="Non"
-                  name="paid"
-                  id="n---paid"
-                  checked={paid === false}
-                  onChange={handleCheckboxChange}
-                />
-                <label htmlFor="n---paid">Non</label>
-                <input
-                  type="radio"
-                  value="Oui"
-                  name="paid"
-                  id="y---paid"
-                  checked={paid === true}
-                  onChange={handleCheckboxChange}
-                />
-                <label htmlFor="y---paid">Oui</label>
-              </div>
-            </div> */}
-            
+            <InputButton value="Enregistrer" type="submit" />
           </form>
         </div>
       </div>

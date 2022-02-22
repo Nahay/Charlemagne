@@ -21,36 +21,30 @@
             .left__icons {
                 align-self: flex-end;
                 margin-bottom : 5px;
+
                 input {
                     text-align: center;
                     color : white;
                     font-size : 22px;
-                    transition : all 0.3s linear;
-                    width:110px;
+                    transition : color 0.2s;
+                    width:100px;
                     height:40px;
                     margin-right:3px;
                     background:none;
                     outline:none;
                     border:none;
+                    cursor : pointer;
 
-                    &:hover {
-                        background : $color-primary;
-                        cursor : pointer;
-                    }
+                    &:hover { background : $color-primary }
 
-                    &:last-child {
-                        margin-right : 2px;
-                    }
+                    &:last-child { margin-right: 2px }
                 }
             }
 
             .list__container {
                 height : 100%;
 
-                .list__container__box {
-
-                    padding: 0;
-                }
+                .list__container__box { padding: 0 }
             }
         }
     }
@@ -71,10 +65,7 @@
             
             button {
                 height : 50px;
-
-                &:hover {
-                    cursor : pointer;
-                }
+                cursor : pointer;
             }
         }
 
@@ -87,10 +78,13 @@
                 margin-bottom : 5%;
 
                 label {
+                    cursor:pointer;
                     margin-left : 30px;
                 }
             }
-            
+
+            span { margin: 10px 0 }
+
             .input-btn {
                 align-self: flex-end;
                 margin-top : 5%;
@@ -111,7 +105,9 @@
 
         .admin-dishes__right {
             width : 100%;
-            height : 100vh;
+            height : unset;
+            
+            padding : 40px 0;
         }
     }
 

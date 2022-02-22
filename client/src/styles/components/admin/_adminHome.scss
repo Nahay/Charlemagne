@@ -8,7 +8,7 @@
     
     .admin-home__container {
         height : 100%;
-        width : 80%;
+        width : 60%;
         min-width: 365px;
         display : flex;
         justify-content: center;
@@ -17,13 +17,15 @@
         .container__inputs {
             width: 100%;
             
-            p {
-                margin-bottom : 2em;
-            }
+            p { margin-bottom: 2em }
+            .textarea textarea {
+                height:180px;
 
-            .container__inputs__1 {
-                margin-bottom: 15px;
+                @media (max-height: 770px) { height:150px }
+                @media (max-height: 710px) { height:110px }
             }
+            
+            .container__inputs__1 { margin-bottom: 15px }
 
             .container__inputs__1, .container__inputs__2 {
                 display : flex;

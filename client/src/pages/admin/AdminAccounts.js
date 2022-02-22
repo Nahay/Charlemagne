@@ -427,9 +427,6 @@ const AdminAccounts = () => {
                                         handleChange={handleTel}
                                     />
                                 </div>
-                                                             
-                               
-                              
                                
                                 <InputButton value={create? "Créer" : "Enregistrer"} type="submit"/>
                             </div>
