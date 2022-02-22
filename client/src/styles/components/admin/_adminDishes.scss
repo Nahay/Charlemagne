@@ -11,8 +11,39 @@
         height : 100%;
 
         .left__dishes-list {
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
             margin: 5% 5%;
             height : 90%;
+
+            .left__icons {
+                align-self: flex-end;
+                margin-bottom : 5px;
+
+                input {
+                    text-align: center;
+                    color : white;
+                    font-size : 22px;
+                    transition : color 0.2s;
+                    width:40px;
+                    height:40px;
+                    margin-right:3px;
+                    background:none;
+                    outline:none;
+                    border:none;
+
+                    &:hover {
+                        background : $color-primary;
+                        cursor : pointer;
+                    }
+
+                    &:last-child {
+                        margin-right : 2px;
+                    }
+                }
+            }
 
             .list__container {
                 height : 100%;

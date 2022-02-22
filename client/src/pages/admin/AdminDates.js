@@ -33,8 +33,8 @@ const AdminDates = () => {
     const [idD, setIdD] = useState("");
     const [nbC, setNbC] = useState("");
     const [nbR, setNbR] = useState("");
-    const [timeMin, setTimeMin] = useState("");
-    const [timeMax, setTimeMax] = useState("");
+    const [timeMin, setTimeMin] = useState("12:00");
+    const [timeMax, setTimeMax] = useState("16:00");
     const [currentCommandList, setCurrentCommandList] = useState({});
     const [deletedDate, setDeletedDate] = useState(true);
 
@@ -97,8 +97,8 @@ const AdminDates = () => {
         setComment("");
         setSelect("0");
         setNb("");
-        setTimeMin("");
-        setTimeMax("");
+        setTimeMin("12:00");
+        setTimeMax("16:00");
         setDishByDateList([]);
     }   
 
@@ -211,38 +211,41 @@ const AdminDates = () => {
 
     const onDateSubmit = async (e) => {
         e.preventDefault();
-        saveDate(); 
+        saveDate();        
     }
 
     const onDishSubmit = async (e) => {
         e.preventDefault();        
         // si on a sélectionné qqe chose :
         if (select !== "0") {
+            if(nb != "") {
+                if (dateExists) {
 
-            if (dateExists) {
+                    let dishExists = false;
+                    dishByDateList.forEach(d => {
+                        if (d.idDish._id === select) dishExists = true;
+                    });
 
-                let dishExists = false;
-                dishByDateList.forEach(d => {
-                    if (d.idDish._id === select) dishExists = true;
-                });
+                    if (!dishExists) {
+                        await createDishDate(date, select, nb);
+                        getDishByDateList(date);
+                    }
+                    else toast.error("Le plat existe déjà !");
+                }
 
-                if (!dishExists) {
+                // la date n'existe pas : on la crée et on ajoute le plat
+                else {
+                    await createDate(date, visibility, comment, timeMin, timeMax);
+                    setDateExists(true);
                     await createDishDate(date, select, nb);
                     getDishByDateList(date);
+                    getDateList();
                 }
-                else toast.error("Le plat existe déjà !");
-            }
 
-            // la date n'existe pas : on la crée et on ajoute le plat
-            else {
-                await createDate(date, visibility, comment, timeMin, timeMax);
-                setDateExists(true);
-                await createDishDate(date, select, nb);
-                getDishByDateList(date);
+                setNb("");
+                setSelect("0");
             }
-
-            setNb("");
-            setSelect("0");
+            else toast.error("Veuillez entrer un nombre cuisine.");
         }
         else toast.error("Aucun plat n'est sélectionné.");
     }
@@ -290,6 +293,7 @@ const AdminDates = () => {
                 <h1 className="right__date">{moment(date).locale('fr').format('LL')}</h1>
                 <div className="right__form">
                     <form className="right__form__1" onSubmit={onDateSubmit}>
+
                         <div className="right__form__radio" onChange={handleVisibilityChange}>
                             <span>Visible ?</span>
                             <input
@@ -311,12 +315,7 @@ const AdminDates = () => {
                             />
                             <label htmlFor="y">Oui</label>
                         </div>
-                        <TextArea
-                            value={comment}
-                            placeholder="Commentaire pour cette date..."
-                            required={false}
-                            handleChange={handleCommentChange}
-                        />
+
                         <div className='input-time'>
                             <div className="input-time___min">
                                 <p>Heure min :</p>
@@ -328,43 +327,69 @@ const AdminDates = () => {
                             </div>
                             
                         </div>
+
+                        <div className="select-container">
+                            <select value={select} id="dish-select" className="dish-select" onChange={handleSelectChange}>
+                                <option value="0" id="0">Liste des plats</option>
+                                <optgroup label="Entrées">
+                                    {dishList.filter(d => d.type === 'e').map((d) => {
+                                        return <option value={d._id} key={d._id}>{d.name}</option>
+                                    })}
+                                </optgroup>
+                                <optgroup label="Plats">
+                                    {dishList.filter(d => d.type === 'p').map((d) => {
+                                        return <option value={d._id} key={d._id}>{d.name}</option>
+                                    })}
+                                </optgroup>
+                                <optgroup label="Desserts">
+                                    {dishList.filter(d => d.type === 'd').map((d) => {
+                                        return <option value={d._id} key={d._id}>{d.name}</option>
+                                    })}
+                                </optgroup>
+                            </select>
+                            <div className="input-duo">
+                                <InputText
+                                    value={nb}
+                                    placeholder="Nombre Cuisine*"
+                                    handleChange={handleNbChange}
+                                    required={false}
+                                />
+                                <InputButton value= { upD ? "Enregistrer nombre" : "Ajouter le plat à cette date" } type="button" onClick={upD ? onUpdateDishSubmit : onDishSubmit}/>
+                            </div>
+                        </div>
+
+                        <div className="dish-list">
+                            <DishList
+                                dishByDateList={dishByDateList}
+                                onClickDish={onClickDish}
+                                onClickDelete={onClickConfirmation}
+                            />
+                        </div>
+                                    
+                        <TextArea
+                            value={comment}
+                            placeholder="Commentaire pour cette date..."
+                            required={false}
+                            handleChange={handleCommentChange}
+                        />
+
                         { dateExists ?
                             <div className="multi-btn">
-                                    <InputButton value="Enregistrer" type="submit"/>
 
                                     <div onClick={onClickConfirmation}>
                                         <InputButton type="button" value="Supprimer"/>
-                                    </div>                                    
+                                    </div>
+
+                                    <InputButton value="Enregistrer" type="submit"/>                                    
                             </div>
                         :
                             <div className="multi-btn">
                                 <InputButton value="Créer" type="submit"/>
                             </div>
                         }
+
+
                     </form>
-                    <form className="right__form__2" onSubmit={upD ? onUpdateDishSubmit : onDishSubmit }>
-                        <select value={select} id="dish-select" className="dish-select" onChange={handleSelectChange}>
-                            <option value="0" id="0">Liste des plats</option>
-                            {dishList.map((d) => {
-                                return <option value={d._id} key={d._id}>{d.name}</option>
-                            })}
-                        </select>
-                        <div className="input-duo">
-                            <InputText
-                                value={nb}
-                                placeholder="Nombre Cuisine*"
-                                handleChange={handleNbChange}
-                            />
-                            <InputButton value= { upD ? "Enregistrer nombre" : "Ajouter le plat à cette date" } type="submit"/>
-                        </div>
-                    </form>
-                    <div className="dish-list">
-                        <DishList
-                            dishByDateList={dishByDateList}
-                            onClickDish={onClickDish}
-                            onClickDelete={onClickConfirmation}
-                        />
-                    </div>
                 </div>
             </div>
         </div>

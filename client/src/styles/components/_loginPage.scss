@@ -59,18 +59,48 @@
                 }
             }
     
-            span {
-                font-size:13px;
-                cursor:pointer;
-                align-self: flex-end;
-                color:$color-grey;
-                transition: color 0.5s;
+            .content__password {
+                position: relative;
+                display: flex;
+                width: 100%;
+                justify-content: flex-end;
 
-                &:hover {
-                    color:$color-primary;
+                span {
+                    font-size:13px;
+                }
+
+                span:first-child {
+                    cursor:pointer;
+                    color:$color-grey;
+                    transition: color 0.5s;
+
+                    &:hover {
+                        color:$color-primary;
+                    }
+                }            
+
+                &:hover > span:last-child{
+                    visibility: visible;
+                    opacity: 1;
+                }
+
+                span:last-child {
+                    visibility: hidden;
+                    opacity: 0;
+                    position: absolute;
+                    transition: visibility 0.2s, opacity 0.5s linear;
+                    z-index: 0;
+                    color: white;
+                    background: $color-primary;
+                    width: 200px;
+                    text-align: center;
+                    bottom: 15px;
+                    right: 0;
                 }
             }
-    
+
+            
+            
             .input-btn {
                 width:50%;
                 margin-top:30px;

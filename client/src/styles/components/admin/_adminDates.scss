@@ -8,7 +8,6 @@
 
     .admin-dates__left {
         width : 40%;
-        height : 100%;
         display : flex;
         justify-content: center;
         align-items:center;
@@ -17,8 +16,9 @@
 
     .admin-dates__right {
         background : $color-secondary;
-        height : 100%;
         width : 50%;
+        height:100%;
+        overflow-y:scroll;
         display : flex;
         flex-direction: column;
         align-items: center;
@@ -30,7 +30,6 @@
 
         .right__form {
             width: 70%;
-            height: 70%;
             display: flex;
             flex-direction: column;
 
@@ -79,101 +78,103 @@
                     align-self: flex-start;
                     margin-bottom : 3%;
 
-                    label {
-                        margin-left : 30px;
-                    }
+                    label { margin-left: 30px }
                 }
 
-                .textarea {
-                    margin-bottom : 2%;
-                }
+                .textarea { margin-bottom : 5% }
 
                 .multi-btn {
                     width:100%;
                     display:flex;
                     justify-content: space-between;
                 }
-            }
 
-            .right__form__2 {
-
-                margin-bottom: 5%;
-            
-                .dish-select {
-                    margin-bottom: 3%;
+                .select-container {
                     width: 100%;
-                    height : 3.5em;
-                    padding-left: 10px;
-                    outline: none;
-                    border: none;
-                    color: #757575;
-                    background: #2B2B2B;
-                    transition: 0.5s;
-
-                    &:focus > option:checked { 
-                        background: $color-primary;
-                        color: white;
-                    }
-                }
-    
-                .input-duo {
-                    display : flex;
-                    justify-content: space-between;
-    
-                    .input {
-                        width: 45%;
-                    }
-    
-                    .input-btn input {
-                        margin-top : 0;
-                        width : 200px;
-                    }
-    
-                    & + .input-btn {
-                        align-self: flex-end;
-                        margin-top : 2em;
-                    }
-                }
-            }
-
-            .dish-list {
-
-                height : 40%;
-                min-height: 130px;
-
-                .list__container {
                     
-                    height: 100%;
+                    margin: 5% 0 2% 0;
+                
+                    .dish-select {
+                        width: 100%;
+                        height :50px;
+                        
+                        margin-bottom: 3%;
+                        padding-left: 10px;
+                        outline: none;
+                        border: none;
+                        color: #757575;
+                        background: #2B2B2B;
+                        transition: 0.5s;
+                        font-size: 16px;
+     
+                        optgroup { 
+                            font-size: 14px;
+                        }
     
-                    .list__container__box {
-                        height : 30%;
-                        padding-left: 20px;
-
-                        .infos-dish {
-                            p, span {
-                                font-size: 80%;
-                            }
-
-                            span:first-child { 
-                                margin-left: 0;
-                            }
-
-                            p {
-                                padding:0
-                            }
+                        option {
+                            font-size: 12px;
+                            color: white;
+                        }
+    
+                        &:focus > option:checked {
+                            background: $color-primary;
+                            color: white;
+                        }
+                    }
         
-                            .nb-dish {
-                                width : 125%;
-                                height : 100%;
-                                display : flex;
-                                align-items: center;
+                    .input-duo {
+                        display : flex;
+                        justify-content: space-between;
+        
+                        .input { width: 45% }
+        
+                        .input-btn input {
+                            margin-top : 0;
+                            width : 200px;
+                        }
+        
+                        & + .input-btn {
+                            align-self: flex-end;
+                            margin-top : 2em;
+                        }
+                    }
+                }
+
+                            
+
+                .dish-list {
+
+                    height: 250px;
+                    min-height: 130px;
+                    width: 100%;
+                    margin-bottom: 5%;
+
+                    .list__container {
+                        
+                        height: 100%;
+        
+                        .list__container__box {
+                            height : 30%;
+                            padding-left: 20px;
+
+                            .infos-dish {
+                                p, span { font-size: 80% }
+
+                                span:first-child { margin-left: 0 }
+
+                                p { padding:0 }
+            
+                                .nb-dish {
+                                    width : 125%;
+                                    height : 100%;
+                                    display : flex;
+                                    align-items: center;
+                                }
+                                
+                                .icon-delete { width: 15% }
                             }
                             
-                            .icon-delete {
-                                width: 15%;
-                            }
                         }
-                        
                     }
                 }
             }
@@ -208,21 +209,16 @@
                         flex-direction: column;
                         align-items: center;
 
-                        div, .input-btn, input {
-                            width:100%;
-                        }
+                        div, .input-btn, input { width:100% }
 
-                        .input-btn:first-child {
-                            margin-bottom: 7px;
-                        }
+                        .input-btn:first-child { margin-bottom: 7px }
                     }
 
                     .input-time {
                         flex-direction: column;
                         height: 100%;
 
-                        .input-time___min,
-                        .input-time___max {
+                        .input-time___min, .input-time___max {
                             width: 100%;
 
                             p {
@@ -230,43 +226,28 @@
                                 white-space: nowrap;
                                 margin-right: 5px;
                             }
-                            input {
-                                width: 100%;
-                            }
+
+                            input { width: 100% }
                         }
 
-                        .input-time___min {
-                            margin-bottom: 2%;
-                        }
-
-
-                    
+                        .input-time___min { margin-bottom: 2% }                    
                     }
                 }
 
-                .right__form__2 {
+                .select-container {
                     .input-duo {
                         flex-direction: column;
                         align-items: center;
 
-                        .input {
-                            margin-top:4px;
-                        }
+                        .input { margin-top:4px }
 
-                        .input, .input-btn {
-                            width:100%;
-                        }
+                        .input, .input-btn { width:100% }
 
-                        .input-btn input {
-                            width:100%;
-                        }
+                        .input-btn input { width:100% }
                     }
                 }
 
-                .dish-list {
-                    height: 200px;
-                    margin-bottom: 30px;
-                }
+                .dish-list { height: 200px }
             }
         }
     }

@@ -59,7 +59,7 @@ const AdminHome = () => {
             <div className="admin-home__container">
                 <div className="container__inputs">
                     <form className="container__inputs__1" onSubmit={onWelcomeMessageSubmit}>
-                        <p>Changer la phrase de bienvenue :</p>
+                        <p>Phrase de bienvenue :</p>
                         <TextArea
                             value={welcomeMess}
                             placeholder=""
@@ -69,7 +69,7 @@ const AdminHome = () => {
                         <InputButton value="Changer" type="submit"/>
                     </form>
                     <form className="container__inputs__2" onSubmit={onOrderInfoSubmit}>
-                        <p>Changer les informations en bas de commande :</p>
+                        <p>Informations des pages de commandes :</p>
                         <TextArea
                             value={orderInfo}
                             placeholder=""

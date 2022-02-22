@@ -6,7 +6,7 @@ import ACalendar from "../components/order/ACalendar";
 import List from "../components/order/List";
 import DayDetails from "../components/order/DayDetails";
 
-import { getDatesByVisibility } from '../services/calendarService';
+import { getDateByDate, getDatesByVisibility } from '../services/calendarService';
 import { getDishByDate } from '../services/dishesService';
 
 
@@ -30,11 +30,17 @@ const Order = () => {
   }
 
   const getDishByDateList = async (dateC) => {
-        
+    let dateVisible = false;
     const dishes = await getDishByDate(dateC);
 
-    if (dishes === null) {
-        setDishByDateList([]);
+    const d = await getDateByDate(dateC);
+
+    if (d !== null) {
+      if(d.visibility) dateVisible = true;
+    }
+
+    if (dishes === null || !dateVisible) {
+      setDishByDateList([]);
     }
     else setDishByDateList(dishes);
   }
