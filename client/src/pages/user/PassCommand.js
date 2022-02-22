@@ -130,21 +130,27 @@ const PassCommand = () => {
 
     let wrongCommand = false;
     let commandList = [];
-    
+    let total = 0;
+
     data.forEach(async (d) => {
-      // Teste si les nombres des plats sont corrects et les stock dans un tableau
-      if (d.nbC === 0 && d.nbC) {
-        wrongCommand = true;
-        toast.error(`Il n'y a malheureusement plus de ${d.name}, il faut être plus rapide !`, { autoClose: 10000});
+      // si nombre entré pas vide
+      if(d.nbC !== "") {
+
+        // Teste si les nombres des plats sont corrects et les stocke dans un tableau
+        if(parseInt(d.nbC) > d.nb) {
+            wrongCommand = true;
+            if (d.nb === 0) toast.error(`Il n'y a malheureusement plus de ${d.name}, il faut être plus rapide !`, { autoClose: 10000});
+            else toast.error(`Le nombre désiré de ${d.name} est supérieur au nombre restant ${d.nb}.`, { autoClose: 10000});  
+        }
+        else {
+          total += d.price * parseInt(d.nbC);
+          commandList.push(d);
+        }
       }
-      else if(d.nbC && parseInt(d.nbC) > d.nb) {
-          wrongCommand = true;
-          toast.error(`Le nombre désiré de ${d.name} est supérieur au nombre restant ${d.nb}.`, { autoClose: 10000}); // autoClose = le temps du toast  
-      }
-      else commandList.push(d);
     });
     
-    if(!wrongCommand){
+
+    if(!wrongCommand && total > 0){
       // Créer la commande si aucun des champs entrés est faux
       const command = await createCommand(userId, parseInt(date), timeC, false, container, comment, total);
       // Parcours de la liste des commandes et créer chacune d'entre elle
@@ -152,14 +158,12 @@ const PassCommand = () => {
        
         await createCommandList(command._id, d._id, parseInt(d.nbC));
         const dishDate = await getDishByDateAndDish(date, d._id);
-        console.log({d, dishDate});
         await updateDishDate(dishDate._id, dishDate.numberKitchen, dishDate.numberRemaining - parseInt(d.nbC));
       });
       
       if (confirmEmail) {
         // emailJS 
         //  ...
-        console.log("ok");
       }
 
       toast.success("La commande a été passée avec succès !");
@@ -167,8 +171,7 @@ const PassCommand = () => {
       // Change de page et nous amène vers l'accueil maybe une page où on voit toutes les commandes (?)
       history.push("/");      
     }
-    else toast.error("La commande n'a pu être réalisée, vérifiez les champs.", { autoClose: 10000}); // autoClose = le temps du toast  
-     
+    else toast.error("La commande n'a pu être réalisée, vérifiez les champs.", { autoClose: 10000}); // autoClose = le temps du toast     
   }
 
   // HANDLE ------------------------------------------------
