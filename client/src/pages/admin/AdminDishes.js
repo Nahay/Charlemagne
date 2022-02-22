@@ -1,17 +1,24 @@
 import React, {useState, useEffect, useRef} from 'react';
+
+import { toast } from 'react-toastify';
+
 import InputText from '../../components/generic/InputText';
 import InputButton from '../../components/generic/InputButton';
 import TextArea from '../../components/generic/TextArea';
 import AllDishesList from '../../components/admin/AllDishesList';
-import { toast } from 'react-toastify';
+import Box from '../../components/generic/Box';
 
 import { getCountByName, getDishes, updateDish, createDish, deleteDish, deleteAllDishesDish } from "../../services/dishesService";
 import { getOneCommandListByDish } from '../../services/commandsListService';
-import Box from '../../components/generic/Box';
 
 
 const AdminDishes = () => {
+
     const box = useRef(null);
+    const e = useRef(null);
+    const p = useRef(null);
+    const d = useRef(null);
+    
 
     const [id, setId] = useState("");
     const [type, setType] = useState('e');
@@ -22,17 +29,22 @@ const AdminDishes = () => {
 
     const [create, setCreate] = useState(true);
     const [dishList, setDishList] = useState([]);
+    const [filtered, setFiltered] = useState([]);    
 
-    
     const [needConfirmation, setNeedConfirmation] = useState(true);
+
 
     useEffect(() => {
       getDishList();
     }, []);
   
     const getDishList = async () => {
-      const dishes = await getDishes();
-      setDishList(dishes);
+        const dishes = await getDishes();
+        setDishList(dishes);
+
+        const newList = dishes.filter(d => d.type === type)
+        setFiltered(newList);
+        e.current.style.background = "rgb(255, 97, 79)";
     }
 
 
@@ -156,6 +168,19 @@ const AdminDishes = () => {
         }
     }
 
+    const filterDishes = (type) => {
+        const newList = dishList.filter(d => d.type === type)
+        setFiltered(newList);
+
+        e.current.style.background = "none";
+        p.current.style.background = "none";
+        d.current.style.background = "none";
+
+        if (type === "e") { e.current.style.background = "rgb(255, 97, 79)" }
+        else if (type === "p") { p.current.style.background = "rgb(255, 97, 79)" }
+        else d.current.style.background = "rgb(255, 97, 79)";
+    }
+
 
     // RENDER --------------------------------------------------------------
 
@@ -164,9 +189,15 @@ const AdminDishes = () => {
             <Box onClickConfirmation={onClickConfirmation} onClickDelete={onClickDelete} boxRef={box} message="Voulez-vous vraiment supprimer ce plat ?"/>
             <div className="admin-dishes__left">
                 <div className="left__dishes-list">
+
+                    <div className="left__icons">
+                        <input value="Entrée" ref={e} onClick={() => filterDishes("e")} readOnly/>
+                        <input value="Plats" ref={p} onClick={() => filterDishes("p")} readOnly/>
+                        <input value="Dessert" ref={d} onClick={() => filterDishes("d")} readOnly/>
+                    </div>
                     
                     <AllDishesList
-                        dishList={dishList}
+                        dishList={filtered}
                         onClickDish={onClickDish}
                         onClickDelete={onClickConfirmation}
                     />

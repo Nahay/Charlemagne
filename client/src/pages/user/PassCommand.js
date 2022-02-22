@@ -32,6 +32,7 @@ const PassCommand = () => {
     const [userId, setUserId] = useState("");
     const [name, setName] = useState("");
     const [firstname, setFirstname] = useState("");
+    const [dateComment, setDateComment] = useState("");
 
 
     const [dishList, setDishList] = useState([]);
@@ -67,6 +68,7 @@ const PassCommand = () => {
 
       async function getTimeLimit() {
         const currentDate = await getDateByDate(date);
+        setDateComment(currentDate.comment);
         setTime({min: currentDate.timeMin, max: currentDate.timeMax});
       }
 
@@ -188,11 +190,12 @@ const PassCommand = () => {
     <form className="make-order" onSubmit={onOrderSubmit}>
       <div className="make-order__container">
         <h1 className="container__date">{moment(new Date(parseInt(date))).locale('fr').format('LL')}</h1>
-        <div className="container__name-time">
+        <div className="container__comment">
+          <p>{orderInfo}</p>
+          <p>{dateComment}</p>
+        </div>
+        <div className="container__name">
           <p className="fixed-text name">{name} {firstname}</p>
-          <div className="time__container">
-            <input type="time" min={time.min} max={time.max} value={timeC} onChange={handleTimeChange} required/>
-          </div>
         </div>
         <OrderTable data={data} setData={setData}/>
         <div className="container__comm-others">
@@ -203,8 +206,11 @@ const PassCommand = () => {
               handleChange={handleComment}
           />
           <div className="comm-others__others">
-            <p className="fixed-text">{total} €</p>
-            <div>
+            <div className="others__total">
+              <p>Total : </p>
+              <p className="fixed-text"> {total} €</p>
+            </div>
+            <div className="checkbox__container">
               <input
                 type="checkbox"
                 id="container"
@@ -224,10 +230,16 @@ const PassCommand = () => {
               />
               <label htmlFor="confirm-email">Recevoir un email de confirmation</label>
             </div>
+            <div className="time__container">
+              <div className="time__text">
+                <p>Heure : </p>
+                <p>({time.min} - {time.max})</p>
+              </div>
+              <input type="time" min={time.min} max={time.max} value={timeC} onChange={handleTimeChange} required/>
+            </div>
           </div>
         </div>
         <div className="container__mess-btn">
-          <p className="fixed-text order">{orderInfo}</p>
           <InputButton value= "Commander" type="submit"/>
         </div>
       </div>

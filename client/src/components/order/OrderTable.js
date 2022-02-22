@@ -29,12 +29,13 @@ const OrderTable = ({data, setData}) => {
     const columns = [
         {
             name: 'Nom',
+            width: "400px",
             selector: row => row.name,
             sortable: true,
         },
         {
             name: 'Prix',
-            selector: row => row.price,
+            selector: row => row.price + " €",
             sortable: true,
         },
         {
@@ -43,6 +44,7 @@ const OrderTable = ({data, setData}) => {
         },
         {
             name: 'Nombre Désiré',
+            display: "flex",
             cell: row => (
                 <InputText value={row.nbC} required={false} placeholder="0" handleChange={(e) => handleNbChange(e, row.id)}/>
             )

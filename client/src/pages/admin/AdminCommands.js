@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+
 import { toast } from "react-toastify";
 import moment from "moment";
 import "moment/locale/fr";
@@ -8,20 +9,18 @@ import TextArea from "../../components/generic/TextArea";
 import InputButton from "../../components/generic/InputButton";
 import AdminCalendar from "../../components/admin/AdminCalendar";
 import Box from "../../components/generic/Box";
-
-import { getDates } from "../../services/calendarService";
-import {
-  deleteCommand,
-  getCommandByDate,
-  updateCommand
-} from "../../services/commandsService";
 import CommandsList from "../../components/admin/CommandsList";
 import DishCommandList from "../../components/admin/DishCommandList";
+
+import { getDates } from "../../services/calendarService";
+import { deleteCommand, getCommandByDate, updateCommand } from "../../services/commandsService";
 import { deleteAllCommandsList, updateQuantity } from "../../services/commandsListService";
 import { getDishByDateAndDish, getDishById, updateDishDate } from "../../services/dishesService";
 import { getUserById } from "../../services/usersService";
 
+
 const AdminCommands = () => {
+
   const ref = useRef(null);
   const box = useRef(null);
 
@@ -50,6 +49,7 @@ const AdminCommands = () => {
   const [commandsList, setCommandsList] = useState([]);
   const [reformatList, setReformatList] = useState([]);
 
+
   useEffect(() => {
     getDateList();
     getCommandsByDate();
@@ -58,7 +58,7 @@ const AdminCommands = () => {
   const getDateList = async () => {
     const dates = await getDates();
     setDatesList(dates);
-  };
+  }
 
   const getCommandsByDate = async () => {
     const commands = await getCommandByDate(date);
@@ -86,13 +86,13 @@ const AdminCommands = () => {
     const dishes = await getCommandByDate(date);
     const d = dishes.filter((d) => d.user._id === id)[0].list;
     setDishList(d);
-  };
+  }
 
   const onChangeDate = async (e) => {
     setDate(e);
     resetInput();
     getCommandsByDate();
-  };
+  }
 
   const onClickCommand = ({ _id, user, container, total, timeC, comment, paid }) => {
     getDishList(user._id);
@@ -106,12 +106,12 @@ const AdminCommands = () => {
     setTime(timeC);
     setComment(comment);
     setPaid(paid);
-  };
+  }
 
   const onClickDish = (d) => {
     setQuantity(d.quantity);
     setCurrentCommandList(d);
-  };
+  }
 
   const onClickDelete = async () => {
 
@@ -124,7 +124,7 @@ const AdminCommands = () => {
     box.current.style.display = "none";
     
     setNeedConfirmation(true);
-  };
+  }
 
   const onClickConfirmation = ({_id}) => {
     if (needConfirmation) {
@@ -195,7 +195,7 @@ const AdminCommands = () => {
     setTime("");
     setQuantity("");
     setPaid(false);
-  };
+  }
 
   // HANDLE
 
@@ -203,30 +203,31 @@ const AdminCommands = () => {
     if(Number(e.target.value) || e.target.value === "") setQuantity(e.target.value);
   }
 
-  const handleCommentChange = (e) => setComment(e.target.value);
+  const handleCommentChange = (e) => setComment(e.target.value)
 
-  const handleNameChange = (e) => setName(e.target.value);
+  const handleNameChange = (e) => setName(e.target.value)
 
-  const handleFirstnameChange = (e) => setFirstname(e.target.value);
+  const handleFirstnameChange = (e) => setFirstname(e.target.value)
 
-  const handleTimeChange = (e) => setTime(e.target.value);
+  const handleTimeChange = (e) => setTime(e.target.value)
 
-  const handleCheckboxChange = (e) => (e.target.checked = true);
+  const handleCheckboxChange = (e) => (e.target.checked = true)
 
   const handleTotalChange = (e) => {
     const val = e.target.value;
     if (Number(val) || val === "") setTotal(val);
-  };
+  }
 
   const handlePaidChange = (e) => {
     if (e.target.id === "y---paid") setPaid(true);
     else setPaid(false);
-  };
+  }
 
   const handleContainerChange = (e) => {
     if (e.target.id === "y---container") setContainer(true);
     else setContainer(false);
-  };
+  } 
+
 
   // RENDER ----------------------------------------------------------------
 
@@ -283,31 +284,6 @@ const AdminCommands = () => {
               />
             </div>
 
-            <div
-              className="right__form__radio"
-              onChange={handleContainerChange}
-            >
-              <span>Contenant :</span>
-              <input
-                type="radio"
-                value="Non"
-                name="contaier"
-                id="n---container"
-                checked={container === false}
-                onChange={handleCheckboxChange}
-              />
-              <label htmlFor="n---container">Non</label>
-              <input
-                type="radio"
-                value="Oui"
-                name="container"
-                id="y---container"
-                checked={container === true}
-                onChange={handleCheckboxChange}
-              />
-              <label htmlFor="y---container">Oui</label>
-            </div>
-
             <TextArea
               value={comment}
               placeholder="Commentaire"
@@ -331,6 +307,33 @@ const AdminCommands = () => {
               <InputButton value="Modifier" type="button" onClick={onModifyQuantity}/>
             </div>
 
+            <div className="container_radio_duo">
+              <div
+                className="right__form__radio"
+                onChange={handleContainerChange}
+              >
+                <span>Contenant :</span>
+                <input
+                  type="radio"
+                  value="Non"
+                  name="contaier"
+                  id="n---container"
+                  checked={container === false}
+                  onChange={handleCheckboxChange}
+                />
+                <label htmlFor="n---container">Non</label>
+                <input
+                  type="radio"
+                  value="Oui"
+                  name="container"
+                  id="y---container"
+                  checked={container === true}
+                  onChange={handleCheckboxChange}
+                />
+                <label htmlFor="y---container">Oui</label>
+              </div>
+            </div>
+
             <div className="input-duo">
               <div className="time__container">
                   <div className="input__time">
@@ -352,27 +355,30 @@ const AdminCommands = () => {
                 </div>
             </div>
 
-            <div className="right__form__radio" onChange={handlePaidChange}>
-              <span>Payée ?</span>
-              <input
-                type="radio"
-                value="Non"
-                name="paid"
-                id="n---paid"
-                checked={paid === false}
-                onChange={handleCheckboxChange}
-              />
-              <label htmlFor="n---paid">Non</label>
-              <input
-                type="radio"
-                value="Oui"
-                name="paid"
-                id="y---paid"
-                checked={paid === true}
-                onChange={handleCheckboxChange}
-              />
-              <label htmlFor="y---paid">Oui</label>
+            <div className="container_radio_duo">
+              <div className="right__form__radio" onChange={handlePaidChange}>
+                <span>Payée ?</span>
+                <input
+                  type="radio"
+                  value="Non"
+                  name="paid"
+                  id="n---paid"
+                  checked={paid === false}
+                  onChange={handleCheckboxChange}
+                />
+                <label htmlFor="n---paid">Non</label>
+                <input
+                  type="radio"
+                  value="Oui"
+                  name="paid"
+                  id="y---paid"
+                  checked={paid === true}
+                  onChange={handleCheckboxChange}
+                />
+                <label htmlFor="y---paid">Oui</label>
+              </div>
             </div>
+
             <InputButton value="Enregistrer" type="submit" />
           </form>
         </div>

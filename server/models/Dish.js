@@ -19,6 +19,11 @@ const DishSchema = Schema({
     type: String,
     required: true
   },
+  visible: {
+    type: Boolean,
+    required: false,
+    default: true
+  }
 });
 
 

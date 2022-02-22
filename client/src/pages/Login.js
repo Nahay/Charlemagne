@@ -27,7 +27,7 @@ const Login = () => {
         if (si.token) {
           // si il y est, on l'ajoute au local storage
           localStorage.setItem('userToken', si.token);
-          history.push("/");
+          history.push("/commander");
           toast.success("Bienvenue " + username +" !");          
         }
         else toast.error("Le nom d'utilisateur ou le mot de passe est incorrect.");
