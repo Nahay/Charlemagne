@@ -120,6 +120,21 @@ router.patch("/hide/:dishId", async (req, res) => {
   }
 });
 
+// Unhide a dish
+router.patch("/unhide/:dishId", async (req, res) => {
+  try {
+      const dishToUnhide = await Dish.findOneAndUpdate(
+        {_id: req.params.dishId },
+        {
+          visible: true
+        }
+        );
+      res.json(dishToUnhide);
+  } catch(err) {
+      res.json({error: err.message});
+  }
+});
+
 // Delete a dish
 router.delete("/:dishId", async (req, res) => {
   try {

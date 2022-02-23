@@ -10,7 +10,7 @@ import TextArea from '../../components/generic/TextArea';
 import AllDishesList from '../../components/admin/AllDishesList';
 import Box from '../../components/generic/Box';
 
-import { getCountByName, getDishes, updateDish, createDish, hideDish, deleteAllDishesDish, getInvisibleDishes } from "../../services/dishesService";
+import { getCountByName, getDishes, updateDish, createDish, hideDish, getInvisibleDishes, unhideDish } from "../../services/dishesService";
 import { getOneCommandListByDish } from '../../services/commandsListService';
 
 
@@ -32,7 +32,8 @@ const AdminDishes = () => {
 
     const [create, setCreate] = useState(true);
     const [dishList, setDishList] = useState([]);
-    const [filtered, setFiltered] = useState([]);    
+    const [filtered, setFiltered] = useState([]);
+    const [invisible, setInvisible] = useState(false);   
 
     const [needConfirmation, setNeedConfirmation] = useState(true);
 
@@ -58,13 +59,18 @@ const AdminDishes = () => {
     const getInvisibleList = async () => {
         const dishes = await getInvisibleDishes();
         setFiltered(dishes);
+        setInvisible(true);
 
+        e.current.style.background = "none";
+        p.current.style.background = "none";
+        d.current.style.background = "none";
         inv.current.style.background = "rgb(255, 97, 79)";
     }
 
     const filterDishes = (fType, list) => {
         const newList = list.filter(d => d.type === fType)
         setFiltered(newList);
+        setInvisible(false);
 
         e.current.style.background = "none";
         p.current.style.background = "none";
@@ -129,23 +135,23 @@ const AdminDishes = () => {
     // DB -------------------------------------------------------------------
 
     const onClickDelete = async () => {
-        const dish = await getOneCommandListByDish(id);
-        if (!dish) {
-            const fType = await hideDish(id);
 
-            await deleteAllDishesDish(id);
+        const fType = await hideDish(id);
 
-            onClickNewDish();
+        onClickNewDish();
 
-            getDishList(fType);
-            
-        }
-        else toast.error("Le plat appartient à une commande, vous ne pouvez pas le supprimer.");
+        getDishList(fType);
+        
         box.current.style.display = "none";    
         setNeedConfirmation(true);
     }
 
-    const onClickConfirmation = (e) => {
+    const onClickInvisible = async (hiddenId) => {
+        const fType = await unhideDish(hiddenId);
+        getDishList(fType);
+    }
+
+    const onClickConfirmation = (idToDelete) => {
         if (needConfirmation) {
           box.current.style.display = "flex";
           setNeedConfirmation(false);
@@ -154,7 +160,7 @@ const AdminDishes = () => {
           box.current.style.display = "none";
           setNeedConfirmation(true);
         }
-        setId(e);
+        setId(idToDelete);
     }
 
 
@@ -215,8 +221,10 @@ const AdminDishes = () => {
                     
                     <AllDishesList
                         dishList={filtered}
+                        invisible={invisible}
                         onClickDish={onClickDish}
                         onClickDelete={onClickConfirmation}
+                        onClickInvisible={onClickInvisible}
                     />
 
                 </div>

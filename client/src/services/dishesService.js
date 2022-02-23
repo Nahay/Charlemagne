@@ -96,7 +96,18 @@ const deleteDish = async (id) => {
 const hideDish = async (id) => {
     try {
         const { data } = await axios.patch(API_URL + "/dishes/hide/" +id);
-        toast.success(`Le plat ${data.name} a été supprimé !`);
+        toast.success(`Le plat ${data.name} n'est plus visible !`);
+        return data.type;
+    }
+    catch(err) {
+        toast.error(err.message);
+    }
+}
+
+const unhideDish = async (id) => {
+    try {
+        const { data } = await axios.patch(API_URL + "/dishes/unhide/" +id);
+        toast.success(`Le plat ${data.name} est à nouveau visible !`);
         return data.type;
     }
     catch(err) {
@@ -208,5 +219,6 @@ export {
     deleteDishDate,
     deleteAllDishesDish,
     getNbRByDate,
-    getInvisibleDishes
+    getInvisibleDishes,
+    unhideDish
 };
