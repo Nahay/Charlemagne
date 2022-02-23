@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import moment from "moment";
 import 'moment/locale/fr';
@@ -15,10 +15,11 @@ import { getUserById } from '../../services/usersService';
 import { getDateByDate } from "../../services/calendarService";
 import { createCommand } from "../../services/commandsService";
 import { createCommandList } from "../../services/commandsListService";
+import Summary from "../../components/order/Summary";
 
 
 const PassCommand = () => {
-
+    const summary = useRef(null);
     const { date } = useParams();
     const history = useHistory();
 
@@ -37,6 +38,10 @@ const PassCommand = () => {
 
     const [dishList, setDishList] = useState([]);
     const [data, setData] = useState([]);
+
+    const [orderedDishes, setOrderedDishes] = useState([]);
+
+    const [summaryTotal, setSummaryTotal] = useState([]);
 
 
     useEffect(() => {
@@ -126,7 +131,18 @@ const PassCommand = () => {
     setOrderInfo(orderMess);
   }
 
+  const onClickConfirmation = () => {
+
+    summary.current.style.visibility = "hidden";
+    summary.current.style.opacity = "0";
+
+    history.push("/");
+    toast.success("La commande a été passée avec succès !");
+
+  }
+
   // SUBMIT ------------------------------------------------
+
   const onOrderSubmit = async (e) => {
     e.preventDefault();
 
@@ -150,9 +166,8 @@ const PassCommand = () => {
         }
       }
     });
-    
 
-    if(!wrongCommand && total > 0){
+    if(!wrongCommand && total > 0) {
       // Créer la commande si aucun des champs entrés est faux
       const command = await createCommand(userId, parseInt(date), timeC, false, container, comment, total);
       // Parcours de la liste des commandes et créer chacune d'entre elle
@@ -162,17 +177,17 @@ const PassCommand = () => {
         const dishDate = await getDishByDateAndDish(date, d._id);
         await updateDishDate(dishDate._id, dishDate.numberKitchen, dishDate.numberRemaining - parseInt(d.nbC));
       });
-      
+      setOrderedDishes(commandList);
+      setSummaryTotal(total);
+      console.log(commandList);
       if (confirmEmail) {
         // emailJS 
         //  ...
       }
-      console.log(data);
 
-      toast.success("La commande a été passée avec succès !");
+      summary.current.style.visibility = "visible";
+      summary.current.style.opacity = 1;
 
-      // Change de page et nous amène vers l'accueil maybe une page où on voit toutes les commandes (?)
-      history.push("/");      
     }
     else toast.error("La commande n'a pu être réalisée, vérifiez les champs.", { autoClose: 10000}); // autoClose = le temps du toast     
   }
@@ -189,6 +204,7 @@ const PassCommand = () => {
 
   return (
     <form className="make-order" onSubmit={onOrderSubmit}>
+      <Summary onClickConfirmation={onClickConfirmation} sumRef={summary} dishList={orderedDishes} name={name} firstname={firstname} total={summaryTotal}/>
       <div className="make-order__container">
         <h1 className="container__date">{moment(new Date(parseInt(date))).locale('fr').format('LL')}</h1>
         <div className="container__comment">

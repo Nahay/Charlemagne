@@ -1,32 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import InputButton from "./InputButton";
+import InputButton from "../generic/InputButton";
 
-const Summary = ({onClickConfirmation, sumRef, dishList, user}) => {
+const Summary = ({onClickConfirmation, sumRef, dishList, name, firstname, total}) => {
+
+    useEffect(() => {
+        
+    }, [dishList]);
+
     return (
         <div className="summary-container" ref={sumRef}>
             <div className="summary-content">
                 <div className="summary-items">
-                    <p>Merci pour votre commande !</p>
-                    <p>Nom Prénom voici le résumé de votre commande :</p>
+                    <p className="summary-title">Merci pour votre commande !</p>
+                    <p className="summary-name">{name} {firstname} voici le résumé de votre commande :</p>
                     <div className="summary-list">
-                        {/* foreach de l'objet */}
-                        <div className="list---box">
-                            <p>Nom du plat</p>
-                            <p>Quantité</p>  
-                            <p>Prix</p>  
-                        </div>
+                        {dishList.map(d => {
+                            return (
+                                <div className="list---box" key={d._id}>
+                                    <p className="box---name">{d.name}</p>
+                                    <p className="box---quantity">x {d.nbC}</p>  
+                                    <p className="box---price">{d.price} €</p>  
+                                </div>
+                            );
+                        })}                        
                     </div>
 
                     <div className="summary-total">
-                        <p>Total : 0 €</p>
+                        <p>Total : {total} €</p>
                     </div>
+
+                    <InputButton type="button" value={"Ok"} onClick={onClickConfirmation}/>
                 </div>
-                
-                <InputButton type="button" onClick={onClickConfirmation}/>
             </div>
 
-            <div className="confirmation__background">
+            <div className="summary-background">
             </div>
         </div>
     );
