@@ -7,10 +7,9 @@ const OrderTable = ({data, setData}) => {
 
 
     const handleNbChange = (e, id) => {
-
         const val = e.target.value;
 
-        if ((Number(val) || val === "") && Number(val) > 0) {
+        if (Number(val) || val === "") {
 
             setData(data =>
             [...data.slice(0,id),
@@ -20,6 +19,59 @@ const OrderTable = ({data, setData}) => {
                 },
                 ...data.slice(id+1)
             ]
+            );
+        }
+    }
+
+    const onClickMinus = (nbC, id) => {
+        let nb = parseInt(nbC);
+        if(nb > 1) {
+            setData(data =>
+                [...data.slice(0,id),
+                    {
+                        ...data[id],
+                        nbC: nb-1,
+                    },
+                    ...data.slice(id+1)
+                ]
+            );
+        }
+        else {
+            setData(data =>
+                [...data.slice(0,id),
+                    {
+                        ...data[id],
+                        nbC: 1,
+                    },
+                    ...data.slice(id+1)
+                ]
+            );
+        }        
+    }
+
+    const onClickPlus = (nbC, id, max) => {
+        let nb = parseInt(nbC);
+        let nbMax = parseInt(max);
+        if (nb < nbMax) {
+            setData(data =>
+                [...data.slice(0,id),
+                    {
+                        ...data[id],
+                        nbC: nb+1,
+                    },
+                    ...data.slice(id+1)
+                ]
+            );
+        }
+        else if (nbC === "") {
+            setData(data =>
+                [...data.slice(0,id),
+                    {
+                        ...data[id],
+                        nbC: 1,
+                    },
+                    ...data.slice(id+1)
+                ]
             );
         }
     }
@@ -44,7 +96,9 @@ const OrderTable = ({data, setData}) => {
         {
             name: 'Nombre Désiré',
             display: "flex",
-            cell: row => ( <Counter handleChange={(e) => handleNbChange(e, row.id)} onClickPlus={onClickPlus} onClickMinus={onClickMinus}/> )
+            cell: row => (
+                // <InputText value={row.nbC} required={false} placeholder="0" handleChange={(e) => handleNbChange(e, row.id)}/>
+                <Counter value={row.nbC} handleChange={(e) => handleNbChange(e, row.id)} onClickPlus={() => onClickPlus(row.nbC, row.id, row.nb)} onClickMinus={() => onClickMinus(row.nbC, row.id)} /> )
         },
         {
             name: 'Total',

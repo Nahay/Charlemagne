@@ -101,6 +101,7 @@ const AdminCommands = () => {
     setDate(e);
     resetInput();
     getCommandsByDate();
+    setDishClicked(false);
   }
 
   const onClickCommand = ({ _id, user, container, total, timeC, comment, paid }) => {

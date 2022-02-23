@@ -180,7 +180,7 @@ router.post("/signin", async (req, res) => {
     if (!password) return res.json({ success: false, message: "Error: Password cannot be blank."});
   
     try {
-      const user = await User.findOne({ username: username });  
+      const user = await User.findOne({ username: username, visible: true });
       // Teste si le mot de passe vaut celui qui est hashé
       if (!user.validPassword(password)) return res.json({ success: false, message: "Error: Invalid password while testing" });
       // ajoute les valeurs assignées dans le token

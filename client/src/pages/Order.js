@@ -17,9 +17,10 @@ const Order = () => {
   const [dateList, setDatesList] = useState([]);
   const [dishByDateList, setDishByDateList] = useState([]);
   const [tableActive, setTableActive] = useState(true);
-  const [date, setDate] = useState(new Date().getTime());
+  const [date, setDate] = useState(new Date(new Date().toDateString()).getTime());
 
   useEffect(() => {
+
     getSetDates();
   }, []);
 
@@ -27,6 +28,8 @@ const Order = () => {
   const getSetDates = async () => {
     const dates = await getDatesByVisibility();
     setDatesList(dates);
+
+    await getDishByDateList(date);
   }
 
   const getDishByDateList = async (dateC) => {

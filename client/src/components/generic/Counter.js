@@ -1,13 +1,17 @@
 import React, {useState} from "react";
 
 
-const Counter = ({ nb, handleChange }) => {
+const Counter = ({ value, handleChange, onClickPlus, onClickMinus }) => {
 
     return (
-        <div className="counter__content">  
-            <p>{nb}</p>
-            <button type="button" value="+" onClick={onClickPlus} />
-            <button type="button" value="-" onClick={onClickMinus} />
+        <div className="counter__content">
+            
+            <input type="text" value={value} onChange={handleChange} placeholder="0"/>
+            <div className="buttons">
+                <button type="button" onClick={onClickPlus} >+</button>
+                <button type="button" onClick={onClickMinus}>-</button>
+            </div>
+
         </div>
     );
 }

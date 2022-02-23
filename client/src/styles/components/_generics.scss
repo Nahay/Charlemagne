@@ -447,24 +447,43 @@ input[type="time"] {
 // --------------- COUNTER  -----------------------------
 .counter__content {
   display: flex;
-
-  button {
-    width: 50%;
-    height: 50px;
+  input {
+    color: #8d8d8d;
+    font-size: 16px;
+    background-color: #2b2b2b;
+    border: none;
     outline: none;
-    border: $color-primary 2px solid;
-    color: $color-primary;
-    background:#2b2b2b;
-    transition: .3s ease;
-    position: relative;
-    overflow: hidden;
+    width: 30px;
+    height: 50px;
+    padding: 0 10px;
+    transition: all ease-out 0.3s;
+  }
+  .buttons {
+    display: flex;
+    flex-direction: column;
 
-    &::after {
-      content:'';
-      position: absolute;
-      background: red;
-      width: 300px;
-      height: 100%;
+    height: 50px;
+
+      button {
+        width: 25px;
+        height: 25px;
+        outline: none;
+        border: none;
+        color: white;
+        background:#1B1B1B;
+        transition: .3s ease;
+        position: relative;
+
+        &:hover {
+          background-color: $color-primary;
+        }
+
+        &:active {
+          background-color: $color-primary;
+
+          transform: translateY(4px);
+        }
     }
   }
+
 }
