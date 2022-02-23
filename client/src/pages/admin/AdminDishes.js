@@ -10,8 +10,7 @@ import TextArea from '../../components/generic/TextArea';
 import AllDishesList from '../../components/admin/AllDishesList';
 import Box from '../../components/generic/Box';
 
-import { getCountByName, getDishes, updateDish, createDish, hideDish, getInvisibleDishes, unhideDish } from "../../services/dishesService";
-import { getOneCommandListByDish } from '../../services/commandsListService';
+import { getDishes, updateDish, createDish, hideDish, getInvisibleDishes, unhideDish, getDishByName } from "../../services/dishesService";
 
 
 const AdminDishes = () => {
@@ -171,24 +170,26 @@ const AdminDishes = () => {
 
             // submit for a new dish
             if (create) {
-                const count = await getCountByName(name);
-                if (count !== 1) {
+                const count = await getDishByName(name);
+                if (!count) {
                     await createDish(name, price, desc, type);
                     onClickNewDish();
                     getDishList(type);
                 }
+                else if (!count.visible) toast.error("Ce nom est déjà assigné à un plat actuellement invisible.");
                 else toast.error("Ce nom existe déjà.");
             }
     
             // submit for changing a dish
             else {
                 if (name !== previousName) {
-                    const count = await getCountByName(name);
-                    if (count !== 1) {
+                    const count = await getDishByName(name);
+                    if (!count) {
                         await updateDish(id, name, price, desc, type);
                         setPreviousName(name);
                         getDishList(type);
                     }
+                    else if (!count.visible) toast.error("Ce nom est déjà assigné à un plat actuellement invisible.");
                     else toast.error("Ce nom existe déjà.");
                 }
                 else {

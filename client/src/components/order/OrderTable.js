@@ -1,7 +1,6 @@
 import React from "react";
 import DataTable, { createTheme } from 'react-data-table-component';
-
-import InputText from '../generic/InputText';
+import Counter from "../generic/Counter";
 
 
 const OrderTable = ({data, setData}) => {
@@ -11,7 +10,7 @@ const OrderTable = ({data, setData}) => {
 
         const val = e.target.value;
 
-        if (Number(val) || val === "") {
+        if ((Number(val) || val === "") && Number(val) > 0) {
 
             setData(data =>
             [...data.slice(0,id),
@@ -45,9 +44,7 @@ const OrderTable = ({data, setData}) => {
         {
             name: 'Nombre Désiré',
             display: "flex",
-            cell: row => (
-                <InputText value={row.nbC} required={false} placeholder="0" handleChange={(e) => handleNbChange(e, row.id)}/>
-            )
+            cell: row => ( <Counter handleChange={(e) => handleNbChange(e, row.id)} onClickPlus={onClickPlus} onClickMinus={onClickMinus}/> )
         },
         {
             name: 'Total',
