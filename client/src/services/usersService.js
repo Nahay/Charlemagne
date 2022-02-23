@@ -18,6 +18,15 @@ const getUsers = async(token) => {
     }
 }
 
+const getVisibleUsers = async(token) => {
+    try {
+        const { data } = await axios.get(API_URL + "/users/visible", config(token));
+        return data;
+    } catch(err) {
+        toast.error(err.message);
+    }
+}
+
 const getUserByUsername = async (username, token) => {
     try {
         const { data } = await axios.get(API_URL + "/users/user/" + username, config(token));
@@ -66,6 +75,16 @@ const updateUserNoPw = async (id, name, firstname, email, tel, token) => {
     }
 }
 
+const hideUser = async (id, token) => {
+    try {
+        await axios.patch(API_URL + "/users/hide/" +id, {visible: false}, config(token));
+        toast.success("L'utilisateur a été supprimé !");
+    } catch(err) {
+        console.log(err)
+        toast.error(err.message);
+    }
+}
+
 // DELETE ---------------------------------------------------------------------------------------------------------------------------------------
 
 const deleteUser = async (id, token) => {
@@ -105,7 +124,9 @@ export {
     getUserByUsername,
     getUserById,
     getUsers,
+    getVisibleUsers,
     createUser,
+    hideUser,
     updateUser,
     updateUserNoPw,
     deleteUser,

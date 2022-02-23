@@ -11,8 +11,8 @@ import InputEmail from '../../components/generic/InputEmail';
 import AccountList from '../../components/admin/AccountList';
 import Box from "../../components/generic/Box";
 
-import { createUser, deleteUser, getUsers, updateUser, updateUserNoPw, getUserByUsername } from '../../services/usersService';
-import { createAdmin, deleteAdminByUsername, getAdminById, getAdminByUsername, getAdmins, updateAdmin } from '../../services/adminsService';
+import { createUser, hideUser, getVisibleUsers, updateUser, updateUserNoPw, getUserByUsername } from '../../services/usersService';
+import { createAdmin, deleteAdmin, getAdminById, getAdminByUsername, getAdmins, updateAdmin } from '../../services/adminsService';
 
 
 const AdminAccounts = () => {
@@ -44,7 +44,7 @@ const AdminAccounts = () => {
         const token = localStorage.getItem("adminToken");
 
         async function getClientAccountList() {
-            const clients = await getUsers(token);
+            const clients = await getVisibleUsers(token);
             setClientAccountList(clients.users);
         }
     
@@ -53,30 +53,26 @@ const AdminAccounts = () => {
             setAdminAccountList(admins.admins);
         }
 
+        async function getCurrentAdmin() {
+  
+            const adminDecoded = decodeToken(localStorage.getItem("adminToken"));
+    
+            if (adminDecoded) {  
+                const admin = await getAdminById(adminDecoded._id, token);
+                // it returns an object with { success: true, user { all the user's info } }
+                if (admin.success) {  
+                    const { _id } = admin.admin;
+                    setCurrentAdmin({_id});              
+                }
+            }
+        }
+
+
+        getCurrentAdmin();
         getClientAccountList();
         getAdminAccountList();
 
     }, []);
-    
-    useEffect(() => {
-
-      async function getCurrentAdmin() {
-  
-          const adminDecoded = decodeToken(localStorage.getItem("adminToken"));
-  
-          if (adminDecoded) {  
-            const admin = await getAdminById(adminDecoded._id, token);
-            // it returns an object with { success: true, user { all the user's info } }
-            if (admin.success) {  
-              const { _id, username } = admin.admin;
-              setCurrentAdmin({_id, username});              
-            }
-          }
-        }
-
-        getCurrentAdmin();
-  
-      }, []);
   
     // RESET VALUES -----------------------------------------------------
 
@@ -144,7 +140,7 @@ const AdminAccounts = () => {
     // DB -------------------------------------------------------------
 
     const getClientAccountList = async () => {
-        const clients = await getUsers(token);
+        const clients = await getVisibleUsers(token);
         setClientAccountList(clients.users);
     }
 
@@ -153,10 +149,10 @@ const AdminAccounts = () => {
         setAdminAccountList(admins.admins);
     }
 
-    const onClickConfirmation = (e) => {
+    const onClickConfirmation = (id) => {
         if (needConfirmation) {
           box.current.style.display = "flex";
-          setUsername(e);
+          setId(id);
           setNeedConfirmation(false);
         }
         else {
@@ -167,25 +163,28 @@ const AdminAccounts = () => {
 
 
     const onClickDelete = async () => {
+        
         if (watchClients) {
-            await deleteUser(id, token);
+            await hideUser(id, token);
+
             getClientAccountList();
         }
+
         else {
-            console.log(username);
-            console.log(id);
-            if (currentAdmin.username === username) {
+            if (currentAdmin._id === id) {
                 toast.error("Vous ne pouvez pas supprimer le compte sur lequel vous êtes connectés !")
                 return;
             }
-            // setAdmin(true);
             
-            await deleteAdminByUsername(username, token);
-            setCreate(true);
-            setUsername("");
+            await deleteAdmin(id, token);
+
             getAdminAccountList();
             
         }
+
+        setId("");
+        setCreate(true);
+
         box.current.style.display = "none";
         setNeedConfirmation(true);
     }
@@ -345,25 +344,19 @@ const AdminAccounts = () => {
 
                             <div className="admin-form">
 
-                                <div className="input-label">
-                                    <label>Nom d'utilisateur :</label>
-                                    <InputText
-                                        value={username}
-                                        placeholder="Nom d'utilisateur*"
-                                        handleChange={handleUsername}
-                                        readOnly={create ? false : true}
-                                    />
-                                </div>
-
-                                <div className="input-label">
-                                    <label>Mot de passe :</label>
-                                    <InputText
-                                        value={password}
-                                        placeholder={create ? "Mot de passe*" : "Changer mot de passe"}
-                                        required={create ? true : false}
-                                        handleChange={handlePassword}
-                                    />
-                                </div>
+                                <InputText
+                                    value={username}
+                                    placeholder="Nom d'utilisateur*"
+                                    handleChange={handleUsername}
+                                    readOnly={create ? false : true}
+                                />
+                                
+                                <InputText
+                                    value={password}
+                                    placeholder={create ? "Mot de passe*" : "Changer mot de passe"}
+                                    required={create ? true : false}
+                                    handleChange={handlePassword}
+                                />
                                 
                                 <InputButton value={create? "Créer" : "Enregistrer"} type="submit"/>
                             </div>
@@ -371,62 +364,46 @@ const AdminAccounts = () => {
                         :
                             
                             <div className="admin-form">
-                                <div className="input-label">
-                                    <label>Nom d'utilisateur :</label>
-                                    <InputText
-                                        value={username}
-                                        placeholder="Nom d'utilisateur*"
-                                        handleChange={handleUsername}
-                                        readOnly={create ? false : true}
-                                    />
-                                </div>
 
-                                <div className="input-label">
-                                    <label>Mot de passe :</label>
-                                    <InputText
-                                        value={password}
-                                        placeholder={create ? "Mot de passe*" : "Changer mot de passe"}
-                                        required={create ? true : false}
-                                        handleChange={handlePassword}
-                                    />
-                                </div>
+                                <InputText
+                                    value={username}
+                                    placeholder="Nom d'utilisateur*"
+                                    handleChange={handleUsername}
+                                    readOnly={create ? false : true}
+                                />
+                                <InputText
+                                    value={password}
+                                    placeholder={create ? "Mot de passe*" : "Changer mot de passe"}
+                                    required={create ? true : false}
+                                    handleChange={handlePassword}
+                                />
 
-                                <div className="input-label">
-                                    <label>Email :</label>
-                                    <InputEmail
-                                        value={email}
-                                        placeholder="Email*"
-                                        handleChange={handleEmail}
-                                    />  
-                                </div>
+                               
+                                <InputEmail
+                                    value={email}
+                                    placeholder="Email*"
+                                    handleChange={handleEmail}
+                                />  
+ 
 
-                                <div className="input-label">
-                                    <label>Nom :</label>
-                                    <InputText
-                                        value={name}
-                                        placeholder="Nom*"
-                                        handleChange={handleName}
-                                    />
-                                </div>
+                                <InputText
+                                    value={name}
+                                    placeholder="Nom*"
+                                    handleChange={handleName}
+                                />
 
-                                <div className="input-label">
-                                    <label>Prénom:</label>
-                                    <InputText
-                                        value={firstname}
-                                        placeholder="Prénom*"
-                                        handleChange={handleFirstname}
-                                    />
-                                </div>
+                                <InputText
+                                    value={firstname}
+                                    placeholder="Prénom*"
+                                    handleChange={handleFirstname}
+                                />
 
-                                <div className="input-label">
-                                    <label>Tél :</label>
-                                    <InputNumber
-                                        value={tel}
-                                        placeholder="Tel"
-                                        required={false}
-                                        handleChange={handleTel}
-                                    />
-                                </div>
+                                <InputNumber
+                                    value={tel}
+                                    placeholder="Tel"
+                                    required={false}
+                                    handleChange={handleTel}
+                                />
                                
                                 <InputButton value={create? "Créer" : "Enregistrer"} type="submit"/>
                             </div>

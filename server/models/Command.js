@@ -30,6 +30,11 @@ const UserSchema = new Schema({
     creationDate: {
         type: Date,
         default: Date.now
+    },
+    visible: {
+        type: Boolean,
+        required: false,
+        default: true
     }
 });
 
