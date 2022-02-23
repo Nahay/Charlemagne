@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import "moment/locale/fr";
 import { CSVLink } from "react-csv";
+
 import InputText from "../../components/generic/InputText";
 import TextArea from "../../components/generic/TextArea";
 import InputButton from "../../components/generic/InputButton";
@@ -24,9 +25,7 @@ const AdminCommands = () => {
   const ref = useRef(null);
   const box = useRef(null);
 
-  const [date, setDate] = useState(
-    new Date(new Date().toDateString()).getTime()
-  );
+  const [date, setDate] = useState(new Date(new Date().toDateString()).getTime());
 
   const [id, setId] = useState("");
   const [commandId, setCommandId] = useState("");
@@ -52,6 +51,15 @@ const AdminCommands = () => {
 
 
   useEffect(() => {
+    async function getCommandsByDate() {
+      const commands = await getCommandByDate(date);
+      setCommandsList(commands);
+      const reformat = await reformatCommands(commands);
+      const tab = [];
+      tab.push(...reformat, {"TOTAL": `=SUM(E2:E${reformat.length + 1})&""€""`});
+      setReformatList(tab);
+    };
+
     getDateList();
     getCommandsByDate();
   }, [date]);
@@ -221,11 +229,6 @@ const AdminCommands = () => {
     const val = e.target.value;
     if (Number(val) || val === "") setTotal(val);
   }
-
-  // const handlePaidChange = (e) => {
-  //   if (e.target.id === "y---paid") setPaid(true);
-  //   else setPaid(false);
-  // }
 
   const handleContainerChange = (e) => {
     if (e.target.id === "y---container") setContainer(true);

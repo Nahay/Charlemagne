@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 
 import { toast } from 'react-toastify';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import InputText from '../../components/generic/InputText';
 import InputButton from '../../components/generic/InputButton';
@@ -8,7 +10,7 @@ import TextArea from '../../components/generic/TextArea';
 import AllDishesList from '../../components/admin/AllDishesList';
 import Box from '../../components/generic/Box';
 
-import { getCountByName, getDishes, updateDish, createDish, deleteDish, deleteAllDishesDish } from "../../services/dishesService";
+import { getCountByName, getDishes, updateDish, createDish, hideDish, getInvisibleDishes, unhideDish } from "../../services/dishesService";
 import { getOneCommandListByDish } from '../../services/commandsListService';
 
 
@@ -18,6 +20,7 @@ const AdminDishes = () => {
     const e = useRef(null);
     const p = useRef(null);
     const d = useRef(null);
+    const inv = useRef(null);
     
 
     const [id, setId] = useState("");
@@ -29,13 +32,21 @@ const AdminDishes = () => {
 
     const [create, setCreate] = useState(true);
     const [dishList, setDishList] = useState([]);
-    const [filtered, setFiltered] = useState([]);    
+    const [filtered, setFiltered] = useState([]);
+    const [invisible, setInvisible] = useState(false);   
 
     const [needConfirmation, setNeedConfirmation] = useState(true);
 
 
     useEffect(() => {
-        getDishList('e');
+        async function initDishList(fType) {
+            const dishes = await getDishes();
+            setDishList(dishes);
+    
+            filterDishes(fType, dishes);
+        }
+
+        initDishList('e');
     }, []);
 
     const getDishList = async (fType) => {
@@ -45,13 +56,26 @@ const AdminDishes = () => {
         filterDishes(fType, dishes);
     }
 
-    const filterDishes = (fType, list) => {
-        const newList = list.filter(d => d.type === fType)
-        setFiltered(newList);
+    const getInvisibleList = async () => {
+        const dishes = await getInvisibleDishes();
+        setFiltered(dishes);
+        setInvisible(true);
 
         e.current.style.background = "none";
         p.current.style.background = "none";
         d.current.style.background = "none";
+        inv.current.style.background = "rgb(255, 97, 79)";
+    }
+
+    const filterDishes = (fType, list) => {
+        const newList = list.filter(d => d.type === fType)
+        setFiltered(newList);
+        setInvisible(false);
+
+        e.current.style.background = "none";
+        p.current.style.background = "none";
+        d.current.style.background = "none";
+        inv.current.style.background = "none";
 
         if (fType === "e") { e.current.style.background = "rgb(255, 97, 79)" }
         else if (fType === "p") { p.current.style.background = "rgb(255, 97, 79)" }
@@ -111,22 +135,23 @@ const AdminDishes = () => {
     // DB -------------------------------------------------------------------
 
     const onClickDelete = async () => {
-        const dish = await getOneCommandListByDish(id);
-        if (!dish) {
-            const fType = await deleteDish(id);
-            await deleteAllDishesDish(id);
 
-            onClickNewDish();
+        const fType = await hideDish(id);
 
-            await getDishList(fType);
-            
-        }
-        else toast.error("Le plat appartient à une commande, vous ne pouvez pas le supprimer.");
+        onClickNewDish();
+
+        getDishList(fType);
+        
         box.current.style.display = "none";    
         setNeedConfirmation(true);
     }
 
-    const onClickConfirmation = (e) => {
+    const onClickInvisible = async (hiddenId) => {
+        const fType = await unhideDish(hiddenId);
+        getDishList(fType);
+    }
+
+    const onClickConfirmation = (idToDelete) => {
         if (needConfirmation) {
           box.current.style.display = "flex";
           setNeedConfirmation(false);
@@ -135,7 +160,7 @@ const AdminDishes = () => {
           box.current.style.display = "none";
           setNeedConfirmation(true);
         }
-        setId(e);
+        setId(idToDelete);
     }
 
 
@@ -150,7 +175,7 @@ const AdminDishes = () => {
                 if (count !== 1) {
                     await createDish(name, price, desc, type);
                     onClickNewDish();
-                    await getDishList(type);
+                    getDishList(type);
                 }
                 else toast.error("Ce nom existe déjà.");
             }
@@ -162,14 +187,14 @@ const AdminDishes = () => {
                     if (count !== 1) {
                         await updateDish(id, name, price, desc, type);
                         setPreviousName(name);
-                        await getDishList(type);
+                        getDishList(type);
                     }
                     else toast.error("Ce nom existe déjà.");
                 }
                 else {
                     await updateDish(id, name, price, desc, type);
                     setPreviousName(name);
-                    await getDishList(type);
+                    getDishList(type);
                 }
             }
 
@@ -189,12 +214,17 @@ const AdminDishes = () => {
                         <input value="Entrées" ref={e} onClick={() => filterDishes("e", dishList)} readOnly/>
                         <input value="Plats" ref={p} onClick={() => filterDishes("p", dishList)} readOnly/>
                         <input value="Desserts" ref={d} onClick={() => filterDishes("d", dishList)} readOnly/>
+                        <div className="inv-container" ref={inv} onClick={() => getInvisibleList()}>
+                            <FontAwesomeIcon icon={faEye} size="lg"/>
+                        </div>
                     </div>
                     
                     <AllDishesList
                         dishList={filtered}
+                        invisible={invisible}
                         onClickDish={onClickDish}
                         onClickDelete={onClickConfirmation}
+                        onClickInvisible={onClickInvisible}
                     />
 
                 </div>

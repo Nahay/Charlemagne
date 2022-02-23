@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
+
 import DataTable, { createTheme } from 'react-data-table-component';
 
-import { getDishById } from "../../services/dishesService";
 
 const Table = ({dishByDateList}) => {
 

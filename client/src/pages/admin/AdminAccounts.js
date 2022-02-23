@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
+
 import { toast } from 'react-toastify';
-import { faLongArrowAltDown, faUser, faUserCog } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faUserCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { decodeToken } from 'react-jwt';
 
@@ -16,6 +17,7 @@ import { createAdmin, deleteAdmin, getAdminById, getAdminByUsername, getAdmins, 
 
 
 const AdminAccounts = () => {
+    
     const box = useRef(null);
     const token = localStorage.getItem("adminToken");
 

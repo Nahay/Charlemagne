@@ -383,18 +383,16 @@ input[type="time"] {
           align-items: center;
           justify-content: space-between;
 
-          height: 50px;
+          height: fit-content;
+          min-height: 50px;
+
           font-size: 14px;
           border-bottom: 1px solid white;
           padding: 0 20px;
 
-          &:last-child {
-            border: none;
-          }
+          &:last-child { border: none }
 
-          .box---name {
-            width: 180px;
-          }
+          .box---name { width: 180px }
 
           .box---quantity {
             display: flex;
@@ -423,13 +421,12 @@ input[type="time"] {
       .input-btn {
         justify-self: flex-end;
         margin-top: 20px;
+
         input {
           color: white;
           background: $color-primary;
         }
-
       }
-      
     }
   }
 
