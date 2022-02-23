@@ -286,7 +286,7 @@ const AdminCommands = () => {
                 handleChange={handleFirstnameChange}
                 readOnly
               />
-            </div>            
+            </div>
 
             <div className="commands-dish-list">
               <DishCommandList dishList={dishList} onClickDish={(d) => onClickDish(d)} />

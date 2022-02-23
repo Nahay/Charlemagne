@@ -1,9 +1,11 @@
 .admin-commands {
-  height: 100%;
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  height: 100%;
+  width: 100%;
+
   color: white;
 
   .admin-commands__left {
@@ -15,11 +17,13 @@
     align-items: center;
     margin: 0 5%;
 
-    .left__commands-list {      
-      .csv__download { 
+    .left__commands-list {
+
+      .csv__download {
         display: flex;
         justify-content: center; 
         margin-top: 5%;
+
         a {
           width: fit-content;
           padding: 15px;
@@ -27,37 +31,41 @@
           color: white;
         }        
       }
-
     }
-    
   }
 
   .admin-commands__right {
-    background: $color-secondary;
-    height: 100%;
-    width: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    
+    height: 100%;
+    width: 50%;
+    
+    background: $color-secondary;
     overflow-y: scroll;
 
     .commands-list {
       width: 70%;
-      height: 200px;
-      min-height: 20%;
+      height: 250px;
+      
+      margin-bottom: 30px;
 
       .list__container {
-        height: 85%;
+        height: 250px;
         width: 100%;
 
         .list__container__box {
+          height:60px;
 
           padding-left: 0;
 
           .infos-commands {
+            display: flex;
+            
             width: 100%;
             height: 100%;
-            display: flex;
+
             padding-left: 20px;
 
             p {
@@ -67,6 +75,7 @@
               &:last-child {
                 white-space: nowrap;
                 margin-right: 5%;
+                justify-content: flex-end;
               }
             }
 
@@ -111,11 +120,13 @@
           display : flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 40px;
-          
-          .input {
-              width: 49%;
+          margin-bottom: 30px;
+
+          input {
+            margin-bottom: 0;
           }
+          
+          .input { width: 49% }
 
           .time__container {
             display: flex;
@@ -127,7 +138,7 @@
   
               p {
                 white-space: nowrap;
-                margin-right: 10%;
+                margin-right: 15px;
               }
   
               input {
@@ -151,14 +162,13 @@
   
               p {
                 white-space: nowrap;
-                margin-right: 10%;
+                margin-right: 15px;
               }
   
               .input {                
                 width: 100%;
-                input {
-                  margin: 0;
-                }
+                
+                input { margin: 0 }
               }
             }
           }  
@@ -262,6 +272,8 @@
       width: 100%;
       height: 100vh;
       margin: 0 5%;
+
+      .left__commands-list { width:60% }
     }
 
     .admin-commands__right {
@@ -287,6 +299,42 @@
         }
 
         .dish-list { height: 200px }
+      }
+    }
+  }
+
+  @media (max-width: 800px) {
+    .admin-commands__left .left__commands-list { width:80% }
+  }
+
+  @media(max-width:600px) {
+    .admin-commands__right .commands-list .list__container .list__container__box .infos-commands p { font-size:12px }
+  }
+
+  @media(max-width:400px) {
+    .admin-commands__left .left__commands-list .csv__download a { font-size:12.5px }
+    .admin-commands__right .commands-list .list__container .list__container__box .infos-commands p { font-size:10px }
+  }
+
+  @media (max-width: 560px) {
+    .admin-commands__right .right__form .right__form__1 {
+      .input-duo {
+        flex-direction: column;
+        align-items: flex-start;
+
+        input { width:100% }
+        .input:first-child { margin-bottom:10px }
+        .time__container  { margin-bottom: 10px }
+        .total__container {
+          margin-left:unset;
+          max-width:150px;
+        }
+
+        &:first-child {
+          width:100%;
+
+          .input  { width: calc(100% - 40px) }
+        }
       }
     }
   }
