@@ -56,6 +56,19 @@ router.get("/", async (req, res) => {
     }
 });
 
+// All visible users
+router.get("/visible", async (req, res) => {
+    try {
+      const adminRequesting = await getRequestingAdmin(req, res);
+
+      const users = await User.find({visible: true});
+      res.json({ success: true, adminRequesting: adminRequesting._id, users: users });
+    } catch (err) {
+        console.log(err);
+      res.json({ error: err.message });
+    }
+});
+
 // User by id
 router.get('/:userId', async (req, res) => {
     try {
@@ -110,6 +123,19 @@ router.patch('/usernpw/:id', async (req, res) => {
 
         const userUpdated = await User.updateOne( { _id: req.params.id }, { name, firstname, email, tel } );
         res.json({ success: true, message: "User updated successfully", adminRequesting: adminRequesting._id, userUpdated })
+    } catch(err) {
+        console.log(err);
+        res.json({error: err.message});
+    }
+});
+
+// Hide a user (delete)
+router.patch('/hide/:id', async (req, res) => {
+    try {
+        const adminRequesting = await getRequestingAdmin(req, res);
+
+        const userDeleted = await User.updateOne( { _id: req.params.id }, {visible: false} );
+        res.json({ success: true, adminRequesting: adminRequesting._id, userDeleted });
     } catch(err) {
         console.log(err);
         res.json({error: err.message});

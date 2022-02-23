@@ -11,7 +11,7 @@ const AccountList = ({watchClients, accountList, onClickClientAccount, onClickAd
           return (
             <div className="list__container__box" key={a._id}>
               <p onClick={() => {
-                  if (watchClients) onClickClientAccount(a)
+                  if (watchClients) onClickClientAccount(a);
                   else onClickAdminAccount(a.username, a._id)}
                 }
               >
@@ -19,7 +19,7 @@ const AccountList = ({watchClients, accountList, onClickClientAccount, onClickAd
               </p>
               <div
                 className="icon-delete"
-                onClick={() => onClickDelete(a.username)}
+                onClick={() => onClickDelete(a._id)}
               >
                 <FontAwesomeIcon icon={faTrashAlt} size="sm"/>
               </div>
