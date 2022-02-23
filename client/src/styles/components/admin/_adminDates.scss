@@ -63,11 +63,12 @@
 
                         p {
                             white-space: nowrap;
-                            margin-right: 2%;
+                            margin-right: 15px;
                         }
 
                         input {
-                            width: 100%;
+                            width:130px;
+                            min-width: 80px;
                             height: 40px;
                         }
                     }
@@ -215,39 +216,56 @@
                     }
 
                     .input-time {
-                        flex-direction: column;
-                        height: 100%;
+                        margin-top:10px;
 
-                        .input-time___min, .input-time___max {
-                            width: 100%;
-
-                            p {
-                                width: 150px;
-                                white-space: nowrap;
-                                margin-right: 5px;
-                            }
-
-                            input { width: 100% }
-                        }
-
-                        .input-time___min { margin-bottom: 2% }                    
-                    }
-                }
-
-                .select-container {
-                    .input-duo {
-                        flex-direction: column;
-                        align-items: center;
-
-                        .input { margin-top:4px }
-
-                        .input, .input-btn { width:100% }
-
-                        .input-btn input { width:100% }
+                        .input-time___min, .input-time___max { justify-content: flex-start }            
                     }
                 }
 
                 .dish-list { height: 200px }
+            }
+        }
+    }
+
+    @media(max-width:700px) {
+        .admin-dates__right .right__form .right__form__1 {
+
+            .multi-btn {
+                flex-direction: column;
+                align-items: center;
+
+                div, .input-btn, input { width:100% }
+
+                .input-btn:first-child { margin-bottom: 7px }
+            }
+
+            .input-time {
+                flex-direction: column;
+
+                .input-time___min { margin-bottom: 15px }
+                .input-time___min, .input-time___max {
+                    input { min-width: 130px }           
+                }
+            }
+        }
+    }
+
+    @media(max-width:550px) {
+        .admin-dates__right {
+
+            .right__form .select-container {
+                margin: 25px 0 30px 0 !important;
+
+                .input-duo {
+                    flex-direction: column;
+                    // align-items: center;
+
+                    .input { margin-top: 4px }
+
+                    .input, .input-btn { width:100% !important }
+
+                    .input-btn input { width:100% !important }
+                }
             }
         }
     }
