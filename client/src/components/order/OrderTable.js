@@ -41,7 +41,7 @@ const OrderTable = ({data, setData}) => {
                 [...data.slice(0,id),
                     {
                         ...data[id],
-                        nbC: 1,
+                        nbC: "",
                     },
                     ...data.slice(id+1)
                 ]

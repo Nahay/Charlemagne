@@ -469,13 +469,14 @@ input[type="time"] {
         height: 25px;
         outline: none;
         border: none;
-        color: white;
+        color: #8d8d8d;
         background:#1B1B1B;
-        transition: .3s ease;
+        transition: all .3s ease;
         position: relative;
 
         &:hover {
           background-color: $color-primary;
+          color: white;
         }
 
         &:active {
