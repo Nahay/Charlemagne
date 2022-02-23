@@ -14,7 +14,7 @@ const LoginForm = ({handleUsernameChange, handlePasswordChange, handleLoginSubmi
                 <InputPassword placeholder="Mot de passe" handleChange={handlePasswordChange} value={password}/>
                 <div className="content__password">
                     <span>Mot de passe oublié ?</span>
-                    <span>Merci de contacter les professeurs de l'hôtellerie</span>
+                    <p>Merci de contacter les professeurs de l'hotellerie.</p>
                 </div>
                 <InputButton value="Login" type="submit"/>
             </div>

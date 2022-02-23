@@ -186,9 +186,9 @@ const AdminDishes = () => {
                 <div className="left__dishes-list">
 
                     <div className="left__icons">
-                        <input value="Entrée" ref={e} onClick={() => filterDishes("e", dishList)} readOnly/>
+                        <input value="Entrées" ref={e} onClick={() => filterDishes("e", dishList)} readOnly/>
                         <input value="Plats" ref={p} onClick={() => filterDishes("p", dishList)} readOnly/>
-                        <input value="Dessert" ref={d} onClick={() => filterDishes("d", dishList)} readOnly/>
+                        <input value="Desserts" ref={d} onClick={() => filterDishes("d", dishList)} readOnly/>
                     </div>
                     
                     <AllDishesList

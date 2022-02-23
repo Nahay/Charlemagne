@@ -61,15 +61,15 @@
     
             .content__password {
                 position: relative;
+
                 display: flex;
-                width: 100%;
                 justify-content: flex-end;
 
-                span {
-                    font-size:13px;
-                }
+                width: 100%;
 
-                span:first-child {
+                span {
+                    position : relative;
+                    font-size:13px;
                     cursor:pointer;
                     color:$color-grey;
                     transition: color 0.5s;
@@ -77,29 +77,32 @@
                     &:hover {
                         color:$color-primary;
                     }
-                }            
 
-                &:hover > span:last-child{
-                    visibility: visible;
-                    opacity: 1;
+                    &:hover + p {
+                        visibility: visible;
+                        opacity: 1;
+                    }
                 }
+                
+                p {
+                    position: absolute;
+                    bottom: 30px;
+                    right: 0;
+                    z-index: 10;
 
-                span:last-child {
+                    width: 200px;
+
+                    padding: 10px;
+                    border-radius: 10px;
                     visibility: hidden;
                     opacity: 0;
-                    position: absolute;
                     transition: visibility 0.2s, opacity 0.5s linear;
-                    z-index: 0;
                     color: white;
                     background: $color-primary;
-                    width: 200px;
                     text-align: center;
-                    bottom: 15px;
-                    right: 0;
+                    font-size:14px;
                 }
             }
-
-            
             
             .input-btn {
                 width:50%;

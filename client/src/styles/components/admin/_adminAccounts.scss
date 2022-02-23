@@ -60,12 +60,14 @@
         background : $color-secondary;
         width : 50%;
         height : 100%;
+        overflow-y: scroll;
         display : flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-
+       
         .right__content {
+            
             display: flex;
             justify-content: center;
             align-items: center;
@@ -75,7 +77,8 @@
 
             .btn {
                 align-self: flex-end;
-                margin-bottom: 20%;
+                margin-top: 80px;
+                margin-bottom: 40px;
 
                 button {
                     height:50px;
@@ -110,7 +113,12 @@
 
                     .input-btn {
                         margin-top:20px;
+                        margin-bottom: 40px;
                         align-self: flex-end;
+                    }
+
+                    .input-label{
+                        margin-bottom: 10px;
                     }
                 }
             }

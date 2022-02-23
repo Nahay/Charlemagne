@@ -103,6 +103,10 @@
 
       .right__form__1 {
 
+        .input-btn---save {
+          margin-top: 40px;
+        }
+        
         .input-duo {
           display : flex;
           justify-content: space-between;
@@ -158,7 +162,7 @@
               }
             }
           }  
-        }        
+        }       
         
         .right__form--quantity {
           display: flex;
@@ -187,6 +191,21 @@
             width: 50%;
             margin-left: 2%;
             margin-bottom: 0;
+          }
+        }
+
+        .disabled {
+          p {
+            color: #ffffff;
+            cursor: default;
+            
+          }
+
+          input {
+            background: #474747;
+            border: none;
+            color: #ffffff;
+            cursor: default;
           }
         }
 

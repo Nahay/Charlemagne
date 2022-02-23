@@ -167,6 +167,7 @@ const PassCommand = () => {
         // emailJS 
         //  ...
       }
+      console.log(data);
 
       toast.success("La commande a été passée avec succès !");
 
