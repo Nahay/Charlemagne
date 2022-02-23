@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { decodeToken } from 'react-jwt';
-import DishCommandList from '../../components/admin/DishCommandList';
 
+import { decodeToken } from 'react-jwt';
+
+import DishCommandList from '../../components/admin/DishCommandList';
 import OrderList from '../../components/order/OrderList';
+
 import { getCommandByUser } from '../../services/commandsService';
 import { getUserById } from '../../services/usersService';
 import { getCommandListByCommand } from '../../services/commandsListService';
 
+
 const History = () => {
 
-    const [user, setUser] = useState({});
     const [orderList, setOrderList] = useState([]);
     const [dishList, setDishList] = useState([]);
 
@@ -25,16 +27,6 @@ const History = () => {
             }
         }
 
-        async function getCurrentUser() {
-            const userDecoded = decodeToken(localStorage.getItem("userToken"));
-
-            if (userDecoded) {
-                const currentUser = await getUserById(userDecoded._id);                
-                if (currentUser.success) setUser(currentUser.user);                
-            }
-        }
-
-        getCurrentUser();
         getOrderList();
 
     },[]);

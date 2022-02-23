@@ -8,7 +8,6 @@ const CommandsList = ({commandsListByDate, onClickCommand, onClickDelete}) => {
   return (
     <div className="list__container">
     {commandsListByDate.map((d) => {
-      console.log(d);
           return (
             <div className="list__container__box" key={d._id} >
               <div className="infos-commands" onClick={() => onClickCommand(d)}>

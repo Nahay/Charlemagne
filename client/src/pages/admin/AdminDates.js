@@ -1,4 +1,5 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+
 import { toast } from 'react-toastify';
 import moment from "moment";
 import 'moment/locale/fr';
@@ -218,7 +219,7 @@ const AdminDates = () => {
         e.preventDefault();        
         // si on a sélectionné qqe chose :
         if (select !== "0") {
-            if(nb != "") {
+            if(nb !== "") {
                 if (dateExists) {
 
                     let dishExists = false;

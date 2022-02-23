@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 
 import { toast } from 'react-toastify';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import InputText from '../../components/generic/InputText';
 import InputButton from '../../components/generic/InputButton';
@@ -8,7 +10,7 @@ import TextArea from '../../components/generic/TextArea';
 import AllDishesList from '../../components/admin/AllDishesList';
 import Box from '../../components/generic/Box';
 
-import { getCountByName, getDishes, updateDish, createDish, deleteDish, deleteAllDishesDish } from "../../services/dishesService";
+import { getCountByName, getDishes, updateDish, createDish, hideDish, deleteAllDishesDish, getInvisibleDishes } from "../../services/dishesService";
 import { getOneCommandListByDish } from '../../services/commandsListService';
 
 
@@ -18,6 +20,7 @@ const AdminDishes = () => {
     const e = useRef(null);
     const p = useRef(null);
     const d = useRef(null);
+    const inv = useRef(null);
     
 
     const [id, setId] = useState("");
@@ -35,7 +38,14 @@ const AdminDishes = () => {
 
 
     useEffect(() => {
-        getDishList('e');
+        async function initDishList(fType) {
+            const dishes = await getDishes();
+            setDishList(dishes);
+    
+            filterDishes(fType, dishes);
+        }
+
+        initDishList('e');
     }, []);
 
     const getDishList = async (fType) => {
@@ -45,6 +55,13 @@ const AdminDishes = () => {
         filterDishes(fType, dishes);
     }
 
+    const getInvisibleList = async () => {
+        const dishes = await getInvisibleDishes();
+        setFiltered(dishes);
+
+        inv.current.style.background = "rgb(255, 97, 79)";
+    }
+
     const filterDishes = (fType, list) => {
         const newList = list.filter(d => d.type === fType)
         setFiltered(newList);
@@ -52,6 +69,7 @@ const AdminDishes = () => {
         e.current.style.background = "none";
         p.current.style.background = "none";
         d.current.style.background = "none";
+        inv.current.style.background = "none";
 
         if (fType === "e") { e.current.style.background = "rgb(255, 97, 79)" }
         else if (fType === "p") { p.current.style.background = "rgb(255, 97, 79)" }
@@ -113,12 +131,13 @@ const AdminDishes = () => {
     const onClickDelete = async () => {
         const dish = await getOneCommandListByDish(id);
         if (!dish) {
-            const fType = await deleteDish(id);
+            const fType = await hideDish(id);
+
             await deleteAllDishesDish(id);
 
             onClickNewDish();
 
-            await getDishList(fType);
+            getDishList(fType);
             
         }
         else toast.error("Le plat appartient à une commande, vous ne pouvez pas le supprimer.");
@@ -150,7 +169,7 @@ const AdminDishes = () => {
                 if (count !== 1) {
                     await createDish(name, price, desc, type);
                     onClickNewDish();
-                    await getDishList(type);
+                    getDishList(type);
                 }
                 else toast.error("Ce nom existe déjà.");
             }
@@ -162,14 +181,14 @@ const AdminDishes = () => {
                     if (count !== 1) {
                         await updateDish(id, name, price, desc, type);
                         setPreviousName(name);
-                        await getDishList(type);
+                        getDishList(type);
                     }
                     else toast.error("Ce nom existe déjà.");
                 }
                 else {
                     await updateDish(id, name, price, desc, type);
                     setPreviousName(name);
-                    await getDishList(type);
+                    getDishList(type);
                 }
             }
 
@@ -189,6 +208,9 @@ const AdminDishes = () => {
                         <input value="Entrées" ref={e} onClick={() => filterDishes("e", dishList)} readOnly/>
                         <input value="Plats" ref={p} onClick={() => filterDishes("p", dishList)} readOnly/>
                         <input value="Desserts" ref={d} onClick={() => filterDishes("d", dishList)} readOnly/>
+                        <div className="inv-container" ref={inv} onClick={() => getInvisibleList()}>
+                            <FontAwesomeIcon icon={faEye} size="lg"/>
+                        </div>
                     </div>
                     
                     <AllDishesList

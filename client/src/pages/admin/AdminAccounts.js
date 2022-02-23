@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
+
 import { toast } from 'react-toastify';
-import { faLongArrowAltDown, faUser, faUserCog } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faUserCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { decodeToken } from 'react-jwt';
 
@@ -16,6 +17,7 @@ import { createAdmin, deleteAdminByUsername, getAdminById, getAdminByUsername, g
 
 
 const AdminAccounts = () => {
+    
     const box = useRef(null);
     const token = localStorage.getItem("adminToken");
 
@@ -53,30 +55,26 @@ const AdminAccounts = () => {
             setAdminAccountList(admins.admins);
         }
 
-        getClientAccountList();
-        getAdminAccountList();
-
-    }, []);
+        async function getCurrentAdmin() {
+  
+            const adminDecoded = decodeToken(localStorage.getItem("adminToken"));
     
-    useEffect(() => {
-
-      async function getCurrentAdmin() {
-  
-          const adminDecoded = decodeToken(localStorage.getItem("adminToken"));
-  
-          if (adminDecoded) {  
-            const admin = await getAdminById(adminDecoded._id, token);
-            // it returns an object with { success: true, user { all the user's info } }
-            if (admin.success) {  
-              const { _id, username } = admin.admin;
-              setCurrentAdmin({_id, username});              
+            if (adminDecoded) {  
+              const admin = await getAdminById(adminDecoded._id, token);
+              // it returns an object with { success: true, user { all the user's info } }
+              if (admin.success) {  
+                const { _id, username } = admin.admin;
+                setCurrentAdmin({_id, username});              
+              }
             }
           }
-        }
 
+        getClientAccountList();
+        getAdminAccountList();
         getCurrentAdmin();
-  
-      }, []);
+
+    }, []);
+
   
     // RESET VALUES -----------------------------------------------------
 
