@@ -151,18 +151,16 @@ const AdminAccounts = () => {
         setAdminAccountList(admins.admins);
     }
 
-    const onClickConfirmation = (id) => {
-        if (needConfirmation) {
-          box.current.style.display = "flex";
-          setId(id);
-          setNeedConfirmation(false);
-        }
-        else {
-          box.current.style.display = "none";
-          setNeedConfirmation(true);
-        }
+    const onClickDeleteAccount = (id) => {        
+        box.current.style.visibility = "visible";
+        box.current.style.opacity = 1;
+        setId(id);
     }
 
+    const onClickConfirmation = () => {
+        box.current.style.visibility = "hidden";
+        box.current.style.opacity = 0;
+    }
 
     const onClickDelete = async () => {
         
@@ -187,7 +185,9 @@ const AdminAccounts = () => {
         setId("");
         setCreate(true);
 
-        box.current.style.display = "none";
+        box.current.style.visibility = "hidden";
+        box.current.style.opacity = 0;
+        
         setNeedConfirmation(true);
     }
 
@@ -304,7 +304,7 @@ const AdminAccounts = () => {
                         accountList={watchClients ? clientAccountList : adminAccountList}
                         onClickClientAccount={onClickClientAccount}
                         onClickAdminAccount={onClickAdminAccount}
-                        onClickDelete={onClickConfirmation}
+                        onClickDelete={onClickDeleteAccount}
                     />
 
                 </div>

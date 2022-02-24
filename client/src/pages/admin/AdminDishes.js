@@ -34,8 +34,6 @@ const AdminDishes = () => {
     const [filtered, setFiltered] = useState([]);
     const [invisible, setInvisible] = useState(false);   
 
-    const [needConfirmation, setNeedConfirmation] = useState(true);
-
 
     useEffect(() => {
         async function initDishList(fType) {
@@ -134,32 +132,32 @@ const AdminDishes = () => {
     // DB -------------------------------------------------------------------
 
     const onClickDelete = async () => {
+        box.current.style.visibility = "hidden";
+        box.current.style.opacity = 0;
 
         const fType = await hideDish(id);
 
         onClickNewDish();
 
         getDishList(fType);
-        
-        box.current.style.display = "none";    
-        setNeedConfirmation(true);
+
     }
 
+    const onClickConfirmation = () => {
+        box.current.style.visibility = "hidden";
+        box.current.style.opacity = 0;
+    }
+
+    const onClickDishDelete = (idToDelete) => {
+        box.current.style.visibility = "visible";
+        box.current.style.opacity = 1;
+        setId(idToDelete);
+    }
+
+    
     const onClickInvisible = async (hiddenId) => {
         const fType = await unhideDish(hiddenId);
         getDishList(fType);
-    }
-
-    const onClickConfirmation = (idToDelete) => {
-        if (needConfirmation) {
-          box.current.style.display = "flex";
-          setNeedConfirmation(false);
-        }
-        else {
-          box.current.style.display = "none";
-          setNeedConfirmation(true);
-        }
-        setId(idToDelete);
     }
 
 
@@ -224,7 +222,7 @@ const AdminDishes = () => {
                         dishList={filtered}
                         invisible={invisible}
                         onClickDish={onClickDish}
-                        onClickDelete={onClickConfirmation}
+                        onClickDelete={onClickDishDelete}
                         onClickInvisible={onClickInvisible}
                     />
 

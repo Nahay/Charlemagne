@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { decodeToken } from 'react-jwt';
 
@@ -8,12 +8,19 @@ import OrderList from '../../components/order/OrderList';
 import { getCommandByUser } from '../../services/commandsService';
 import { getUserById } from '../../services/usersService';
 import { getCommandListByCommand } from '../../services/commandsListService';
+import DishBox from '../../components/generic/DishBox';
 
 
 const History = () => {
+    const dishBox = useRef(null);
 
     const [orderList, setOrderList] = useState([]);
     const [dishList, setDishList] = useState([]);
+
+    const [dateClicked, setDateClicked] = useState(false);
+    const [dishClicked, setDishClicked] = useState({});
+
+    const [user, setUser] = useState({});
 
     useEffect(() => {   
 
@@ -23,6 +30,7 @@ const History = () => {
             if (userDecoded) {
                 const currentUser = await getUserById(userDecoded._id);
                 const orders = await getCommandByUser(currentUser.user._id);
+                setUser(currentUser.user);
                 setOrderList(orders);
             }
         }
@@ -31,8 +39,15 @@ const History = () => {
 
     },[]);
 
-    const onClickDish = () => {
-        
+    const onClickDish = (e) => {
+        setDishClicked(e);
+        dishBox.current.style.visibility = "visible";
+        dishBox.current.style.opacity = 1;
+    }
+
+    const onClickConfirmation = () => {
+        dishBox.current.style.visibility = "hidden";
+        dishBox.current.style.opacity = 0;
     }
 
     // HANDLE ------------------------------------------------------------
@@ -40,24 +55,36 @@ const History = () => {
     const handleOrderClick = async (id) => {
         const commands = await getCommandListByCommand(id);
         setDishList(commands);
+        setDateClicked(true);
     }
 
     return (
-        <div className="history__container">            
-            <div className="history__content">
+        <div className="history__container"> 
 
-                <p>Historique de vos commandes :</p>
-
-                <div className="content__list">
-                    <div className="content__left">
-                        <OrderList orderListByUser={orderList} handleClick={handleOrderClick} />
+            <DishBox onClickConfirmation={onClickConfirmation} dish={dishClicked} dishBoxRef={dishBox}/>
+           
+           <div className="history__left">
+                   
+                <div className="left__content">
+                    <div className="history__title">
+                        <span className="title-name">{user.firstname} </span> voici l'aperçu de vos commandes
                     </div>
-                    <div className="content__right">
-                        <DishCommandList dishList={dishList} onClickDish={onClickDish}/>
-                    </div>
+                    <OrderList orderListByUser={orderList} handleClick={handleOrderClick} />
                 </div>
-                
-            </div>
+           </div>
+
+           <div className="history__right">
+               <div className="right__content">
+                   {dateClicked ? 
+                        <DishCommandList dishList={dishList} onClickDish={onClickDish}/>
+                    :
+                        <div className="content__empty">
+                            Veuillez sélectionner une commande effectuée.
+                        </div>    
+                    }
+                    
+               </div>
+           </div>
         </div>
     );
 }

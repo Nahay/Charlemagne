@@ -12,13 +12,13 @@ const OrderTable = ({data, setData}) => {
         if (Number(val) || val === "") {
 
             setData(data =>
-            [...data.slice(0,id),
-                {
-                    ...data[id],
-                    nbC:val,
-                },
-                ...data.slice(id+1)
-            ]
+                [...data.slice(0,id),
+                    {
+                        ...data[id],
+                        nbC:val,
+                    },
+                    ...data.slice(id+1)
+                ]
             );
         }
     }
@@ -52,6 +52,7 @@ const OrderTable = ({data, setData}) => {
     const onClickPlus = (nbC, id, max) => {
         let nb = parseInt(nbC);
         let nbMax = parseInt(max);
+        
         if (nb < nbMax) {
             setData(data =>
                 [...data.slice(0,id),

@@ -189,25 +189,8 @@ const AdminDates = () => {
         }
         else toast.error("Il y a une commande à cette date, vous ne pouvez pas la supprimer.");
 
-        box.current.style.display = "none";    
-        setNeedConfirmation(true);
-    }
-
-    const onClickConfirmation = (e) => {
-        if (needConfirmation) {
-          box.current.style.display = "flex";
-          setNeedConfirmation(false);
-        }
-        else {
-          box.current.style.display = "none";
-          setNeedConfirmation(true);
-        }
-
-        if(e.dateC === date) {
-            setCurrentCommandList(e);
-            setDeletedDate(false);
-        }
-        else setDeletedDate(true);
+        box.current.style.visibility = "hidden";
+        box.current.style.opacity = 0;
     }
 
     const onDateSubmit = async (e) => {
@@ -270,8 +253,25 @@ const AdminDates = () => {
             getDishByDateList(date);
         }
         else toast.error("Ce plat a déjà été commandé, vous ne pouvez pas le supprimer.");        
-        box.current.style.display = "none";    
-        setNeedConfirmation(true);
+        box.current.style.visibility = "hidden";
+        box.current.style.opacity = 0;
+        
+    }
+
+    const onClickConfirmation = () => {
+        box.current.style.visibility = "hidden";
+        box.current.style.opacity = 0;
+    }
+
+    const onClickDeleteIcon = (e) => {
+        if(e.dateC === date) {
+            setCurrentCommandList(e);
+            setDeletedDate(false);
+        }
+        else setDeletedDate(true);
+
+        box.current.style.visibility = "visible";
+        box.current.style.opacity = 1;
     }
 
 
@@ -363,7 +363,7 @@ const AdminDates = () => {
                             <DishList
                                 dishByDateList={dishByDateList}
                                 onClickDish={onClickDish}
-                                onClickDelete={onClickConfirmation}
+                                onClickDelete={onClickDeleteIcon}
                             />
                         </div>
                                     
@@ -377,7 +377,7 @@ const AdminDates = () => {
                         { dateExists ?
                             <div className="multi-btn">
 
-                                    <div onClick={onClickConfirmation}>
+                                    <div onClick={onClickDeleteIcon}>
                                         <InputButton type="button" value="Supprimer"/>
                                     </div>
 

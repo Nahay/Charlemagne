@@ -253,14 +253,17 @@ input[type="time"] {
   inset: 0;
   z-index: 2;
 
-  display: none;
+  visibility: hidden;
+  opacity: 0;
+
+  display: flex;
   justify-content: center;
   align-items: center;
 
   width: 100%;
   height: 100%;
 
-  transition: all .5s ease;
+  transition: all 0.3s linear;
   
   .confirmation-box__container {
     position: absolute;
@@ -339,7 +342,7 @@ input[type="time"] {
   visibility: hidden;
   opacity: 0;
 
-  transition: all .5s ease;
+  transition: all 0.3s linear;
 
   .summary-content {
     display: flex;
@@ -440,6 +443,225 @@ input[type="time"] {
     transition: all 0.5s;
     background:rgba(43, 43, 43, 0.8);
     backdrop-filter: blur(10px);
+  }
+}
+
+// --------------- DISHSUM BOX -----------------------------
+
+.dish-summary__container {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+
+  visibility: hidden;
+  opacity: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  transition: all 0.3s linear;
+  
+  .dish-summary-box__container {
+    position: absolute;
+    z-index: 2;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 650px;
+    height: 500px;
+
+    transition: all 0.3s linear;
+    background: $color-black;
+    border-radius: 15px;
+    color: white;
+
+    .dish-summary-box__content {
+      position: relative;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      
+      width: 70%;
+      height: 80%;
+
+      transition: all 0.3s linear;
+
+      .dish-name {
+        color: $color-primary;
+        font-size: 36px;
+        font-weight: bold;
+      }
+
+      .dish-quantity-price {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .dish-description {
+        overflow-y: scroll;
+        width: calc(100% - 40px);
+        height: calc(40% - 20px);
+        padding: 10px 20px;
+        background: #333333;
+      }
+
+      .dish-total {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+      }
+  
+      .content__buttons {
+        display: flex;
+        justify-content: space-evenly;
+
+        width: 90%;
+
+        .input-btn {
+          &:after {
+            content: none;
+          }
+
+          input {
+            color: white;
+            background: $color-primary;
+          }
+        }
+      }
+    }
+  }
+  
+  .dish-summary__background {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    background:rgba(43, 43, 43, 0.8);
+    backdrop-filter: blur(10px);    
+  }
+
+  @media (max-width: 690px) {
+    .dish-summary-box__container {
+      width: 500px;
+      height: 450px;
+    }
+  }
+
+  @media (max-width: 530px) {
+    .dish-summary-box__container {
+      width: 450px;
+      height: 350px;
+
+      .dish-summary-box__content {
+        .dish-name {
+          font-size: 32px;
+        }
+
+        .dish-quantity-price, 
+        .dish-total, 
+        .dish-description {
+          font-size: 14px;
+        }
+
+        .content__buttons {
+          input {
+            width: 150px;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 460px) {
+    .dish-summary-box__container {
+      width: 375px;
+      height: 275px;
+
+      .dish-summary-box__content {
+        .dish-name {
+          font-size: 26px;
+        }
+
+        .dish-quantity-price, 
+        .dish-total, 
+        .dish-description {
+          font-size: 12px;
+        }
+
+        .content__buttons {
+          input {
+            width: 125px;
+            height: 40px;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 370px) {
+    .dish-summary-box__container {
+      width: 320px;
+      height: 275px;
+
+      .dish-summary-box__content {
+        .dish-name {
+          font-size: 24px;
+        }
+
+        .dish-quantity-price, 
+        .dish-total, 
+        .dish-description {
+          font-size: 11px;
+        }
+
+        .content__buttons {
+          input {
+            width: 100px;
+            height: 40px;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 331px) {
+    .dish-summary-box__container {
+      width: 250px;
+      height: 250px;
+
+      .dish-summary-box__content {
+        .dish-name {
+          font-size: 20px;
+        }
+
+        .dish-quantity-price, 
+        .dish-total, 
+        .dish-description {
+          font-size: 10px;
+        }
+
+        .dish-quantity-price {
+          flex-direction: column;
+          
+          p {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+          }
+        }
+
+      }
+    }
   }
 }
 

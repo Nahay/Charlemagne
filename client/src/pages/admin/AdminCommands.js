@@ -42,7 +42,6 @@ const AdminCommands = () => {
   const [dishClicked, setDishClicked] = useState(false);
 
   const [currentDelete, setCurrentDelete] = useState("");
-  const [needConfirmation, setNeedConfirmation] = useState(true);
 
   const [dishList, setDishList] = useState([]);
   const [dateList, setDatesList] = useState([]);
@@ -132,21 +131,22 @@ const AdminCommands = () => {
     getCommandsByDate();
     resetInput();
 
-    box.current.style.display = "none";
+    box.current.style.visibility = "hidden";
+    box.current.style.opacity = 0;
     
-    setNeedConfirmation(true);
+  }
+  const onClickCommandDelete =  ({_id}) => {
+
+    box.current.style.visibility = "visible";
+    box.current.style.opacity = 1;
+    setCurrentDelete(_id);
+    
   }
 
-  const onClickConfirmation = ({_id}) => {
-    if (needConfirmation) {
-      box.current.style.display = "flex";
-      setNeedConfirmation(false);
-    }
-    else {
-      box.current.style.display = "none";
-      setNeedConfirmation(true);
-    }
-    setCurrentDelete(_id);
+  const onClickConfirmation = () => {
+
+    box.current.style.visibility = "hidden";
+    box.current.style.opacity = 0;
   }
 
   const onCommandSubmit = async (e) => {
@@ -268,7 +268,7 @@ const AdminCommands = () => {
           <CommandsList
             commandsListByDate={commandsList}
             onClickCommand={onClickCommand}
-            onClickDelete={onClickConfirmation}
+            onClickDelete={onClickCommandDelete}
           />
         </div>
         <div className="right__form">

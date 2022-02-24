@@ -9,8 +9,12 @@ const OrderList = ({ orderListByUser, handleClick }) => {
     {orderListByUser.map((o, i) => { 
         return (
           <div className="list__container__box" onClick={() => handleClick(o._id)} key={i}>
+            <div className="infos-command">
               <p>Pour {o.timeC} le {moment(new Date(parseInt(o.dateC))).locale("fr").format("L")}</p>
-              <p>Total : {o.total} €</p>
+              <div className="command__total">
+                <p>Total : {o.total} €</p>
+              </div>
+            </div>              
           </div>
         );
       }
