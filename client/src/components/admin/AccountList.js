@@ -15,7 +15,7 @@ const AccountList = ({watchClients, accountList, onClickClientAccount, onClickAd
                   else onClickAdminAccount(a.username, a._id)}
                 }
               >
-                {a.username}
+                {watchClients ? a.name + " " + a.firstname : a.username}
               </p>
               <div
                 className="icon-delete"
