@@ -33,7 +33,7 @@ const AdminCommands = () => {
   const [firstname, setFirstname] = useState("");
   const [time, setTime] = useState("");
   const [container, setContainer] = useState(false);
-  const [total, setTotal] = useState("");
+  const [total, setTotal] = useState(0);
   const [comment, setComment] = useState("");
   const [emptyFields, setEmptyFields] = useState(true);
   const [paid, setPaid] = useState(false);
@@ -204,7 +204,7 @@ const AdminCommands = () => {
     setContainer(false);
     setComment("");
     setDishList([]);
-    setTotal("");
+    setTotal(0);
     setTime("");
     setQuantity("");
     setPaid(false);
@@ -365,7 +365,7 @@ const AdminCommands = () => {
               <div className="total__container">
                 <div className="total__content">
                   <p>Total :</p>
-                  <InputText value={total} handleChange={handleTotalChange} readOnly/>
+                  <InputText value={total+" €"} handleChange={handleTotalChange} readOnly/>
                 </div>
               </div>
             </div>
