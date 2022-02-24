@@ -21,16 +21,16 @@ const Order = () => {
 
   useEffect(() => {
 
+    async function getSetDates() {
+      const dates = await getDatesByVisibility();
+      setDatesList(dates);
+
+      
+      await getDishByDateList(date);
+    }
+
     getSetDates();
-  }, []);
-
-
-  const getSetDates = async () => {
-    const dates = await getDatesByVisibility();
-    setDatesList(dates);
-
-    await getDishByDateList(date);
-  }
+  }, [date]);
 
   const getDishByDateList = async (dateC) => {
     let dateVisible = false;
