@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import moment from 'moment';
 import { toast } from 'react-toastify';
 // import emailjs from 'emailjs-com';
 
@@ -12,8 +11,6 @@ import InputNumber from '../generic/InputNumber';
 
 const ContactForm = () => {
     const form = useRef(null);
-    let day = moment(new Date()).locale('fr').format('LL');
-    let time = moment(new Date()).locale('fr').format('LTS');
     const nameReg = /^[ a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'-]+$/;
     const emailReg = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
     
@@ -87,10 +84,6 @@ const ContactForm = () => {
                     <InputNumber value={answer} placeholder={`${captcha[0]} + ${captcha[1]}*`} handleChange={handleAnswerChange} />
                     <div className="input__btn">
                         <InputButton value="Envoyer le message" type="submit"/>
-                    </div>
-                    <div className="hidden">
-                        <input name="day" value={day}/>
-                        <input name="time" value={time}/>
                     </div>
                 </div>
             </form>
