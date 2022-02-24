@@ -32,7 +32,7 @@
                     text-align: center;
                     color : white;
                     font-size : 22px;
-                    transition : color 0.2s;
+                    transition : all 0.2s;
                     margin-right:3px;
                     background:none;
                     outline:none;
@@ -126,6 +126,21 @@
         }
     }
 
+    @media (max-width: 480px) {
+
+        .admin-dishes__left {
+            .left__dishes-list {
+                .left__icons {
+
+                    input {
+                        width: 80px;
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+    }
+
     @media (max-width: 430px) {
 
         .admin-dishes__right {
@@ -143,4 +158,16 @@
             }
         }
     }
+
+    @media (max-height: 650px) {
+        .admin-dishes__right {
+            overflow-y: scroll;
+
+            .btn { margin: 45px 15% }
+
+            .input-btn { margin-bottom: 15px }
+            
+        }
+    }
+
 }
