@@ -120,6 +120,11 @@ const CommandSchema = new Schema({
         type: Number,
         required: true
     },
+    visible: {
+        type: Boolean,
+        required: false,
+        default: true
+    },
     list: [{ 
         type: Schema.Types.ObjectId,
         ref: 'CommandList'

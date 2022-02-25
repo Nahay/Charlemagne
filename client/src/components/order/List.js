@@ -39,12 +39,12 @@ const List = ({dateList, onDateChange, rightRef}) => {
 
     {dateList.map((d, i) => {
       // déclaration de la date actuelle
-      let todayMinusTwo = new Date(moment(new Date()).format("YYYY, MM, DD"));
+      let todayMinusSeven = new Date(moment(new Date()).format("YYYY, MM, DD"));
       // transformation de la date en Jour - 2
-      todayMinusTwo.setDate(todayMinusTwo.getDate() - 7);
+      todayMinusSeven.setDate(todayMinusSeven.getDate() - 7);
       // déclare une nouvelle date sous le format int
-      todayMinusTwo = todayMinusTwo.getTime();
-      if (d.dateC >= todayMinusTwo) {
+      todayMinusSeven = todayMinusSeven.getTime();
+      if (d.dateC >= todayMinusSeven) {
         return (
           <div className="list__container__box" key={d._id} onClick={() => handleClick(d.dateC)}>
             <p>{moment(d.dateC).locale("fr").format("LL")}</p>

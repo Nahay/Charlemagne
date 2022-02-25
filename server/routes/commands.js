@@ -13,6 +13,16 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Get all visible commands
+router.get('/visible', async (req, res) => {
+    try {
+        const commands = await Command.find({visible: true});
+        res.json(commands);
+    } catch(err) {
+        res.json({error: err.message});
+    }
+});
+
 // Get command by date
 router.get('/:dateC', async (req, res) => {
     try {
@@ -64,6 +74,16 @@ router.post('/', async (req, res) => {
 router.delete("/:commandId", async (req, res) => {
     try {
         const commandToDelete = await Command.findByIdAndDelete(req.params.commandId);
+        res.json(commandToDelete);
+    } catch(err) {
+        res.json({error: err.message});
+    }
+});
+
+// Hide a command
+router.patch("/hide/:commandId", async (req, res) => {
+    try {
+        const commandToDelete = await Command.updateOne({ _id: req.params.commandId }, { visible: false });
         res.json(commandToDelete);
     } catch(err) {
         res.json({error: err.message});
