@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import TextArea from '../../components/generic/TextArea';
 import InputButton from '../../components/generic/InputButton';
 import OrderTable from "../../components/order/OrderTable";
+import Summary from "../../components/order/Summary";
 
 import { getDishByDate, updateDishDate, getDishByDateAndDish } from "../../services/dishesService";
 import { getParam } from '../../services/paramsService';
@@ -15,7 +16,6 @@ import { getUserById } from '../../services/usersService';
 import { getDateByDate } from "../../services/calendarService";
 import { createCommand } from "../../services/commandsService";
 import { createCommandList } from "../../services/commandsListService";
-import Summary from "../../components/order/Summary";
 
 
 const PassCommand = () => {

@@ -131,22 +131,19 @@ const AdminCommands = () => {
     getCommandsByDate();
     resetInput();
 
-    box.current.style.visibility = "hidden";
-    box.current.style.opacity = 0;
+    box.current.classList.toggle("visible");
     
   }
   const onClickCommandDelete =  ({_id}) => {
 
-    box.current.style.visibility = "visible";
-    box.current.style.opacity = 1;
+    box.current.classList.toggle("visible");
     setCurrentDelete(_id);
     
   }
 
   const onClickConfirmation = () => {
 
-    box.current.style.visibility = "hidden";
-    box.current.style.opacity = 0;
+    box.current.classList.toggle("visible");
   }
 
   const onCommandSubmit = async (e) => {

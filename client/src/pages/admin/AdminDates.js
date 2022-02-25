@@ -9,11 +9,10 @@ import TextArea from '../../components/generic/TextArea';
 import InputButton from '../../components/generic/InputButton';
 import DishList from '../../components/admin/DishList';
 import AdminCalendar from "../../components/admin/AdminCalendar";
+import Box from '../../components/generic/Box';
 
 import {getDates, updateDate, getDateByDate, createDate, deleteDate} from '../../services/calendarService';
 import {getDishes, createDishDate, getDishByDate, deleteAllDishesDate, deleteDishDate, updateDishDate} from '../../services/dishesService';
-import Box from '../../components/generic/Box';
-
 
 const AdminDates = () => {
 
@@ -187,8 +186,7 @@ const AdminDates = () => {
         }
         else toast.error("Il y a une commande à cette date, vous ne pouvez pas la supprimer.");
 
-        box.current.style.visibility = "hidden";
-        box.current.style.opacity = 0;
+        box.current.classList.toggle("visible");
     }
 
     const onDateSubmit = async (e) => {
@@ -252,14 +250,12 @@ const AdminDates = () => {
             getDishByDateList(date);
         }
         else toast.error("Ce plat a déjà été commandé, vous ne pouvez pas le supprimer.");        
-        box.current.style.visibility = "hidden";
-        box.current.style.opacity = 0;
+        box.current.classList.toggle("visible");
         
     }
 
     const onClickConfirmation = () => {
-        box.current.style.visibility = "hidden";
-        box.current.style.opacity = 0;
+        box.current.classList.toggle("visible");
     }
 
     const onClickDeleteIcon = (e) => {
@@ -269,8 +265,7 @@ const AdminDates = () => {
         }
         else setDeletedDate(true);
 
-        box.current.style.visibility = "visible";
-        box.current.style.opacity = 1;
+        box.current.classList.toggle("visible");
     }
 
 

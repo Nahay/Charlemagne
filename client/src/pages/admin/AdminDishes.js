@@ -132,8 +132,7 @@ const AdminDishes = () => {
     // DB -------------------------------------------------------------------
 
     const onClickDelete = async () => {
-        box.current.style.visibility = "hidden";
-        box.current.style.opacity = 0;
+        box.current.classList.toggle("visible");
 
         const fType = await hideDish(id);
 
@@ -144,13 +143,11 @@ const AdminDishes = () => {
     }
 
     const onClickConfirmation = () => {
-        box.current.style.visibility = "hidden";
-        box.current.style.opacity = 0;
+        box.current.classList.toggle("visible");
     }
 
     const onClickDishDelete = (idToDelete) => {
-        box.current.style.visibility = "visible";
-        box.current.style.opacity = 1;
+        box.current.classList.toggle("visible");
         setId(idToDelete);
     }
 

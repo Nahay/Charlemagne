@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-
 import { decodeToken } from 'react-jwt';
 
 import DishCommandList from '../../components/admin/DishCommandList';
 import OrderList from '../../components/order/OrderList';
+import DishBox from '../../components/generic/DishBox';
 
 import { getCommandByUser } from '../../services/commandsService';
 import { getUserById } from '../../services/usersService';
 import { getCommandListByCommandWithDish } from '../../services/commandsListService';
-import DishBox from '../../components/generic/DishBox';
-
 
 const History = () => {
     const dishBox = useRef(null);
@@ -19,8 +17,6 @@ const History = () => {
 
     const [dateClicked, setDateClicked] = useState(false);
     const [dishClicked, setDishClicked] = useState({});
-
-    const [onDishClicked, setOnDishClicked] = useState(false);
 
     const [user, setUser] = useState({});
 
@@ -41,17 +37,12 @@ const History = () => {
 
     },[]);
 
-    const onClickDish = (e) => {
-        setDishClicked(e);
-        dishBox.current.style.visibility = "visible";
-        dishBox.current.style.opacity = 1;        
+    const onClickDish = (dish) => {
+        setDishClicked(dish);
+        dishBox.current.classList.toggle("visible");
     }
 
-    const onClickConfirmation = () => {
-        dishBox.current.style.visibility = "hidden";
-        dishBox.current.style.opacity = 0;
-        setDishClicked({});
-    }
+    const onClickConfirmation = () => { dishBox.current.classList.toggle("visible") }
 
     // HANDLE ------------------------------------------------------------
 
