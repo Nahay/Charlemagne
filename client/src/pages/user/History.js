@@ -7,7 +7,7 @@ import OrderList from '../../components/order/OrderList';
 
 import { getCommandByUser } from '../../services/commandsService';
 import { getUserById } from '../../services/usersService';
-import { getCommandListByCommand } from '../../services/commandsListService';
+import { getCommandListByCommandWithDish } from '../../services/commandsListService';
 import DishBox from '../../components/generic/DishBox';
 
 
@@ -19,6 +19,8 @@ const History = () => {
 
     const [dateClicked, setDateClicked] = useState(false);
     const [dishClicked, setDishClicked] = useState({});
+
+    const [onDishClicked, setOnDishClicked] = useState(false);
 
     const [user, setUser] = useState({});
 
@@ -42,26 +44,28 @@ const History = () => {
     const onClickDish = (e) => {
         setDishClicked(e);
         dishBox.current.style.visibility = "visible";
-        dishBox.current.style.opacity = 1;
+        dishBox.current.style.opacity = 1;        
     }
 
     const onClickConfirmation = () => {
         dishBox.current.style.visibility = "hidden";
         dishBox.current.style.opacity = 0;
+        setDishClicked({});
     }
 
     // HANDLE ------------------------------------------------------------
 
     const handleOrderClick = async (id) => {
-        const commands = await getCommandListByCommand(id);
+        const commands = await getCommandListByCommandWithDish(id);
         setDishList(commands);
         setDateClicked(true);
+        setDishClicked({});
     }
 
     return (
         <div className="history__container"> 
-
-            <DishBox onClickConfirmation={onClickConfirmation} dish={dishClicked} dishBoxRef={dishBox}/>
+                
+            <DishBox onClickConfirmation={onClickConfirmation} dish={dishClicked} dishBoxRef={dishBox}/>            
            
            <div className="history__left">
                    

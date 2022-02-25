@@ -25,6 +25,16 @@ router.get('/command/:commandID', async (req, res) => {
     }
 });
 
+router.get('/commandAndDish/:commandID', async (req, res) => {
+    try {
+        const commandList = await CommandList.find({ command: req.params.commandID }).populate('dishID');
+        res.json(commandList);
+
+    } catch(err) {
+        res.json({error: err.message});
+    }
+});
+
 // Get one command list by dish
 router.get('/dish/:dishID', async (req, res) => {
     try {

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { Dish } = require("../models/Dish");
+const { Dish } = require("../models/Command");
 
 
 // Get all dishes

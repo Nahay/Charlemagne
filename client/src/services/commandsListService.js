@@ -33,6 +33,15 @@ const getCommandListByCommand = async (commandID) => {
     }
 };
 
+const getCommandListByCommandWithDish = async (commandID) => {
+    try {
+        const { data } = await axios.get(API_URL + "/commandsList/commandAndDish/" +commandID);
+        return data;
+    } catch(err) {
+        toast.error(err.message);
+    }
+};
+
 const getOneCommandListByDish = async (dishID) => {
     try {
         const { data } = await axios.get(API_URL + "/commandsList/dish/" +dishID);
@@ -95,6 +104,7 @@ export {
     createCommandList,
     getCommandsList,
     getCommandListByCommand,
+    getCommandListByCommandWithDish,
     getOneCommandListByDish,
     updateQuantity,
     deleteCommandList,

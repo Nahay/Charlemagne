@@ -2,38 +2,35 @@ import React, { useEffect, useState } from "react";
 
 import InputButton from "./InputButton";
 
-import { getDishById } from "../../services/dishesService";
 
 const DishBox = ({onClickConfirmation, dishBoxRef, dish}) => {
-
-    const [currentDish, setCurrentDish] = useState({});
+    const [dishEmpty, setDishEmpty] = useState(true);
 
     useEffect(() => {
-        async function getDish() {
-            const d = await getDishById(dish.dishID);
-            setCurrentDish(d);
-        }
+        
+        isEmpty();
+    }, [dishEmpty]);
 
-        getDish();
-    }, [dish]);
-
-   
-
+    const isEmpty = () => {
+        if(Object.keys(dish).length === 0) setDishEmpty(true);
+        else setDishEmpty(false);
+    }
+    console.log(dish);
     return (
         <div className="dish-summary__container" ref={dishBoxRef}>      
             <div className="dish-summary-box__container">
                 <div className="dish-summary-box__content">
 
-                    <div className="dish-name">{currentDish.name}</div>
+                    <div className="dish-name">{!dishEmpty && dish.dishID.name}</div>
                     
                     <div className="dish-quantity-price">
                         <p>Quantité achetée : {dish.quantity}</p>
-                        <p>Prix unitaire : {currentDish.price} €</p>
+                        <p>Prix unitaire : {!dishEmpty && dish.dishID.price} €</p>
                     </div>
 
-                    <div className="dish-description">{currentDish.description}</div>
+                    <div className="dish-description">{!dishEmpty && dish.dishID.description}</div>
                     
-                    <div className="dish-total">Total : {currentDish.price * dish.quantity} €</div>
+                    <div className="dish-total">Total : {!dishEmpty && dish.dishID.price * dish.quantity} €</div>
 
                     <div className="content__buttons">
 

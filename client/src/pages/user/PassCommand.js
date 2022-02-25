@@ -179,7 +179,7 @@ const PassCommand = () => {
       });
       setOrderedDishes(commandList);
       setSummaryTotal(total);
-      console.log(commandList);
+      
       if (confirmEmail) {
         // emailJS 
         //  ...

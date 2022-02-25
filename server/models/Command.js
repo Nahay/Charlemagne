@@ -46,6 +46,50 @@ UserSchema.methods.validPassword = function(password) {
     return compareSync(password, this.password);
 }
 
+const DishSchema = Schema({
+    name: {
+      type: String,
+      unique: true,
+      required: true
+    },
+    price: {
+      type: Number,
+      required: true
+    },
+    description: {
+      type: String,
+      required: false
+    },
+    type: {
+      type: String,
+      required: true
+    },
+    visible: {
+      type: Boolean,
+      required: false,
+      default: true
+    }
+  });  
+  
+  const DishDateSchema = Schema({
+    dateC: {
+      type: Number,
+      required: true
+    },
+    idDish: {
+      type: Schema.Types.ObjectId,
+      ref:'Dish',
+      required: true
+    },
+    numberKitchen: {
+      type: Number,
+      required: true,
+    },
+    numberRemaining: {
+      type: Number,
+      required: true,
+    }
+  });
 
 const CommandSchema = new Schema({
     user: {
@@ -90,7 +134,8 @@ const CommandListSchema = new Schema({
         required: true
     },
     dishID: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Dish',
         required: true
     },
     quantity: {
@@ -99,9 +144,9 @@ const CommandListSchema = new Schema({
     }
 });
 
-
-
 module.exports = {
+    Dish: model('Dish', DishSchema),
+    DishDate: model('DishDate', DishDateSchema),
     Command: model('Command', CommandSchema),
     CommandList: model('CommandList', CommandListSchema),
     User: model('User', UserSchema)

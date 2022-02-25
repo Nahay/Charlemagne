@@ -34,7 +34,7 @@ const AdminAccounts = () => {
 
     const [create, setCreate] = useState(true);
     const [watchClients, setWatchClients] = useState(true);
-    const [needConfirmation, setNeedConfirmation] = useState(true);
+
     const [clientAccountList, setClientAccountList] = useState([]);
     const [adminAccountList, setAdminAccountList] = useState([]);
 
@@ -188,7 +188,6 @@ const AdminAccounts = () => {
         box.current.style.visibility = "hidden";
         box.current.style.opacity = 0;
         
-        setNeedConfirmation(true);
     }
 
     const onSubmit = async (e) => {

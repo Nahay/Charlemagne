@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { DishDate } = require("../models/Dish");
+const { DishDate } = require("../models/Command");
 
 
 // Create a dish

@@ -42,8 +42,6 @@ const AdminDates = () => {
     const [select, setSelect] = useState("0");
     const [dishList, setDishList] = useState([]);
 
-    const [needConfirmation, setNeedConfirmation] = useState(true);
-
 
     useEffect(() => {
 
@@ -243,6 +241,7 @@ const AdminDates = () => {
         if (nb >= nbCommande) {
             await updateDishDate(idD, nb, nb-nbCommande);
             getDishByDateList(date);
+            toast.success("La quantité a été mise à jour !")
         }
         else toast.error(`Vous ne pouvez pas mettre un nombre inférieur au nombre de commandes qui est de : ${nbCommande}.`);
     }
