@@ -154,4 +154,15 @@
             font-size:12px;
         }
     }
+
+    @media (max-width: 480px) {
+        .order__right {
+            .day-details {
+                .table__container {
+                    width: 80%;
+                    min-width: fit-content;
+                }
+            }
+        }
+    }
 }
