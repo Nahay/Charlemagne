@@ -174,6 +174,20 @@ const updateDishDate = async (id, numberKitchen, numberRemaining) => {
     }
 };
 
+const updateDishDateQtt = async (dateC, idDish, numberRemaining) => {
+    try {
+        await axios.patch(
+            API_URL + "/dish-date/qtt", {
+                dateC : dateC,
+                idDish: idDish,
+                numberRemaining : numberRemaining
+            }
+        );
+        } catch(err) {
+        toast.error(err.message);
+    }
+};
+
 const deleteDishDate = async (id) => {
     try {
         await axios.delete(API_URL + "/dish-date/id/" +id);
@@ -220,5 +234,6 @@ export {
     deleteAllDishesDish,
     getNbRByDate,
     getInvisibleDishes,
-    unhideDish
+    unhideDish,
+    updateDishDateQtt
 };

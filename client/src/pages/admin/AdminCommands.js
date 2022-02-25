@@ -14,16 +14,17 @@ import CommandsList from "../../components/admin/CommandsList";
 import DishCommandList from "../../components/admin/DishCommandList";
 
 import { getDates } from "../../services/calendarService";
-import { deleteCommand, getCommandByDate, updateCommand } from "../../services/commandsService";
-import { deleteAllCommandsList, updateQuantity } from "../../services/commandsListService";
-import { getDishByDateAndDish, getDishById, updateDishDate } from "../../services/dishesService";
+import { hideCommand, deleteCommand, getCommandByDate, updateCommand } from "../../services/commandsService";
+import { deleteCommandList, updateQuantity } from "../../services/commandsListService";
+import { updateDishDateQtt, getDishByDateAndDish, getDishById, updateDishDate } from "../../services/dishesService";
 import { getUserById } from "../../services/usersService";
 
 
 const AdminCommands = () => {
 
   const ref = useRef(null);
-  const box = useRef(null);
+  const boxCommand = useRef(null);
+  const boxCommandList = useRef(null);
 
   const [date, setDate] = useState(new Date(new Date().toDateString()).getTime());
 
@@ -46,6 +47,7 @@ const AdminCommands = () => {
   const [dishList, setDishList] = useState([]);
   const [dateList, setDatesList] = useState([]);
   const [commandsList, setCommandsList] = useState([]);
+  const [visibleCommandsList, setVisibleCommandsList] = useState([]);
   const [reformatList, setReformatList] = useState([]);
 
 
@@ -53,6 +55,8 @@ const AdminCommands = () => {
     async function getCommandsByDate() {
       const commands = await getCommandByDate(date);
       setCommandsList(commands);
+      const visibleCommands = commands.filter((c) => c.visible);
+      setVisibleCommandsList(visibleCommands);
       const reformat = await reformatCommands(commands);
       const tab = [];
       tab.push(...reformat, {"TOTAL": `=SUM(E2:E${reformat.length + 1})&""€""`});
@@ -71,6 +75,8 @@ const AdminCommands = () => {
   const getCommandsByDate = async () => {
     const commands = await getCommandByDate(date);
     setCommandsList(commands);
+    const visibleCommands = commands.filter((c) => c.visible);
+    setVisibleCommandsList(visibleCommands);
     const reformat = await reformatCommands(commands);
     const tab = [];
     tab.push(...reformat, {"TOTAL": `=SUM(E2:E${reformat.length + 1})&""€""`});
@@ -91,8 +97,7 @@ const AdminCommands = () => {
   }
 
   const getDishList = async (id) => {
-    const dishes = await getCommandByDate(date);
-    const d = dishes.filter((d) => d._id === id)[0].list;
+    const d = commandsList.filter((d) => d._id === id)[0].list;
     setDishList(d);
   }
 
@@ -115,6 +120,9 @@ const AdminCommands = () => {
     setTime(timeC);
     setComment(comment);
     setPaid(paid);
+
+    setDishClicked(false);
+    setQuantity(0);
   }
 
   const onClickDish = (d) => {
@@ -123,28 +131,47 @@ const AdminCommands = () => {
     setDishClicked(true);
   }
 
-  const onClickDelete = async () => {
+  // suppression de la commande (invisible)
+  const handleHideCommand = async () => {
 
-    await deleteAllCommandsList(currentDelete);
-    await deleteCommand(currentDelete);
+    await hideCommand(currentDelete);
     
     getCommandsByDate();
     resetInput();
 
-    box.current.classList.toggle("visible");
-    
+    boxCommand.current.classList.toggle("visible");
   }
-  const onClickCommandDelete =  ({_id}) => {
 
-    box.current.classList.toggle("visible");
+  // apparition de la box pour supprimer la commande
+  const onClickCommandDelete =  (_id) => {
+    boxCommand.current.classList.toggle("visible");
     setCurrentDelete(_id);
+  }
+
+  // suppression d'un plat d'une commande
+  const handleDeleteCommandList = async () => {
+
+    updateDishDateQtt(date, currentCommandList.dishID._id, currentCommandList.quantity);
+    deleteCommandList(currentCommandList._id);
+
+    const remaining = commandsList.filter((c) => c._id === id)[0].list.length;
+    if (remaining === 1) await deleteCommand(id);
     
+    getCommandsByDate();
+    resetInput();
+
+    boxCommandList.current.classList.toggle("visible");
   }
 
-  const onClickConfirmation = () => {
-
-    box.current.classList.toggle("visible");
+  // apparition de la box pour supprimer un plat d'une commande
+  const onClickCommandListDelete =  (_id) => {
+    boxCommandList.current.classList.toggle("visible");
+    setCurrentDelete(_id);
   }
+
+  // bouton annuler sur la box
+  const removeBoxCommand = () => boxCommand.current.classList.toggle("visible")
+  const removeBoxCommandList = () => boxCommandList.current.classList.toggle("visible")
 
   const onCommandSubmit = async (e) => {
     e.preventDefault();
@@ -155,7 +182,6 @@ const AdminCommands = () => {
       await updateCommand(commandId, time, paid, container, comment, total);
 
       getCommandsByDate();
-  
       resetInput();
     }    
   }
@@ -167,9 +193,9 @@ const AdminCommands = () => {
       return;
     }
 
-    const dishDate = await getDishByDateAndDish(date, currentCommandList.dishID);
-    const dish = await getDishById(currentCommandList.dishID);
-    
+    const dishDate = await getDishByDateAndDish(date, currentCommandList.dishID._id);
+    const dish = await getDishById(currentCommandList.dishID._id);
+
     if (quantity > dishDate.numberRemaining + currentCommandList.quantity) 
       toast.error(`La quantité ne peut être supérieure à ${dishDate.numberRemaining + currentCommandList.quantity}.`);
     else {
@@ -231,7 +257,7 @@ const AdminCommands = () => {
   const handleContainerChange = (e) => {
     if (e.target.id === "y---container") setContainer(true);
     else setContainer(false);
-  } 
+  }
 
 
   // RENDER ----------------------------------------------------------------
@@ -239,7 +265,8 @@ const AdminCommands = () => {
   return (
     <div className="admin-commands">
 
-      <Box onClickConfirmation={onClickConfirmation} onClickDelete={onClickDelete} boxRef={box} message="Voulez-vous vraiment supprimer cette commande ?"/>
+      <Box onClickConfirmation={removeBoxCommand} onClickDelete={handleHideCommand} boxRef={boxCommand} message="Voulez-vous vraiment supprimer cette commande ?"/>
+      <Box onClickConfirmation={removeBoxCommandList} onClickDelete={handleDeleteCommandList} boxRef={boxCommandList} message="Voulez-vous vraiment supprimer ce plat de cette commande ?"/>
 
       <div className="admin-commands__left">
         <div className="left__commands-list">
@@ -263,7 +290,7 @@ const AdminCommands = () => {
         </h1>
         <div className="commands-list">
           <CommandsList
-            commandsListByDate={commandsList}
+            commandsListByDate={visibleCommandsList}
             onClickCommand={onClickCommand}
             onClickDelete={onClickCommandDelete}
           />
@@ -290,7 +317,11 @@ const AdminCommands = () => {
             </div>
 
             <div className="commands-dish-list">
-              <DishCommandList dishList={dishList} onClickDish={(d) => onClickDish(d)} />
+              <DishCommandList
+                dishList={dishList}
+                onClickDish={(d) => onClickDish(d)}
+                onClickDelete={onClickCommandListDelete}
+              />
             </div>
 
             {dishClicked ? 
@@ -369,7 +400,7 @@ const AdminCommands = () => {
 
             <TextArea
               value={comment}
-              placeholder="Commentaire"
+              placeholder="Commentaire..."
               id="comment"
               handleChange={handleCommentChange}
             />

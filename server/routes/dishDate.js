@@ -65,6 +65,23 @@ router.patch('/:dishId', async (req, res) => {
   }
 });
 
+// Update only nb remaining of a dish date
+router.patch('/qtt', async (req, res) => {
+  const { dateC, idDish, numberRemaining } = req.body;
+  try {
+      const dishToUpdate = await DishDate.updateOne(
+          {
+            dateC : dateC,
+            idDish : idDish
+          },
+          { $inc: { numberRemaining: +numberRemaining } }
+      );
+      res.json(dishToUpdate);
+  } catch(err) {
+      res.json({error: err.message});
+  }
+});
+
 // Delete all dishes from a date
 router.delete("/date/:dateC", async (req, res) => {
   try {

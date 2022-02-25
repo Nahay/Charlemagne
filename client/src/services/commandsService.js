@@ -75,7 +75,7 @@ const updateCommand = async (id, timeC, paid, container, comment, total) => {
 
 const hideCommand = async (id) => {
     try {
-        await axios.patch(API_URL + "/commands/hide" + id,);
+        await axios.patch(API_URL + "/commands/hide/" + id,);
         toast.success("La commande a été supprimée !");
     } catch(err) {
         toast.error(err.message);

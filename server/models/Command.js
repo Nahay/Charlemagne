@@ -70,26 +70,28 @@ const DishSchema = Schema({
       default: true
     }
   });  
+
   
-  const DishDateSchema = Schema({
+const DishDateSchema = Schema({
     dateC: {
-      type: Number,
-      required: true
+        type: Number,
+        required: true
     },
     idDish: {
-      type: Schema.Types.ObjectId,
-      ref:'Dish',
-      required: true
+        type: Schema.Types.ObjectId,
+        ref:'Dish',
+        required: true
     },
     numberKitchen: {
-      type: Number,
-      required: true,
+        type: Number,
+        required: true,
     },
     numberRemaining: {
-      type: Number,
-      required: true,
+        type: Number,
+        required: true,
     }
-  });
+});
+
 
 const CommandSchema = new Schema({
     user: {
