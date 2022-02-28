@@ -205,7 +205,7 @@ const AdminCommands = () => {
     if (quantity > dishDate.numberRemaining + currentCommandList.quantity) 
       toast.error(`La quantité ne peut être supérieure à ${dishDate.numberRemaining + currentCommandList.quantity}.`);
     else {
-      // calcul du nombre restant en faisant : nombreRestant - ( nouvelleQuantité - ancienneQuantité )
+      // calcul du nombre dispo en faisant : nombreRestant - ( nouvelleQuantité - ancienneQuantité )
       const numberRemaining = dishDate.numberRemaining - (quantity - currentCommandList.quantity);
 
       // Calcul pour le total étant donné que la quantité change
@@ -215,7 +215,7 @@ const AdminCommands = () => {
 
       // on donne la nouvelle valeur de la quantité dans le state
       currentCommandList.quantity = parseInt(quantity);
-      // update le nombre restant en cuisine
+      // update le nombre dispo en cuisine
       await updateDishDate(dishDate._id, dishDate.numberKitchen, numberRemaining);
 
       // update la quantité dans la command list
