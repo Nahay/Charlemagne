@@ -1,18 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import InputButton from "../generic/InputButton";
 
-const Summary = ({onClickConfirmation, sumRef, dishList, name, firstname, total}) => {
-
-    useEffect(() => {
-        
-    }, [dishList]);
+const Summary = ({onClickConfirmation, sumRef, dishList, name, firstname, total, email}) => {
 
     return (
         <div className="summary-container" ref={sumRef}>
             <div className="summary-content">
                 <div className="summary-items">
-                    <p className="summary-title">Merci pour votre commande !</p>
+                    <p className="summary-title">Commande effectuée ✅ !</p>
                     <p className="summary-name">{name} {firstname} voici le résumé de votre commande :</p>
                     <div className="summary-list">
                         {dishList.map(d => {
@@ -23,9 +19,13 @@ const Summary = ({onClickConfirmation, sumRef, dishList, name, firstname, total}
                                     <p className="box---price">{d.price} €</p>  
                                 </div>
                             );
-                        })}                        
+                        })}
                     </div>
+                    <div className="summary-confirmation">
+                        { email && <p>Un email de confirmation vous a été envoyé.</p> }
 
+                        <p>En vous remerciant, passez une agréable journée !</p>
+                    </div>
                     <div className="summary-total">
                         <p>Total : {total} €</p>
                     </div>

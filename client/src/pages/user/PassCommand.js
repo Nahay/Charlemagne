@@ -158,7 +158,7 @@ const PassCommand = () => {
         if(parseInt(d.nbC) > d.nb) {
             wrongCommand = true;
             if (d.nb === 0) toast.error(`Il n'y a malheureusement plus de ${d.name}, il faut être plus rapide !`, { autoClose: 10000});
-            else toast.error(`Le nombre désiré de ${d.name} est supérieur au nombre restant ${d.nb}.`, { autoClose: 10000});  
+            else toast.error(`Le nombre désiré de ${d.name} est supérieur au nombre disponible ${d.nb}.`, { autoClose: 10000});  
         }
         else {
           total += d.price * parseInt(d.nbC);
@@ -204,12 +204,20 @@ const PassCommand = () => {
 
   return (
     <form className="make-order" onSubmit={onOrderSubmit}>
-      <Summary onClickConfirmation={onClickConfirmation} sumRef={summary} dishList={orderedDishes} name={name} firstname={firstname} total={summaryTotal}/>
+      <Summary
+        onClickConfirmation={onClickConfirmation}
+        sumRef={summary}
+        dishList={orderedDishes}
+        name={name}
+        firstname={firstname}
+        total={summaryTotal}
+        email={confirmEmail}
+      />
       <div className="make-order__container">
         <h1 className="container__date">{moment(new Date(parseInt(date))).locale('fr').format('LL')}</h1>
         <div className="container__comment">
           <p>{orderInfo}</p>
-          <p>{dateComment}</p>
+          {dateComment !== "" && <p>{dateComment}</p>}
         </div>
         <div className="container__name">
           <p className="fixed-text name">{name} {firstname}</p>
@@ -218,7 +226,7 @@ const PassCommand = () => {
         <div className="container__comm-others">
           <TextArea
               value={comment}
-              placeholder="Commentaire..."
+              placeholder="Commentaires (facultatif)..."
               required = {false}
               handleChange={handleComment}
           />
@@ -249,7 +257,7 @@ const PassCommand = () => {
             </div>
             <div className="time__container">
               <div className="time__text">
-                <p>Heure : </p>
+                <p>Heure de retrait : </p>
                 <p>({time.min} - {time.max})</p>
               </div>
               <input type="time" min={time.min} max={time.max} value={timeC} onChange={handleTimeChange} required/>

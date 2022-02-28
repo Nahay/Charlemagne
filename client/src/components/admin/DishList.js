@@ -15,7 +15,7 @@ const DishList = ({dishByDateList, onClickDish, onClickDelete}) => {
                 <p>{d.idDish.name}</p>
                 <div className="nb-dish">
                   <span>Nb cuisine : {d.numberKitchen}</span>
-                  <span>Nb restants : {d.numberRemaining}</span>
+                  <span>Nb Dispo : {d.numberRemaining}</span>
                 </div>
               </div>
               <div className="icon-delete" onClick={() => onClickDelete(d)}>

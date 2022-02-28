@@ -24,7 +24,7 @@ const AdminDates = () => {
     const [dishByDateList, setDishByDateList] = useState([]);
 
     const [dateExists, setDateExists] = useState(false);
-    const [visibility, setVisibility] = useState(false);
+    const [visibility, setVisibility] = useState(true);
     const [comment, setComment] = useState("");
 
 
@@ -91,7 +91,7 @@ const AdminDates = () => {
 
     const resetValues = () => {
         setDateExists(false);
-        setVisibility(false);
+        setVisibility(true);
         setComment("");
         setSelect("0");
         setNb("");

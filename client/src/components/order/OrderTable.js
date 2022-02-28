@@ -64,7 +64,7 @@ const OrderTable = ({data, setData}) => {
                 ]
             );
         }
-        else if (nbC === "") {
+        else if (nbC === "" && nbMax > 0) {
             setData(data =>
                 [...data.slice(0,id),
                     {
@@ -91,7 +91,7 @@ const OrderTable = ({data, setData}) => {
             sortable: true,
         },
         {
-            name: 'Nombre Restant',
+            name: 'Nombre Disponible',
             selector: row => row.nb
         },
         {

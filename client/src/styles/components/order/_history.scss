@@ -93,6 +93,7 @@
 
         .right__content {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
 
@@ -114,6 +115,8 @@
                 transition: all .5s ease;
                 font-size: 100%;
             }
+
+            p.content__empty { margin-bottom:15px }
         }
 
     }

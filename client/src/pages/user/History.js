@@ -70,8 +70,13 @@ const History = () => {
 
            <div className="history__right">
                <div className="right__content">
-                   {dateClicked ? 
-                        <DishCommandList dishList={dishList} onClickDish={onClickDish}/>
+                   {dateClicked ?
+                        <>
+                            <p className="content__empty">
+                                Cliquez sur un plat pour afficher ses détails.
+                            </p>
+                            <DishCommandList dishList={dishList} onClickDish={onClickDish}/>
+                        </>
                     :
                         <div className="content__empty">
                             Veuillez sélectionner une commande effectuée.
