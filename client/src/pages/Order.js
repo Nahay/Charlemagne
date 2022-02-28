@@ -81,6 +81,9 @@ const Order = () => {
       </div>
       <div className="order__right" ref={ref}>
           <DayDetails date={date} dishByDateList = {dishByDateList} />
+          <div className="right__tip">
+            <p>Passez la souris sur le nom du plat pour avoir sa description.</p>
+          </div>
       </div>
     </div>
   );

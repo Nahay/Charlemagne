@@ -416,6 +416,11 @@ input[type="time"] {
         }
       }
 
+      .summary-confirmation {
+        align-self: flex-start;
+        margin-top: 10px;
+      }
+
       .summary-total {
         align-self: flex-end;
         margin-top: 20px;

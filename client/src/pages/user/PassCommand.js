@@ -20,6 +20,8 @@ import { createCommandList } from "../../services/commandsListService";
 
 const PassCommand = () => {
     const summary = useRef(null);
+    const input = useRef(null);
+
     const { date } = useParams();
     const history = useHistory();
 
@@ -192,6 +194,8 @@ const PassCommand = () => {
     else toast.error("La commande n'a pu être réalisée, vérifiez les champs.", { autoClose: 10000}); // autoClose = le temps du toast     
   }
 
+  const onClickSubmit = () => { input.current.blur(); }
+
   // HANDLE ------------------------------------------------
 
   const handleComment = (e) => setComment(e.target.value);
@@ -265,7 +269,9 @@ const PassCommand = () => {
           </div>
         </div>
         <div className="container__mess-btn">
-          <InputButton value= "Commander" type="submit"/>
+          <div className="input-btn" >
+              <input type="submit" value="Commander" onClick={onClickSubmit} ref={input}/>
+          </div>
         </div>
       </div>
     </form>

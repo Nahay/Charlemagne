@@ -52,12 +52,29 @@
     }
 
     .order__right {
-        width : 50%;
+        position: relative;
+
         display : flex;
         justify-content: center;
         align-items: center;
+
+        width : 50%;
+        
         background: $color-secondary;
         overflow-y: scroll;
+
+        .right__tip {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            
+            p {
+                color: white;
+                font-style: italic;
+                font-size: 14px;
+            }
+
+        }
 
         .day-details {
             margin-top: 50px;
@@ -65,6 +82,7 @@
             
 
             .table__container {
+                width: 85%;
 
                 div:first-child {
                     overflow: visible;
@@ -159,7 +177,7 @@
         .order__right {
             .day-details {
                 .table__container {
-                    width: 80%;
+                    width: 200px !important;
                     min-width: fit-content;
                 }
             }

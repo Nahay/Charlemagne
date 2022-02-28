@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import InputButton from "../generic/InputButton";
 
@@ -19,11 +19,11 @@ const Summary = ({onClickConfirmation, sumRef, dishList, name, firstname, total,
                                     <p className="box---price">{d.price} €</p>  
                                 </div>
                             );
-                        })}
+                        })}                        
                     </div>
                     <div className="summary-confirmation">
-                        { email && <p>Un email de confirmation vous a été envoyé.</p> }
-
+                        {email && <p>Un email de confirmation vous a été envoyé.</p> }
+                        
                         <p>En vous remerciant, passez une agréable journée !</p>
                     </div>
                     <div className="summary-total">

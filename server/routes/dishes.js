@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { Dish } = require("../models/Command");
+const { Date } = require("../models/Date");
 
 
 // Get all dishes
@@ -52,6 +53,15 @@ router.get("/name/:dishName", async (req, res) => {
     res.json(dish);
   } catch (err) {
     res.json({ error: err.message });
+  }
+});
+
+// Get dates and nb remaining
+router.get("/number-remaining", async (req, res) => {
+  try {
+
+  } catch (err) {
+    res.json({error: err.message});
   }
 });
 
