@@ -15,7 +15,7 @@ import DishCommandList from "../../components/admin/DishCommandList";
 
 import { getDates } from "../../services/calendarService";
 import { hideCommand, deleteCommand, getCommandByDate, updateCommand } from "../../services/commandsService";
-import { deleteCommandList, updateQuantity } from "../../services/commandsListService";
+import { getCommandListByCommandWithDish, deleteCommandList, updateQuantity } from "../../services/commandsListService";
 import { updateDishDateQtt, getDishByDateAndDish, getDishById, updateDishDate } from "../../services/dishesService";
 import { getUserById } from "../../services/usersService";
 
@@ -51,6 +51,55 @@ const AdminCommands = () => {
   const [reformatList, setReformatList] = useState([]);
   const [pastDate, setPastDate] = useState(false);
 
+  const csvData = [
+    {
+    name: 'Guezouli',
+    firstname: 'Malek',
+  
+    dish: [{
+        id: 16,
+        name: 'Mousse au chocolat',
+        price: 3,
+        quantity: 1
+      },
+      {
+        id: 17,
+        name: 'Lasagnes',
+        price: 8,
+        quantity: 5
+      }
+    ],
+    total: 43
+  }, 
+  {
+    name: 'Doe',
+    firstname: 'John',
+  
+    dish: [{
+        id: 16,
+        name: 'Poulet rôti',
+        price: 10,
+        quantity: 2
+      },
+      {
+        id: 17,
+        name: 'Lasagnes',
+        price: 8,
+        quantity: 5
+      }
+    ],
+    total: 60
+  }, 
+];
+
+  const headers = [
+    { label: 'Nom', key: 'name' },
+    { label: 'Prénom', key: 'firstname' },
+    { label: 'Plat', key: 'dish' },
+    { label: 'Quantité', key: 'quantity' },
+    { label: 'Prix', key: 'price' },
+    { label: 'Total', key: 'total' },
+];
 
   useEffect(() => {
     async function getCommandsByDate() {
@@ -58,10 +107,8 @@ const AdminCommands = () => {
       setCommandsList(commands);
       const visibleCommands = commands.filter((c) => c.visible);
       setVisibleCommandsList(visibleCommands);
-      const reformat = await reformatCommands(commands);
-      const tab = [];
-      tab.push(...reformat, {"TOTAL": `=SUM(E2:E${reformat.length + 1})&""€""`});
-      setReformatList(tab);
+      const reformat = formatData(commands);     
+      setReformatList(reformat);
     };
 
     getDateList();
@@ -76,25 +123,40 @@ const AdminCommands = () => {
   const getCommandsByDate = async () => {
     const commands = await getCommandByDate(date);
     setCommandsList(commands);
+
     const visibleCommands = commands.filter((c) => c.visible);
     setVisibleCommandsList(visibleCommands);
-    const reformat = await reformatCommands(commands);
-    const tab = [];
-    tab.push(...reformat, {"TOTAL": `=SUM(E2:E${reformat.length + 1})&""€""`});
-    setReformatList(tab);
+
+    const reformat = formatData(commands);
+    setReformatList(reformat);
   };
 
-  const reformatCommands = async(commands) => {
-    return Promise.all(commands.map(async (command) => {
-      const obj = {};
-      const user = await getUserById(command.user._id);
-      obj["NOM"] = user.user.name;
-      obj["PRÉNOM"] = user.user.firstname;
-      obj["COMMENTAIRE"] = command.comment; 
-      obj["HEURE"] = command.timeC; 
-      obj["TOTAL"] = command.total + " €";
-      return obj;
-    }));
+  const formatData = (commands) => {
+    let data = []
+    commands.forEach(item => {
+        data.push({
+            name: item.user.name,
+            firstname: item.user.firstname,
+            dish: item.list[0].dishID.name,
+            quantity: item.list[0].quantity,
+            price: item.list[0].dishID.price + " €",
+            total: item.total + "€"
+        });
+        for (let i = 1; i < item.list.length; i++) {
+            const dish = item.list[i];
+            data.push({
+                name: '',
+                firstname: '',
+                dish: dish.dishID.name,
+                quantity: dish.quantity,
+                price: dish.dishID.price + " €",
+                total: ''
+            });
+        }
+        data.push({tt: `=SUM(F2:F${data.length + 1})&""€""`});
+    });
+    console.log(data);
+    return data;
   }
 
   const getDishList = async (id) => {
@@ -284,7 +346,12 @@ const AdminCommands = () => {
           
           { commandsList.length > 0 &&
           <div className="csv__download">
-            <CSVLink data={reformatList} filename={`RAPPORT-${moment(date).format("DD-MM-YYYY")}`}>Télécharger le rapport de cette date</CSVLink>
+             <CSVLink
+            data={reformatList}
+            headers={headers}
+            filename={"blabla"}
+            target="_blank"
+        >Télécharger le rapport de cette date</CSVLink>
           </div>
           }
         </div>
