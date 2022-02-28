@@ -49,6 +49,7 @@ const AdminCommands = () => {
   const [commandsList, setCommandsList] = useState([]);
   const [visibleCommandsList, setVisibleCommandsList] = useState([]);
   const [reformatList, setReformatList] = useState([]);
+  const [pastDate, setPastDate] = useState(false);
 
 
   useEffect(() => {
@@ -106,6 +107,7 @@ const AdminCommands = () => {
     resetInput();
     getCommandsByDate();
     setDishClicked(false);
+    setPastDate(e < new Date(new Date().toDateString()).getTime());
   }
 
   const onClickCommand = ({ _id, user, container, total, timeC, comment, paid }) => {
@@ -165,8 +167,12 @@ const AdminCommands = () => {
 
   // apparition de la box pour supprimer un plat d'une commande
   const onClickCommandListDelete =  (_id) => {
-    boxCommandList.current.classList.toggle("visible");
-    setCurrentDelete(_id);
+    if(!pastDate) {
+      boxCommandList.current.classList.toggle("visible");
+      setCurrentDelete(_id);
+    }
+    else toast.error("Le contenu de la commande ne peut être modifié.")
+
   }
 
   // bouton annuler sur la box
@@ -324,7 +330,7 @@ const AdminCommands = () => {
               />
             </div>
 
-            {dishClicked ? 
+            {dishClicked && !pastDate ? 
             <div className="right__form--quantity" >
               <div className="input__quantity">
                   <p>Quantité : </p>
@@ -405,9 +411,11 @@ const AdminCommands = () => {
               handleChange={handleCommentChange}
             />
 
+            {!pastDate &&  
             <div className="input-btn---save">
               <InputButton value="Enregistrer" type="submit" />
-            </div>
+            </div> }
+           
 
             {/* <div className="container_radio_duo">
               <div className="right__form__radio" onChange={handlePaidChange}>
