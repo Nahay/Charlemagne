@@ -57,18 +57,11 @@
             transition :  color 0.2s;
         }
 
-        *:last-child {
-            border-bottom: 1px solid #282828;
-        }
+        *:last-child { border-bottom: 1px solid #282828 }
 
-        *:hover {
-            color : $color-primary;
-        }
+        *:hover { color : $color-primary }
 
-        .active-link {
-            color : $color-primary;
-        }
-        
+        .active-link { color : $color-primary }
     }
 }
 
@@ -82,9 +75,7 @@
     flex-direction: column;
     justify-content: space-between;
 
-    .btn__logout {
-        align-self: center;
-    }
+    .btn__logout { align-self: center }
 
     .social-media-list {
         padding : 0 10px;
@@ -96,13 +87,9 @@
             transition : color 0.2s;
         }
     
-        *:hover {
-            color : $color-primary;
-        }
+        *:hover { color : $color-primary }
 
-        a:hover * {
-            color : $color-primary;
-        }
+        a:hover * { color : $color-primary }
     }
     
     .footer__cg {
@@ -111,6 +98,7 @@
         flex-direction: column;
         align-items: center;
         margin-bottom : 15px;
+        visibility: hidden;
 
         * {
             color : rgb(124, 124, 124);
@@ -118,9 +106,7 @@
             transition: color 0.2s;
         }
     
-        *:hover {
-            color : $color-primary;
-        }
+        *:hover { color : $color-primary }
     }
 }
 
@@ -141,14 +127,10 @@
         transition : color 0.2s;
     }
     
-    &:hover svg {
-        color : $color-primary;
-    }
+    &:hover svg { color : $color-primary }
 }
 
-.icon--bg {
-    background-color : rgba(0, 0, 0, 0.233);
-}
+.icon--bg { background-color : rgba(0, 0, 0, 0.233) }
 
 .full-screen-header {
     position : fixed;
@@ -173,8 +155,4 @@
     }
 }
 
-@media (max-height:540px) {
-    .full-screen-header {
-        bottom : unset;
-    }
-}
+@media (max-height:540px) { .full-screen-header { bottom : unset } }

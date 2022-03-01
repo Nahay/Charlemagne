@@ -63,26 +63,29 @@
         background: $color-secondary;
         overflow-y: scroll;
 
-        .right__tip {
-            position: absolute;
-            bottom: 15px;
-            right: 20px;
-            
-            p {
-                color: white;
-                font-style: italic;
-                font-size: 14px;
-            }
-
-        }
-
         .day-details {
             margin-top: 50px;
             margin-bottom: 50px;
-            
+
+            .right__tip {
+                width: 85%;
+
+                margin-top:10px;
+                text-align: right;
+                
+                p {
+                    color: #8d8d8d;
+                    font-style: italic;
+                    font-size: 14px;
+                }
+            }
 
             .table__container {
                 width: 85%;
+
+                .eXhAUl, .jBIaED {
+                    font-size:14px;
+                }
 
                 div:first-child {
                     overflow: visible;

@@ -40,20 +40,26 @@ const DayDetails = ({date, dishByDateList}) => {
             <Table dishByDateList={dishByDateList}/>
             
             { isAvailable &&
-            
-            <div className="day-details__button">
-                <div className="btn">
-                    { isLogged ? 
-                        <Link to={`passer-commande/${date}`}>
-                            Commander
-                        </Link> 
-                        :
-                        <Link to={"connexion"} onClick={() => toast.error("Veuillez vous connecter avant de passer commande !")}>
-                            Commander
-                        </Link> 
-                    }                    
+
+            <>
+                <div className="right__tip">
+                    <p>Passez la souris sur le nom du plat pour avoir sa description.</p>
                 </div>
-            </div>
+
+                <div className="day-details__button">
+                    <div className="btn">
+                        { isLogged ? 
+                            <Link to={`passer-commande/${date}`}>
+                                Commander
+                            </Link> 
+                            :
+                            <Link to={"connexion"} onClick={() => toast.error("Veuillez vous connecter avant de passer commande !")}>
+                                Commander
+                            </Link> 
+                        }                    
+                    </div>
+                </div>
+            </>
 
             }
             

@@ -19,7 +19,7 @@ const SocialMediaList = () => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        Pointet
+        www
       </a>
     </div>
   );
