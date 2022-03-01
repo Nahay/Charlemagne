@@ -82,21 +82,58 @@
     margin-top:auto;
 
     width : 100%;
-    height : 10vh;
+    
     padding : 1vh 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    * { transition : color 0.2s }
+
+    .theme-icons {
+        position: relative;
+
+        align-self: center;
+        display:flex;
+        justify-content: space-around;
+
+        width:50%;
+        height:7vh;
+
+        svg {            
+            color:white;
+            cursor:pointer;
+
+            *:hover { color : $color-primary }
+        }
+
+        .light__message, .dark__message {
+            position : absolute;
+            top:-45px;
+            
+            opacity: 0;
+            text-align: center;
+            border-radius: 5px;
+            white-space: nowrap;
+            padding:5px 10px;
+            font-size:13px;
+            color:white;
+            background:$color-primary;
+            transition : opacity 0.4s;
+        }
+
+        svg:first-child:hover + .light__message,
+        svg:nth-child(3):hover + .dark__message {
+            opacity: 1;
+        }
+    }
 
     .social-media-list {
         padding : 0 10px;
         display : flex;
         justify-content: space-around;
     
-        * {
-            color : white;
-            transition : color 0.2s;
-        }
+        * { color : white }
     
         *:hover { color : $color-primary }
 

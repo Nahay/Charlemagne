@@ -1,14 +1,32 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { faMoon, faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import SocialMediaList from '../SocialMediaList';
 
 
 const HeaderFooter = ({admin, toggle}) => {    
 
+    const onClickLight = () => {
+        
+    }
+
+    const onClickDark = () => {
+
+    }
+
     
     return (    
         <div className = "header__footer">
+
+            <div className="theme-icons">
+                <FontAwesomeIcon icon={faLightbulb} size="lg" onClick={onClickLight} />
+                <p className='light__message'>Thème clair</p>
+                <FontAwesomeIcon icon={faMoon} size="lg" onClick={onClickDark} />
+                <p className='dark__message'>Thème sombre</p>
+            </div>
 
             <SocialMediaList/>
 
