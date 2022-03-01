@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import "moment/locale/fr";
 import { CSVLink } from "react-csv";
-import ReactExport from 'react-data-export';
+
 
 import InputText from "../../components/generic/InputText";
 import TextArea from "../../components/generic/TextArea";
@@ -28,8 +28,6 @@ const AdminCommands = () => {
   const boxCommandList = useRef(null);
 
   
-const ExcelFile = ReactExport.ExcelFile;
-const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
   const [date, setDate] = useState(new Date(new Date().toDateString()).getTime());
 
@@ -394,9 +392,7 @@ const multiDataSet = [
           
           { commandsList.length > 0 &&
           <div className="csv__download">
-                <ExcelFile element={<button>Download Data With Styles</button>}>
-                    <ExcelSheet dataSet={multiDataSet} name="Organization"/>
-                </ExcelFile>
+
           </div>
           }
         </div>
