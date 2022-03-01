@@ -337,7 +337,12 @@ const AdminDates = () => {
                                     })}
                                 </optgroup>
                                 <optgroup label="Desserts">
-                                    {dishList.filter(d => d.type === 'd').map((d) => {
+                                    {dishList.filter(d => d.type === 'de').map((d) => {
+                                        return <option value={d._id} key={d._id}>{d.name}</option>
+                                    })}
+                                </optgroup>
+                                <optgroup label="Divers">
+                                    {dishList.filter(d => d.type === 'di').map((d) => {
                                         return <option value={d._id} key={d._id}>{d.name}</option>
                                     })}
                                 </optgroup>

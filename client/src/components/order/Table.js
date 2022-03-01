@@ -36,8 +36,10 @@ const Table = ({dishByDateList}) => {
                 return "Entrée";
             case "p":
                 return "Plat";
-            case "d":
+            case "de":
                 return "Dessert";
+            case "di":
+                return "Divers";
             default:
                 return
         }

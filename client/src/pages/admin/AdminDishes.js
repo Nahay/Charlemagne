@@ -18,7 +18,8 @@ const AdminDishes = () => {
     const box = useRef(null);
     const e = useRef(null);
     const p = useRef(null);
-    const d = useRef(null);
+    const de = useRef(null);
+    const di = useRef(null);
     const inv = useRef(null);
     
 
@@ -60,7 +61,8 @@ const AdminDishes = () => {
 
         e.current.style.background = "none";
         p.current.style.background = "none";
-        d.current.style.background = "none";
+        de.current.style.background = "none";
+        di.current.style.background = "none";
         inv.current.style.background = "rgb(255, 97, 79)";
     }
 
@@ -71,12 +73,14 @@ const AdminDishes = () => {
 
         e.current.style.background = "none";
         p.current.style.background = "none";
-        d.current.style.background = "none";
+        de.current.style.background = "none";
+        di.current.style.background = "none";
         inv.current.style.background = "none";
 
         if (fType === "e") { e.current.style.background = "rgb(255, 97, 79)" }
         else if (fType === "p") { p.current.style.background = "rgb(255, 97, 79)" }
-        else d.current.style.background = "rgb(255, 97, 79)";
+        else if (fType === "de") { de.current.style.background = "rgb(255, 97, 79)" }
+        else di.current.style.background = "rgb(255, 97, 79)";
     }
 
 
@@ -90,8 +94,11 @@ const AdminDishes = () => {
             case 'p' :
                 setType('p');
                 break;
-            case 'd' :
-                setType('d');
+            case 'de' :
+                setType('de');
+                break;
+            case 'di' :
+                setType('di');
                 break;
             default:
                 break;
@@ -209,7 +216,8 @@ const AdminDishes = () => {
                     <div className="left__icons">
                         <input value="Entrées" ref={e} onClick={() => filterDishes("e", dishList)} readOnly/>
                         <input value="Plats" ref={p} onClick={() => filterDishes("p", dishList)} readOnly/>
-                        <input value="Desserts" ref={d} onClick={() => filterDishes("d", dishList)} readOnly/>
+                        <input value="Desserts" ref={de} onClick={() => filterDishes("de", dishList)} readOnly/>
+                        <input value="Divers" ref={di} onClick={() => filterDishes("di", dishList)} readOnly/>
                         <div className="inv-container" ref={inv} onClick={() => getInvisibleList()}>
                             <FontAwesomeIcon icon={faEye} size="lg"/>
                         </div>
@@ -255,11 +263,20 @@ const AdminDishes = () => {
                             type="radio"
                             value="Dessert"
                             name="typePlat"
-                            id="d"
-                            checked={type === 'd'}
+                            id="de"
+                            checked={type === 'de'}
                             readOnly
                         />
-                        <label htmlFor="d">Dessert</label>
+                        <label htmlFor="de">Dessert</label>
+                        <input
+                            type="radio"
+                            value="Dessert"
+                            name="typePlat"
+                            id="di"
+                            checked={type === 'di'}
+                            readOnly
+                        />
+                        <label htmlFor="di">Divers</label>
                     </div>
                     <span>Nom :</span>
                     <InputText

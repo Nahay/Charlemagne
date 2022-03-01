@@ -9,7 +9,7 @@ const Summary = ({onClickConfirmation, sumRef, dishList, name, firstname, total,
             <div className="summary-content">
                 <div className="summary-items">
                     <p className="summary-title">Commande effectuée ✅ !</p>
-                    <p className="summary-name">{name} {firstname} voici le résumé de votre commande :</p>
+                    <p className="summary-name">{firstname} {name}, voici le résumé de votre commande :</p>
                     <div className="summary-list">
                         {dishList.map(d => {
                             return (
