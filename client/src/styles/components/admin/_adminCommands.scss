@@ -210,15 +210,16 @@
 
         .disabled {
           p {
-            color: #ffffff;
+            color: white;
             cursor: default;
             
           }
 
+          // input désactivé
           input {
             background: #474747;
             border: none;
-            color: #ffffff;
+            color: white;
             cursor: default;
           }
         }

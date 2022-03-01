@@ -1,47 +1,48 @@
 .list__container {
-    background: rgb(51, 51, 51);
     width: 100%;
     height : 60%;
+
+    background: $input-lighter-bg;
     overflow-y : scroll;
 
     // Enabled box -------------------------------------------
 
     .list__container__box {
-        cursor : pointer;
-        padding-left : 30px;
-        height : 75px;
-        border-bottom : 1px solid #5c5c5c;
         display : flex;
         align-items: center;
-        justify-content: space-between;        
+        justify-content: space-between;
+
+        height : 75px;
+
+        cursor : pointer;
+        padding-left : 30px;
+        border-bottom : 1px solid #5c5c5c;
         transition : background-color ease-out 0.2s;
 
-        &:hover {
-            background-color : $color-primary;
-        }
+        &:hover { background-color : $color-primary }
 
-        span, p {
-            color: white;
-        }
+        span, p { color: white }
 
-        &:hover > .icon-delete {
-            background-color : $color-secondary;
-        }
+        &:hover > .icon-delete { background-color : $color-secondary }
 
         .icon-delete {
             display: flex;
             justify-content: center;
             align-items: center;
+
             width : 10%;
             height: 100%;
+
             transition : background-color ease-out 0.2s;
         }
 
         p {
             display : flex;
             align-items: center;
+
             width: 90%;
             height : 100%;
+
             padding-left: 20px;
         }
     }
@@ -49,17 +50,17 @@
     // Disabled box -------------------------------------------
 
     .list__container__box--disabled {
-        background-color: rgba(0, 0, 0, 0.3);
-        padding-left : 30px;
-        height : 75px;
-        border-bottom : 1px solid #5c5c5c;
         display : flex;
         align-items: center;
         justify-content: space-between;
 
-        p, span {
-            color: #9b4034;
-        }
+        height : 75px;
+
+        background-color: rgba(0, 0, 0, 0.3);
+        padding-left : 30px;
+        border-bottom : 1px solid #5c5c5c;
+
+        p, span { color: #9b4034 }
     }
 
     // Text sizing inside the boxes -----------------------------
@@ -78,98 +79,82 @@
     @media (max-width: 1000px) {
         .list__container__box, .list__container__box--disabled {
             padding-left: 25px;
-            span {
-                font-size: 13px;
-            }
-            p {
-                font-size: 18px;
-            }
+            
+            span { font-size: 13px }
+            p { font-size: 18px }
         }
     }
 
     @media (max-width: 852px) {
         .list__container__box, .list__container__box--disabled {
             padding-left: 20px;
-            span {
-                font-size: 12px;
-            }
-            p {
-                font-size: 16px;
-            }
+            
+            span { font-size: 12px }
+            p { font-size: 16px }
         }
     }
 
     @media (max-width: 740px) {
         .list__container__box, .list__container__box--disabled {
             padding-left: 15px;
+            
             span {
                 margin-left: 3%;
                 font-size: 11px;
             }
-            p {
-                font-size: 14px;
-            }
+
+            p { font-size: 14px }
         }
     }
 
     @media (max-width: 670px) {
         .list__container__box, .list__container__box--disabled {
             padding-left: 10px;
+            
             span {
                 margin-left: 2%;
                 font-size: 10px;
             }
-            p {
-                font-size: 13px;
-            }
+
+            p { font-size: 13px }
         }
     }
     
     @media (max-width: 590px) {
         .list__container__box, .list__container__box--disabled {
             padding-left: 10px;
+            
             span {
                 margin-left: 2%;
                 font-size: 10px;
             }
-            p {
-                font-size: 11px;
-            }
+
+            p { font-size: 11px }
         }
     }
 
     @media (max-width: 540px) {
         .list__container__box, .list__container__box--disabled {
             padding-left: 10px;
-            span {
-                font-size: 10px;
-            }
-            p {
-                font-size: 12px;
-            }
+            
+            span { font-size: 10px }
+            p { font-size: 12px }
         }
     }
 
     @media (max-width: 470px) {
         .list__container__box, .list__container__box--disabled {
             padding-left: 5px;
-            span {
-                font-size: 10px;
-            }
-            p {
-                font-size: 11px;
-            }
+            
+            span { font-size: 10px }
+            p { font-size: 11px }
         }
     }
 
     @media (max-width: 415px) {
         .list__container__box, .list__container__box--disabled {
-            span {
-                font-size: 10px;
-            }
-            p {
-                font-size: 11px;
-            }
+            span { font-size: 10px }
+            p { font-size: 11px }
         }
     }
 
@@ -179,9 +164,8 @@
                 margin-left: 3%;
                 font-size: 11px;
             }
-            p {
-                font-size: 14px;
-            }
+
+            p { font-size: 14px }
         }
     }
 
@@ -191,10 +175,8 @@
                 margin-left: 2%;
                 font-size: 10px;
             }
-            p {
-                font-size: 12px;
-            }
+
+            p { font-size: 12px }
         }
     }
-
 }

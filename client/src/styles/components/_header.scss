@@ -6,7 +6,7 @@
     bottom : 0;
     width : 10rem;
     height : 100vh;
-    background-color: rgb(24,24,24);
+    background-color: $header-bg;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -58,16 +58,16 @@
         display:flex;
         flex-direction: column;
 
-        color : rgb(124, 124, 124);
+        color : $color-grey-dark;
         list-style: none;
 
         * {
             line-height: 50px;
-            border-top : 1px solid #282828;
+            border-top : 1px solid $header-body-border;
             transition :  color 0.2s;
         }
 
-        *:last-child { border-bottom: 1px solid #282828 }
+        *:last-child { border-bottom: 1px solid $header-body-border }
 
         *:hover { color : $color-primary }
 
@@ -149,7 +149,7 @@
         visibility: hidden;
 
         * {
-            color : rgb(124, 124, 124);
+            color : $color-grey-dark;
             font-size : 12px;
             transition: color 0.2s;
         }
@@ -170,7 +170,7 @@
         position : fixed;
         top : 10px;
         left : 10px;
-        color : rgb(235,235,235);
+        color : white;
         font-size : 50px;
         transition : color 0.2s;
     }
@@ -186,7 +186,7 @@
     left : 0;
     right : 0;
     bottom : 0;
-    background-color : black;
+    background-color : $header-bg;
     z-index : 100;
     display : flex;
     flex-direction: column;

@@ -1,7 +1,5 @@
 @media (min-width:1301px) and (min-height :550px) {
-    .header__icon {
-        display : none;
-    }
+    .header__icon { display : none }
 }
 
 @media (max-width:1300px) {
@@ -11,9 +9,7 @@
         width : 100vw;
     }
 
-    .header {
-        display : none;
-    }
+    .header { display : none }
 }
 
 @media (max-height:550px) {
@@ -23,7 +19,5 @@
         margin-left : 0;
     }
     
-    .header {
-        display : none;
-    }
+    .header { display : none }
 }

@@ -7,24 +7,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SocialMediaList from '../SocialMediaList';
 
 
-const HeaderFooter = ({admin, toggle}) => {    
+const HeaderFooter = ({admin, switchTheme, toggle}) => {    
 
-    const onClickLight = () => {
-        
-    }
-
-    const onClickDark = () => {
-
-    }
-
-    
     return (    
         <div className = "header__footer">
 
             <div className="theme-icons">
-                <FontAwesomeIcon icon={faLightbulb} size="lg" onClick={onClickLight} />
+                <FontAwesomeIcon icon={faLightbulb} size="lg" onClick={() => switchTheme('light')} />
                 <p className='light__message'>Thème clair</p>
-                <FontAwesomeIcon icon={faMoon} size="lg" onClick={onClickDark} />
+                <FontAwesomeIcon icon={faMoon} size="lg" onClick={() => switchTheme('dark')} />
                 <p className='dark__message'>Thème sombre</p>
             </div>
 

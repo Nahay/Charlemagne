@@ -15,11 +15,11 @@ import History from '../pages/user/History';
 import PageNotFound from '../pages/PageNotFound';
 
 
-const UserTemp = () => {
+const UserTemp = ({switchTheme}) => {
     
     return ( 
         <>
-            <SideNavbar admin={false}/>
+            <SideNavbar switchTheme={switchTheme} admin={false}/>
             <HeaderIcon admin={false}/>
             <main className="main">
                 <Switch>

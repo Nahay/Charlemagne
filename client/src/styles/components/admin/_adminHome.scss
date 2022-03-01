@@ -44,8 +44,8 @@
 
                         &:hover {
                             transition-duration : 0.2s;
-                            background-color : #2b2b2b;
-                            border-color : #2b2b2b;
+                            background-color : $input-bg;
+                            border-color : $input-bg;
                         }
                     }
                 }
