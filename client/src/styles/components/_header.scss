@@ -25,7 +25,7 @@
 
     width : 100%;
 
-    background-color : $color-secondary;
+    background-color : var(--color-secondary);
     padding : 1rem 0 2rem 0;
 
     a {
@@ -58,7 +58,7 @@
         display:flex;
         flex-direction: column;
 
-        color : var(--color-grey-dark);
+        color : var(--header-color);
         list-style: none;
 
         * {
@@ -101,7 +101,7 @@
         height:7vh;
 
         svg {            
-            color:white;
+            color:var(--svg-color);
             cursor:pointer;
 
             *:hover { color : $color-primary }
@@ -133,7 +133,7 @@
         display : flex;
         justify-content: space-around;
     
-        * { color : white }
+        * { color : var(--svg-color) }
     
         *:hover { color : $color-primary }
 
@@ -170,7 +170,7 @@
         position : fixed;
         top : 10px;
         left : 10px;
-        color : white;
+        color : --svg-color;
         font-size : 50px;
         transition : color 0.2s;
     }

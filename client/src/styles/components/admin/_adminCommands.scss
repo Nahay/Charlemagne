@@ -42,7 +42,7 @@
     height: 100%;
     width: 50%;
     
-    background: $color-secondary;
+    background: var(--color-secondary);
     overflow-y: scroll;
 
     .commands-list {

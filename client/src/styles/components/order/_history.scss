@@ -66,7 +66,7 @@
 
                 font-size: 25px;
                 white-space: nowrap;
-                color: white;
+                color: var(--svg-color);
                 transition: all .5s ease;
 
                 .title-name {
@@ -88,7 +88,7 @@
         height: 100%;
         width: 50%;
         
-        background: $color-secondary;
+        background: var(--color-secondary);
         overflow-y: scroll;
 
         .right__content {
@@ -110,7 +110,7 @@
                 padding: 0 5%;
 
                 background: var(--input-lighter-bg);
-                color: white;
+                color: var(--svg-color);
                 white-space: nowrap;
                 transition: all .5s ease;
                 font-size: 100%;

@@ -48,7 +48,7 @@
     button {
       min-width: 44px;
       background: none;
-      color : white;
+      color : var(--svg-color);
 
       &:enabled:hover, &:enabled:focus {
         background-color: #e6e6e6;
@@ -62,7 +62,7 @@
 
     .react-calendar__navigation__label {
       &:disabled {
-        color : white;
+        color : var(--svg-color);
         background : none;
       }
     }
@@ -89,7 +89,7 @@
   
   .react-calendar__month-view__weekdays__weekday {
     padding: 1em;
-    color : white;
+    color : var(--svg-color);
     border-right: 1px solid #5c5c5c;
 
     &:last-child{
@@ -122,7 +122,7 @@
 
   // toutes les cases des jours
   .react-calendar__month-view__days__day {
-    color : white;
+    color : var(--svg-color);
 
     &:hover {
       color : black;
@@ -151,7 +151,7 @@
   .react-calendar__decade-view .react-calendar__tile,
   .react-calendar__century-view .react-calendar__tile {
     padding: 2em 0.5em;
-    color : white;
+    color : var(--svg-color);
 
     &:hover {
       color : black;
@@ -191,12 +191,12 @@
   
   // quand case cliquée + son hover
   .react-calendar__tile--active {
-    background: $color-secondary;
+    background: var(--color-secondary);
     color: white;
     transition : color 0.2s;
   
     &:enabled:hover, &:enabled:focus {
-      background: $color-secondary;
+      background: var(--color-secondary);
       color : white;
     }
   }

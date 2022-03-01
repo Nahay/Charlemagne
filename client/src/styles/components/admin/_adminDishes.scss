@@ -30,7 +30,7 @@
                     height:40px;
 
                     text-align: center;
-                    color : white;
+                    color : var(--svg-color);
                     font-size : 22px;
                     transition : all 0.2s;
                     margin-right:3px;
@@ -45,6 +45,9 @@
                 }
 
                 .inv-container {
+
+                    svg { color: var(--svg-color) }
+                    
                     display:flex;
                     align-items: center;
                     justify-content: center;
@@ -65,7 +68,7 @@
     }
 
     .admin-dishes__right {
-        background : $color-secondary;
+        background : var(--color-secondary);
         height : 100%;
         width : 50%;
         display : flex;

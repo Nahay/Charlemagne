@@ -23,7 +23,7 @@
                 align-self: flex-end;
                 
                 svg {
-                    color : white;
+                    color : var(--svg-color);
                     font-size : 22px;
                     transition : color 0.2s;
                     margin-bottom : 3px;
@@ -52,7 +52,7 @@
 
         width : 50%;
         
-        background: $color-secondary;
+        background: var(--color-secondary);
         overflow-y: scroll;
 
         .day-details {
@@ -111,6 +111,7 @@
                             height: 150px;
 
                             background: $color-primary;
+                            color:white;
                             border-radius: 10px; 
                             padding: 20px;
 

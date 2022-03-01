@@ -20,10 +20,11 @@
         transition : background-color ease-out 0.2s;
 
         &:hover { background-color : $color-primary }
+        &:hover p, &:hover span { color : white }
 
-        span, p { color: white }
+        span, p { color: var(--svg-color) }
 
-        &:hover > .icon-delete { background-color : $color-secondary }
+        &:hover > .icon-delete { background-color : var(--color-secondary) }
 
         .icon-delete {
             display: flex;

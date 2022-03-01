@@ -24,7 +24,7 @@
       left: -5%;
       width: 0%;
       height: 100%;
-      background-color: $color-secondary;
+      background-color: var(--color-secondary);
       transition: 0.5s;
       transform: skewX(-10deg);
     }
@@ -176,7 +176,9 @@
   cursor: pointer;
 
   * { transition: all 0.3s }
-  &:hover .connect__container p:last-child { color : $color-primary }
+  &:hover .connect__container p:last-child,
+  &:hover .connect__container p:last-child svg
+   { color : $color-primary }
 
   .connect__container {
     display:flex;
@@ -185,11 +187,12 @@
 
     .connect__name {
       margin-bottom:10px;
-      color:white;
+      color:var(--svg-color);
     }
 
     svg {
-      color:white;
+      transition: all 0.1s;
+      color:var(--svg-color);
       margin-right:10px;
     }
   }
@@ -520,6 +523,7 @@ input[type="time"] {
       }
 
       .dish-quantity-price {
+        color:var(--svg-color);
         display: flex;
         justify-content: space-between;
         width: 100%;
@@ -531,9 +535,11 @@ input[type="time"] {
         height: calc(40% - 20px);
         padding: 10px 20px;
         background: var(--color-black);
+        color:var(--svg-color);
       }
 
       .dish-total {
+        color:var(--svg-color);
         width: 100%;
         display: flex;
         justify-content: flex-end;

@@ -2,36 +2,27 @@
 $font-primary : "Poppins", sans-serif;  
 
 $color-primary : rgb(255, 97, 79);
-$color-secondary : rgb(82, 62, 62);
 
 html {
   
+  --color-secondary : rgb(82, 62, 62);
+
   --color-black: rgb(29,29,29);
   
   --header-bg: rgb(24,24,24);
   --header-body-border:rgb(40,40,40);
+  --header-color: rgb(128, 128, 128);
   
   // grey of home
   --color-grey: rgb(177,177,177);
   --color-grey-dark: rgb(128, 128, 128);
   
   --input-lighter-bg: rgb(51, 51, 51);
-  --input-bg: #2B2B2B; 
-}
-
-html[data-theme="light"] {
-
-  --color-black: rgb(29,29,29);
-
-  --header-bg: white;
-  --header-body-border:rgb(40,40,40);
-
-  --color-grey: rgb(177,177,177);
-  --color-grey-dark: rgb(128, 128, 128);
-
-  --input-lighter-bg: rgb(51, 51, 51);
   --input-bg: #2B2B2B;
+
+  --svg-color:white;
 }
+
 
 *, .root {
   margin: 0;

@@ -57,7 +57,7 @@
 
 
     .admin-accounts__right {
-        background : $color-secondary;
+        background : var(--color-secondary);
         width : 50%;
         height : 100%;
         overflow-y: scroll;

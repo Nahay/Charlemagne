@@ -3,14 +3,14 @@
 
 .Toastify__toast-body {
     font-size: 14px;
-    color: white;
+    color: var(--svg-color);
 }
 
 /* Class for the progress bar */
 .Toastify__progress-bar { background: $color-primary }
 
 /* Class for the close button. */
-.Toastify__close-button { color: white }
+.Toastify__close-button { color: var(--svg-color) }
 
 .Toastify__progress-bar--success { background: green }
 
