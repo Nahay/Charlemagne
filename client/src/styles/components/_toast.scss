@@ -1,5 +1,5 @@
 /* Class for the displayed toast */
-.Toastify__toast { background: $color-black }
+.Toastify__toast { background: var(--color-black) }
 
 .Toastify__toast-body {
     font-size: 14px;

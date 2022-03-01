@@ -21,7 +21,7 @@
         height: 150px;
 
         border-radius: 50%;
-        background:$color-black;
+        background:var(--color-black);
         margin-bottom:30px;
         border: 5px solid transparent;
         transition: 0.5s;
@@ -43,7 +43,7 @@
         height: 50%;
 
         border-radius: 2%;
-        background: $color-black;
+        background: var(--color-black);
         transition: 0.2s;
         border: 5px solid transparent;
 
@@ -71,7 +71,7 @@
                     position : relative;
                     font-size: 13px;
                     cursor: pointer;
-                    color: $color-grey;
+                    color: var(--color-grey);
                     transition: color 0.5s;
 
                     &:hover { color: $color-primary }
@@ -112,7 +112,7 @@
         }
 
         &:hover, &:hover+.login-icon {
-            border: 5px solid $color-grey-dark;
+            border: 5px solid var(--color-grey-dark);
         }
 
         @media(max-width:1000px) { width: 300px }

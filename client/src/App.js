@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import { toast, ToastContainer } from 'react-toastify';
@@ -8,29 +8,33 @@ import UserRouter from './routers/UserRouter';
 import AdminRouter from './routers/AdminRouter';
 import AdminLogin from "./pages/admin/AdminLogin";
 
+
 import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
 
-  const defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const [theme, setTheme] = useState(defaultDark ? 'dark' : 'light');
-
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', 'light');
+
+    const localTheme = localStorage.getItem('theme');
+    if (localTheme) {
+      document.documentElement.setAttribute('data-theme', localTheme);
+    }
+    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    else document.documentElement.setAttribute('data-theme', 'light');
+    
   }, []);
+
 
   const switchTheme = (newTheme) => {
     
     localStorage.setItem('theme', newTheme);
-    setTheme(newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
 
-    document.documentElement.setAttribute("data-theme", theme);
-
-    newTheme === 'light' && toast.success('Thème clair')
-    newTheme === 'dark' && toast.success('Thème sombre')
-
-    console.log(document.documentElement);
+    newTheme === 'light' && toast.success('Thème clair appliqué !')
+    newTheme === 'dark' && toast.success('Thème sombre appliqué !')
   }
 
   // user passe en dernier sinon il prend le dessus sur tlm
