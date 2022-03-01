@@ -184,7 +184,7 @@ router.post("/signin", async (req, res) => {
       // Teste si le mot de passe vaut celui qui est hashé
       if (!user.validPassword(password)) return res.json({ success: false, message: "Error: Invalid password while testing" });
       // ajoute les valeurs assignées dans le token
-      const token = jwt.sign({ _id: user._id,  username, name: user.name, firstname: user.firstname, auth: true }, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
+      const token = jwt.sign({ _id: user._id,  username, name: user.name, firstname: user.firstname, name: user.name, auth: true }, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
       res.json({ success: true, message: "Valid sign in", token });
     } catch (err) {
       console.log(err);

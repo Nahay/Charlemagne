@@ -15,6 +15,7 @@ const Logout = ({ handleLogout, handleLogin, isAuthenticated }) => {
             { decodedToken ?
                 <p>
                     <FontAwesomeIcon icon={faUser} size="" />
+                    {decodedToken.name} {decodedToken.firstname}
                     Se déconnecter
                 </p>
             :
