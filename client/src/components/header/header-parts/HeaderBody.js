@@ -29,7 +29,7 @@ const HeaderBody = ({toggle}) => {
                         Commander
                 </NavLink>
 
-                {isLogged() && 
+                { isLogged() && 
 
                 <NavLink
                     exact to="/history"

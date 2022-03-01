@@ -16,13 +16,23 @@
 // ----------------- TOP ---------------------------------
 
 .header__top {
-    width : 100%;
-    background-color : $color-secondary;
+    position : relative;
+
     display : flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    width : 100%;
+
+    background-color : $color-secondary;
     padding : 1rem 0 2rem 0;
+
+    .btn__logout {
+        position: absolute;
+        bottom:-40px;
+        
+    }
 
     a {
         display: flex;
