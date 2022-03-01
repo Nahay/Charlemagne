@@ -1,11 +1,30 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { useHistory, NavLink } from 'react-router-dom';
+
+import { toast } from 'react-toastify';
+
+import Logout from '../../generic/Logout';
 
 
-const AdminHeaderBody = ({toggle}) => {
+const AdminHeaderBody = ({ toggle }) => {
+
+    const history = useHistory();
+
+    const handleAdminLogout = () => {
+        localStorage.removeItem('adminToken');
+        history.push('/admin');
+        toast.success('Vous avez été déconnecté.');
+    }
 
     return (
         <div className = "header__body">
+
+            <Logout
+                handleLogout={handleAdminLogout}
+                isAdmin={true}
+                isAuthenticated={localStorage.getItem("adminToken")}
+            />
+
             <nav>
                 <NavLink
                     exact to="/admin/accueil"

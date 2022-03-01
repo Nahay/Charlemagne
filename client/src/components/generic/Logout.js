@@ -13,16 +13,20 @@ const Logout = ({ handleLogout, handleLogin, isAuthenticated }) => {
         <div className="btn__logout" onClick={decodedToken ? handleLogout : handleLogin}>
 
             { decodedToken ?
-                <p>
-                    <FontAwesomeIcon icon={faUser} size="" />
-                    {decodedToken.name} {decodedToken.firstname}
-                    Se déconnecter
-                </p>
+                <div className="connect__container">
+                    <p className="connect__name">{decodedToken.firstname} {decodedToken.name}</p>
+                    <p>
+                        <FontAwesomeIcon icon={faUser} />
+                        Se déconnecter
+                    </p>
+                </div>
             :
-                <p>
-                    <FontAwesomeIcon icon={faUser} size="" />
-                    Se connecter
-                </p>
+                <div className="connect__container">
+                    <p>
+                        <FontAwesomeIcon icon={faUser} />
+                        Se connecter
+                    </p>
+                </div>
             }            
 
         </div>
