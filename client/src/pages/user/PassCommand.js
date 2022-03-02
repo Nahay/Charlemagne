@@ -6,7 +6,6 @@ import { decodeToken } from 'react-jwt';
 import { toast } from 'react-toastify';
 
 import TextArea from '../../components/generic/TextArea';
-import InputButton from '../../components/generic/InputButton';
 import OrderTable from "../../components/order/OrderTable";
 import Summary from "../../components/order/Summary";
 
