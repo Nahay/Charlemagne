@@ -110,7 +110,38 @@
         }
     }
 
+    @media (max-width: 1200px) {
+        .admin-dishes__left .left__dishes-list .left__icons input {
+            width:80px;
+            
+            font-size:15px;
+        }
+    }
 
+    @media (max-width: 1150px) {
+        .admin-dishes__right .right__form { width:80% }
+    }
+
+    @media (max-width: 1000px) {
+        .admin-dishes__right .right__form .right__form__radio {
+            label {
+                font-size:14px;
+                margin-left:25px;
+            }
+            label[for="e"] { margin-left:0 }
+        }
+    }
+
+    @media (max-width: 940px) {
+        .admin-dishes__left .left__dishes-list .left__icons {
+            input, .inv-container { height:35px }
+
+            input {
+                width:70px;
+                font-size:14px;
+            }
+        }
+    }
 
     @media (max-width: 850px) {
         flex-direction: column;
@@ -129,39 +160,6 @@
         }
     }
 
-    @media (max-width: 480px) {
-
-        .admin-dishes__left {
-            .left__dishes-list {
-                .left__icons {
-
-                    input {
-                        width: 80px;
-                        font-size: 16px;
-                    }
-                }
-            }
-        }
-    }
-
-    @media (max-width: 430px) {
-
-        .admin-dishes__right {
-            .right__form {
-                .right__form__radio {
-                    font-size: 14px;
-
-                    label {
-                        margin-left: 20px !important;
-                    }
-                    label:nth-child(2) {
-                        margin-left: 0px !important;
-                    }
-                }
-            }
-        }
-    }
-
     @media (max-height: 650px) {
         .admin-dishes__right {
             overflow-y: scroll;
@@ -173,4 +171,23 @@
         }
     }
 
+    @media (max-width: 490px) {
+        .admin-dishes__left .left__dishes-list .left__icons {
+            input, .inv-container { height:30px }
+
+            input {
+                width:60px;
+                font-size:13px;
+            }
+
+            svg { font-size: 18px }
+        }
+    }
+
+    @media (max-width: 450px) {
+        .admin-dishes__right .right__form .right__form__radio label {
+            font-size:12px;
+            margin-left:20px;
+        }
+    }
 }
