@@ -20,7 +20,7 @@ const UserTemp = ({switchTheme}) => {
     return ( 
         <>
             <SideNavbar switchTheme={switchTheme} admin={false}/>
-            <HeaderIcon admin={false}/>
+            <HeaderIcon switchTheme={switchTheme} admin={false}/>
             <main className="main">
                 <Switch>
                     <Route exact path="/" component = {Home} />

@@ -14,21 +14,21 @@ import AdminAccounts from "../pages/admin/AdminAccounts";
 import PageNotFound from '../pages/PageNotFound';
 
 
-const AdminTemp = ({ match }) => {
+const AdminTemp = ({ switchTheme }) => {
   // match.url prend le chemin par défaut = /admin
   // path={ match.url + '/userlist' }
 
   return (
     <>
-      <SideNavbar admin={true}/>
-      <HeaderIcon admin={true}/>
+      <SideNavbar switchTheme={switchTheme} admin={true}/>
+      <HeaderIcon switchTheme={switchTheme} admin={true}/>
       <main className="main">
         <Switch>
-          <ProtectedAdminRoute exact path={match.url + '/accueil'} component={AdminHome} />
-          <ProtectedAdminRoute exact path={match.url + '/plats'} component={AdminDishes} />
-          <ProtectedAdminRoute exact path={match.url + '/dates'} component={AdminDates} />
-          <ProtectedAdminRoute exact path={match.url + '/commandes'} component={AdminCommands} />
-          <ProtectedAdminRoute exact path={match.url + '/comptes'} component={AdminAccounts} />
+          <ProtectedAdminRoute exact path={'/admin/accueil'} component={AdminHome} />
+          <ProtectedAdminRoute exact path={'/admin/plats'} component={AdminDishes} />
+          <ProtectedAdminRoute exact path={'/admin/dates'} component={AdminDates} />
+          <ProtectedAdminRoute exact path={'/admin/commandes'} component={AdminCommands} />
+          <ProtectedAdminRoute exact path={'/admin/comptes'} component={AdminAccounts} />
           <ProtectedAdminRoute exact component = {PageNotFound} />
         </Switch>
       </main>

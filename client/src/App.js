@@ -46,7 +46,9 @@ function App() {
         <Switch>
 
           <ProtectedLoginRoute exact path="/admin" component = {AdminLogin}/>
-          <Route path="/admin" component = {AdminRouter} />
+          <Route path="/admin">
+            <AdminRouter switchTheme={switchTheme}/>
+          </Route>
           <Route path="/">
             <UserRouter switchTheme={switchTheme}/>
           </Route>

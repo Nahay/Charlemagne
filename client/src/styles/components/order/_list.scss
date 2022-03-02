@@ -24,7 +24,10 @@
 
         span, p { color: var(--svg-color) }
 
-        &:hover > .icon-delete { background-color : var(--color-secondary) }
+        &:hover > .icon-delete {
+            color: white;
+            background-color : var(--color-secondary);
+        }
 
         .icon-delete {
             display: flex;
@@ -34,6 +37,7 @@
             width : 10%;
             height: 100%;
 
+            color: var(--svg-color);
             transition : background-color ease-out 0.2s;
         }
 

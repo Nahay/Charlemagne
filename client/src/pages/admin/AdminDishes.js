@@ -59,6 +59,14 @@ const AdminDishes = () => {
         setFiltered(dishes);
         setInvisible(true);
 
+        if (localStorage.getItem('theme') === 'light') {
+            e.current.style.color = "black";
+            p.current.style.color = "black";
+            de.current.style.color = "black";
+            di.current.style.color = "black";
+            inv.current.children[0].style.color = "white";
+        }
+
         e.current.style.background = "none";
         p.current.style.background = "none";
         de.current.style.background = "none";
@@ -70,17 +78,45 @@ const AdminDishes = () => {
         const newList = list.filter(d => d.type === fType)
         setFiltered(newList);
         setInvisible(false);
-
+        
         e.current.style.background = "none";
         p.current.style.background = "none";
         de.current.style.background = "none";
         di.current.style.background = "none";
         inv.current.style.background = "none";
 
-        if (fType === "e") { e.current.style.background = "rgb(255, 97, 79)" }
-        else if (fType === "p") { p.current.style.background = "rgb(255, 97, 79)" }
-        else if (fType === "de") { de.current.style.background = "rgb(255, 97, 79)" }
-        else di.current.style.background = "rgb(255, 97, 79)";
+        if (localStorage.getItem('theme') === 'light') {
+            e.current.style.color = "black";
+            p.current.style.color = "black";
+            de.current.style.color = "black";
+            di.current.style.color = "black";
+            inv.current.children[0].style.color = "black";
+
+            if (fType === "e") {
+                e.current.style.background = "rgb(255, 97, 79)";
+                e.current.style.color = "white";
+            }
+            else if (fType === "p") {
+                p.current.style.background = "rgb(255, 97, 79)";
+                p.current.style.color = "white";
+            }
+            else if (fType === "de") {
+                de.current.style.background = "rgb(255, 97, 79)";
+                de.current.style.color = "white";
+            }
+
+            else {
+                di.current.style.background = "rgb(255, 97, 79)";
+                di.current.style.color = "white";
+            }
+        }
+
+        else {
+            if (fType === "e") { e.current.style.background = "rgb(255, 97, 79)" }
+            else if (fType === "p") { p.current.style.background = "rgb(255, 97, 79)" }
+            else if (fType === "de") { de.current.style.background = "rgb(255, 97, 79)" }
+            else di.current.style.background = "rgb(255, 97, 79)";
+        }
     }
 
 

@@ -264,13 +264,13 @@ const PassCommand = () => {
                 <p>Heure de retrait : </p>
                 <p>({time.min} - {time.max})</p>
               </div>
-              <input type="time" min={time.min} max={time.max} value={timeC} onChange={handleTimeChange} required/>
+              <input type="time" min={time.min} max={time.max} value={timeC} onChange={handleTimeChange} ref={input} required/>
             </div>
           </div>
         </div>
         <div className="container__mess-btn">
           <div className="input-btn" >
-              <input type="submit" value="Commander" onClick={onClickSubmit} ref={input}/>
+              <input type="submit" value="Commander" onClick={onClickSubmit}/>
           </div>
         </div>
       </div>
