@@ -3,8 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import moment from "moment";
 import "moment/locale/fr";
-import { CSVLink } from "react-csv";
-
+import ReactExport from 'react-data-export';
 
 import InputText from "../../components/generic/InputText";
 import TextArea from "../../components/generic/TextArea";
@@ -15,10 +14,9 @@ import CommandsList from "../../components/admin/CommandsList";
 import DishCommandList from "../../components/admin/DishCommandList";
 
 import { getDates } from "../../services/calendarService";
-import { hideCommand, deleteCommand, getCommandByDate, updateCommand } from "../../services/commandsService";
-import { getCommandListByCommandWithDish, deleteCommandList, updateQuantity } from "../../services/commandsListService";
-import { updateDishDateQtt, getDishByDateAndDish, getDishById, updateDishDate } from "../../services/dishesService";
-import { getUserById } from "../../services/usersService";
+import { hideCommand, deleteCommand, getCommandByDate, updateCommand, getNbOfDishByDay } from "../../services/commandsService";
+import { deleteCommandList, updateQuantity } from "../../services/commandsListService";
+import { updateDishDateQtt, getDishByDateAndDish, getDishById, updateDishDate, getDishByDate } from "../../services/dishesService";
 
 
 const AdminCommands = () => {
@@ -28,6 +26,8 @@ const AdminCommands = () => {
   const boxCommandList = useRef(null);
 
   
+  const ExcelFile = ReactExport.ExcelFile;
+  const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
   const [date, setDate] = useState(new Date(new Date().toDateString()).getTime());
 
@@ -51,101 +51,9 @@ const AdminCommands = () => {
   const [dateList, setDatesList] = useState([]);
   const [commandsList, setCommandsList] = useState([]);
   const [visibleCommandsList, setVisibleCommandsList] = useState([]);
-  const [reformatList, setReformatList] = useState([]);
   const [pastDate, setPastDate] = useState(false);
 
-  const csvData = [
-    {
-    name: 'Guezouli',
-    firstname: 'Malek',
-  
-    dish: [{
-        id: 16,
-        name: 'Mousse au chocolat',
-        price: 3,
-        quantity: 1
-      },
-      {
-        id: 17,
-        name: 'Lasagnes',
-        price: 8,
-        quantity: 5
-      }
-    ],
-    total: 43
-  }, 
-  {
-    name: 'Doe',
-    firstname: 'John',
-  
-    dish: [{
-        id: 16,
-        name: 'Poulet rôti',
-        price: 10,
-        quantity: 2
-      },
-      {
-        id: 17,
-        name: 'Lasagnes',
-        price: 8,
-        quantity: 5
-      }
-    ],
-    total: 60
-  }, 
-];
-
-const multiDataSet = [
-  {
-      columns: [
-          {title: "Headings", width: {wpx: 80}},//pixels width 
-          {title: "Text Style", width: {wch: 40}},//char width 
-          {title: "Colors", width: {wpx: 90}},
-      ],
-      data: [
-          [
-              {value: "H1", style: {font: {sz: "24", bold: true}}},
-              {value: "Bold", style: {font: {bold: true}}},
-              {value: "Red", style: {fill: {patternType: "solid", fgColor: {rgb: "FFFF0000"}}}},
-          ],
-          [
-              {value: "H2", style: {font: {sz: "18", bold: true}}},
-              {value: "underline", style: {font: {underline: true}}},
-              {value: "Blue", style: {fill: {patternType: "solid", fgColor: {rgb: "FF0000FF"}}}},
-          ],
-          [
-              {value: "H3", style: {font: {sz: "14", bold: true}}},
-              {value: "italic", style: {font: {italic: true}}},
-              {value: "Green", style: {fill: {patternType: "solid", fgColor: {rgb: "FF00FF00"}}}},
-          ],
-          [
-              {value: "H4", style: {font: {sz: "12", bold: true}}},
-              {value: "strike", style: {font: {strike: true}}},
-              {value: "Orange", style: {fill: {patternType: "solid", fgColor: {rgb: "FFF86B00"}}}},
-          ],
-          [
-              {value: "H5", style: {font: {sz: "10.5", bold: true}}},
-              {value: "outline", style: {font: {outline: true}}},
-              {value: "Yellow", style: {fill: {patternType: "solid", fgColor: {rgb: "FFFFFF00"}}}},
-          ],
-          [
-              {value: "H6", style: {font: {sz: "7.5", bold: true}}},
-              {value: "shadow", style: {font: {shadow: true}}},
-              {value: "Light Blue", style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}}}
-          ]
-      ]
-  }
-];
-
-
-  const headers = [
-    { label: 'Nom', key: 'name' },
-    { label: 'Prénom', key: 'firstname' },
-    { label: 'Plat', key: 'dish' },
-    { label: 'Quantité', key: 'quantity' },
-    { label: 'Prix', key: 'price' },
-    { label: 'Total', key: 'total' },
-];
+  const [csvData, setCsvData] = useState([]);
 
   useEffect(() => {
     async function getCommandsByDate() {
@@ -153,8 +61,6 @@ const multiDataSet = [
       setCommandsList(commands);
       const visibleCommands = commands.filter((c) => c.visible);
       setVisibleCommandsList(visibleCommands);
-      const reformat = formatData(commands);     
-      setReformatList(reformat);
     };
 
     getDateList();
@@ -172,37 +78,150 @@ const multiDataSet = [
 
     const visibleCommands = commands.filter((c) => c.visible);
     setVisibleCommandsList(visibleCommands);
-
-    const reformat = formatData(commands);
-    setReformatList(reformat);
   };
 
-  const formatData = (commands) => {
-    let data = []
-    commands.forEach(item => {
-        data.push({
-            name: item.user.name,
-            firstname: item.user.firstname,
-            dish: item.list[0].dishID.name,
-            quantity: item.list[0].quantity,
-            price: item.list[0].dishID.price + " €",
-            total: item.total + "€"
-        });
-        for (let i = 1; i < item.list.length; i++) {
-            const dish = item.list[i];
-            data.push({
-                name: '',
-                firstname: '',
-                dish: dish.dishID.name,
-                quantity: dish.quantity,
-                price: dish.dishID.price + " €",
-                total: ''
-            });
-        }
-        data.push({tt: `=SUM(F2:F${data.length + 1})&""€""`});
+  const formatCsvData = async (e) => { 
+    const dishes = await getDishByDate(e);
+    const nbDishes = await getNbOfDishByDay(e);
+    const commands = await getCommandByDate(e);
+    
+    let data = [ { columns: [], data: [] }];
+
+    data[0].columns.push(
+      {title: "#", width: {wpx: 40}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center"}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } },
+      {title: "Nom", width: {wpx: 100}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center"}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } }
+      );
+
+    dishes.forEach(d => {
+      data[0].columns.push({title: `${d.idDish.name}        (${d.idDish.price}€)`, width: {wpx: 100}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} }});
     });
-    console.log(data);
-    return data;
+
+    data[0].columns.push(
+      {title: "Montant        (en €)", width: {wpx: 75}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } }, 
+    
+      {title: "CB", width: {wpx: 55}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, alignment: {horizontal:   "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } },
+      
+      {title: "Espèce", width: {wpx: 55}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, alignment:  {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } }, 
+
+      {title: "Chèque", width: {wpx: 55}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, alignment:  {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } }, 
+
+      {title: "Boite perso", width: {wpx: 75}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold:   true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb:  "D4D4D4"}}} } }, 
+
+      {title: "Heure", width: {wpx: 75}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true},  alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb:  "D4D4D4"}}} } },
+
+      {title: "Commentaires", width: {wpx: 200}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold:   true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } }, 
+    
+      {title: "Pmt", width: {wpx: 40}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "medium", color: {rgb: "000000"}}, top: {style: "medium", color: {rgb: "000000"}} } } }
+    );
+    
+    let index = 0;
+    let total = 0;
+    commands.forEach((command, i) => {
+      total += command.total;
+      index = i;
+
+      if((i+1) === commands.length) {
+        data[0].data.push([
+          {value: i+1,  style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}, right: { style: "thin", color: {rgb: "D4D4D4"} }, top: { style: "thin", color: {rgb: "D4D4D4"}}} }},
+
+          {value: command.user.name,  style: {alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}} }}
+      ]);
+
+        dishes.forEach(dish => {
+          let here = false;
+          for(let j = 0; j < command.list.length; j++) {
+            if(command.list[j].dishID._id === dish.idDish._id){
+              data[0].data[i].push({value: command.list[j].quantity,  style: {alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}}  }});
+              here = true;
+              break;
+            }
+          }
+          !here && data[0].data[i].push({value: 0,  style: {alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}}  }});
+        });
+
+        data[0].data[i].push(
+          {value: parseInt(command.total + "€"), style: {numFmt: "0.00€", alignment: {horizontal: "right", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}}  }},
+            
+          {value: "", style: {border: { bottom: {style: "medium", color: {rgb: "000000"}}} }},
+          {value: "", style: {border: { bottom: {style: "medium", color: {rgb: "000000"}}} }},
+          {value: "", style: {border: { bottom: {style: "medium", color: {rgb: "000000"}}} }}
+        );
+
+        command.container ? 
+          data[0].data[i].push({value: "✔", style: {alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}}  }})
+        : 
+          data[0].data[i].push({value: "❌", style: {alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}} }});
+        
+        data[0].data[i].push(
+          {value: command.timeC,  style: {alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}} }},
+
+          {value: command.comment,  style: {font: {sz: "8"}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}} }},
+
+          {value: "", style: {border: { right: { style: "medium", color: {rbg: "000000"}}, bottom: {style: "medium", color: {rgb: "000000"}}} }},
+        );
+      }
+      else {
+        data[0].data.push([
+          {value: i+1,  style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText:true}, border: { right: { style: "thin", color: {rgb: "D4D4D4"} }, top: { style: "thin", color: {rgb: "D4D4D4"}}} }},
+
+          {value: command.user.name,  style: {alignment: {horizontal: "center", vertical: "center", wrapText:true}}}
+        ]);
+
+        dishes.forEach(dish => {
+          let here = false;
+          for(let j = 0; j < command.list.length; j++) {
+            if(command.list[j].dishID._id === dish.idDish._id){
+              data[0].data[i].push({value: command.list[j].quantity,  style: {alignment: {horizontal: "center", vertical: "center", wrapText: true} }});
+              here = true;
+              break;
+            }
+          }
+          !here && data[0].data[i].push({value: 0,  style: {alignment: {horizontal: "center", vertical: "center", wrapText: true} }});
+        });
+
+        data[0].data[i].push(
+          {value: parseInt(command.total + "€"), style: {numFmt: "0.00€", alignment: {horizontal: "right", vertical: "center", wrapText: true} }},
+            
+          {value: ""},
+          {value: ""},        
+          {value: ""}
+        );
+
+        command.container ? 
+          data[0].data[i].push({value: "✔", style: {alignment: {horizontal: "center", vertical: "center", wrapText: true} }})
+        : 
+          data[0].data[i].push({value: "❌", style: {alignment: {horizontal: "center", vertical: "center", wrapText: true} }});
+        
+        data[0].data[i].push(
+          {value: command.timeC,  style: {alignment: {horizontal: "center", vertical: "center", wrapText: true} }},
+
+          {value: command.comment,  style: {font: {sz: "8"}, alignment: {horizontal: "center", vertical: "center", wrapText: true} }},
+
+          {value: "", style: { border: { right: {style: "medium", color: {rgb: "000000"}}} }},
+        );
+      }
+    });
+    
+    data[0].data.push([{value:""}]);
+    data[0].data.push([{value:""}]);
+
+    dishes.forEach((dish, i) => {
+      nbDishes.forEach(n => {
+        if(dish.idDish._id === n._id){
+          data[0].data[index+1].push({value: ""});
+          if(i === 0) data[0].data[index+2].push({value: n.nb, style: {font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}}, left: {style: "medium", color: {rgb: "000000"}} } }});
+          else data[0].data[index+2].push({value: n.nb, style: {font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}} } }});
+        } 
+      });
+    });
+
+    if(commands.length > 0) {
+      data[0].data[index+1].push({value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""});
+
+      data[0].data[index+2].push({value: parseInt(total + "€"), style: {numFmt: "0.00€", font: {sz: "14"}, fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, alignment: {horizontal: "right", vertical: "center", wrapText: true}, border: { right: {style: "medium", color: {rgb: "000000"}},  bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}},  left: {style: "medium", color: {rgb: "000000"}}} }}, {value: ""}, {value: ""}, {value: ""}, {value: ""});
+    }
+
+    setCsvData(data);
   }
 
   const getDishList = async (id) => {
@@ -214,6 +233,7 @@ const multiDataSet = [
     setDate(e);
     resetInput();
     getCommandsByDate();
+    formatCsvData(e);
     setDishClicked(false);
     setPastDate(e < new Date(new Date().toDateString()).getTime());
   }
@@ -391,8 +411,11 @@ const multiDataSet = [
           />
           
           { commandsList.length > 0 &&
+          
           <div className="csv__download">
-
+                <ExcelFile filename={`RAPPORT-${moment(date).format("DD-MM-YYYY")}`} element={<button>Télécharger le rapport</button>}>
+                    <ExcelSheet dataSet={csvData} name={`RAPPORT-${moment(date).format("DD-MM-YYYY")}`}/>
+                </ExcelFile>
           </div>
           }
         </div>
