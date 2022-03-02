@@ -56,6 +56,34 @@ const getCommandByUser = async (user) => {
     }
 };
 
+const getNbOfDishByDay = async (dateC) => {
+    try {
+        const { data } = await axios.get(API_URL + "/commands/" +dateC);
+        let nbDish = [];
+        let total = 0;
+        data.forEach(d => {
+            d.list.forEach(l => {
+                
+                console.log(total);
+                if(nbDish.length === 0) nbDish.push({_id: l.dishID._id, nb: l.quantity});
+                else {
+                    let isHere = false;
+                    nbDish.forEach(n => {
+                        if(n._id === l.dishID._id) {
+                            isHere = true;
+                            n.nb += l.quantity;
+                        }
+                    });
+                    !isHere && nbDish.push({_id: l.dishID._id, nb: l.quantity});
+                }
+            });
+        });
+        return nbDish;
+    } catch(err) {
+        toast.error(err.message);
+    }
+}
+
 const updateCommand = async (id, timeC, paid, container, comment, total) => {
     try {
         await axios.patch(
@@ -98,6 +126,7 @@ export {
     getVisibleCommands,
     getCommandByDate,
     getCommandByUser,
+    getNbOfDishByDay,
     updateCommand,
     hideCommand,
     deleteCommand

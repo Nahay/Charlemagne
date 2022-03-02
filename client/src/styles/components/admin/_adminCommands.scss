@@ -24,9 +24,11 @@
         justify-content: center; 
         margin-top: 5%;
 
-        a {
+        button {
           width: fit-content;
           padding: 15px;
+          outline: none;
+          border: none;
           background: $color-primary;
           color: white;
         }        
