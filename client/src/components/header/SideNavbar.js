@@ -6,13 +6,13 @@ import HeaderFooter from './header-parts/HeaderFooter';
 import AdminHeaderBody from './header-parts/AdminHeaderBody';
 
 
-const SideNavbar = ({admin, switchTheme}) => {
+const SideNavbar = ({ admin }) => {
 
     return (
         <header className = "header">
             <HeaderTop admin={admin}/>
             {admin ? <AdminHeaderBody/> : <HeaderBody/>}
-            <HeaderFooter switchTheme={switchTheme} admin={admin}/>
+            <HeaderFooter admin={admin}/>
         </header>
     );
 }

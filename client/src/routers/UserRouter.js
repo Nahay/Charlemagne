@@ -15,12 +15,12 @@ import History from '../pages/user/History';
 import PageNotFound from '../pages/PageNotFound';
 
 
-const UserTemp = ({switchTheme}) => {
+const UserTemp = () => {
     
     return ( 
         <>
-            <SideNavbar switchTheme={switchTheme} admin={false}/>
-            <HeaderIcon switchTheme={switchTheme} admin={false}/>
+            <SideNavbar admin={false}/>
+            <HeaderIcon admin={false}/>
             <main className="main">
                 <Switch>
                     <Route exact path="/" component = {Home} />

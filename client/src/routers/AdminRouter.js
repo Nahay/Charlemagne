@@ -14,14 +14,14 @@ import AdminAccounts from "../pages/admin/AdminAccounts";
 import PageNotFound from '../pages/PageNotFound';
 
 
-const AdminTemp = ({ switchTheme }) => {
+const AdminTemp = () => {
   // match.url prend le chemin par défaut = /admin
   // path={ match.url + '/userlist' }
 
   return (
     <>
-      <SideNavbar switchTheme={switchTheme} admin={true}/>
-      <HeaderIcon switchTheme={switchTheme} admin={true}/>
+      <SideNavbar admin={true}/>
+      <HeaderIcon admin={true}/>
       <main className="main">
         <Switch>
           <ProtectedAdminRoute exact path={'/admin/accueil'} component={AdminHome} />

@@ -1,13 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { faMoon, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { toast } from 'react-toastify';
 
 import SocialMediaList from '../SocialMediaList';
 
 
-const HeaderFooter = ({admin, switchTheme, toggle}) => {    
+const HeaderFooter = ({admin, toggle}) => {  
+    
+    useEffect(() => {
+
+        const localTheme = localStorage.getItem('theme');
+        if (localTheme) {
+          document.documentElement.setAttribute('data-theme', localTheme);
+        }
+        else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        else document.documentElement.setAttribute('data-theme', 'light');
+        
+    }, []);
+    
+    
+    const switchTheme = (newTheme) => {
+    
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+
+    newTheme === 'light' && toast.success('Thème clair appliqué !')
+    newTheme === 'dark' && toast.success('Thème sombre appliqué !')
+    }
+
 
     return (    
         <div className = "header__footer">
