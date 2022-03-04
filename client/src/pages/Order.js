@@ -7,7 +7,7 @@ import List from "../components/order/List";
 import DayDetails from "../components/order/DayDetails";
 
 import { getDateByDate, getDatesByVisibility } from '../services/calendarService';
-import { getDishByDate } from '../services/dishesService';
+import { getDishByDate, getDatesAndNb } from '../services/dishesService';
 
 
 const Order = () => {
@@ -15,6 +15,7 @@ const Order = () => {
   const ref = useRef(null);
 
   const [dateList, setDatesList] = useState([]);
+  const [datesAndNb, setDatesAndNb] = useState([]);
   const [dishByDateList, setDishByDateList] = useState([]);
   const [tableActive, setTableActive] = useState(true);
   const [date, setDate] = useState(new Date(new Date().toDateString()).getTime());
@@ -25,7 +26,9 @@ const Order = () => {
       const dates = await getDatesByVisibility();
       setDatesList(dates);
 
-      
+      const datesWithNb = await getDatesAndNb();
+      setDatesAndNb(datesWithNb);
+
       await getDishByDateList(date);
     }
 
@@ -74,7 +77,7 @@ const Order = () => {
           { tableActive ?
             <ACalendar rightRef={ref} dateList={dateList} onDateChange={onDateChange} />
           : 
-            <List rightRef={ref} dateList={dateList} onDateChange={onDateChange} />
+            <List rightRef={ref} dateList={datesAndNb} onDateChange={onDateChange} />
           }
 
         </div>

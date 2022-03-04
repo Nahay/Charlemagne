@@ -15,7 +15,7 @@ import DishCommandList from "../../components/admin/DishCommandList";
 
 import { getDates } from "../../services/calendarService";
 import { hideCommand, deleteCommand, getCommandByDate, updateCommand, getNbOfDishByDay } from "../../services/commandsService";
-import { deleteCommandList, updateQuantity } from "../../services/commandsListService";
+import { deleteCommandList, updateQuantity, getCommandListById } from "../../services/commandsListService";
 import { updateDishDateQtt, getDishByDateAndDish, getDishById, updateDishDate, getDishByDate } from "../../services/dishesService";
 
 
@@ -24,7 +24,6 @@ const AdminCommands = () => {
   const ref = useRef(null);
   const boxCommand = useRef(null);
   const boxCommandList = useRef(null);
-
   
   const ExcelFile = ReactExport.ExcelFile;
   const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -90,7 +89,7 @@ const AdminCommands = () => {
     data[0].columns.push(
       {title: "#", width: {wpx: 40}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center"}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } },
       {title: "Nom", width: {wpx: 100}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center"}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } }
-      );
+    );
 
     dishes.forEach(d => {
       data[0].columns.push({title: `${d.idDish.name}        (${d.idDish.price}€)`, width: {wpx: 100}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} }});
@@ -99,7 +98,7 @@ const AdminCommands = () => {
     data[0].columns.push(
       {title: "Montant        (en €)", width: {wpx: 75}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } }, 
     
-      {title: "CB", width: {wpx: 55}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, alignment: {horizontal:   "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } },
+      {title: "CB", width: {wpx: 55}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } },
       
       {title: "Espèce", width: {wpx: 55}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, alignment:  {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } }, 
 
@@ -116,6 +115,7 @@ const AdminCommands = () => {
     
     let index = 0;
     let total = 0;
+
     commands.forEach((command, i) => {
       total += command.total;
       index = i;
@@ -203,20 +203,26 @@ const AdminCommands = () => {
     });
     
     data[0].data.push([{value:""}]);
-    data[0].data.push([{value:""}]);
+    data[0].data.push([{value:""}, {value:""}]);
 
-    dishes.forEach((dish, i) => {
-      nbDishes.forEach(n => {
-        if(dish.idDish._id === n._id){
-          data[0].data[index+1].push({value: ""});
-          if(i === 0) data[0].data[index+2].push({value: n.nb, style: {font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}}, left: {style: "medium", color: {rgb: "000000"}} } }});
-          else data[0].data[index+2].push({value: n.nb, style: {font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}} } }});
-        } 
-      });
+      dishes.forEach((dish, i) => {
+        let here = false;
+        for(let j = 0; j < nbDishes.length; j++) {
+          if(nbDishes[j]._id === dish.idDish._id) {
+            if(i === 0) data[0].data[index+2].push({value: nbDishes[j].nb, style: {font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}}, left: {style: "medium", color: {rgb: "000000"}} } }});
+            else data[0].data[index+2].push({value: nbDishes[j].nb, style: {font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}} } }});
+            here = true;
+            break;
+          }
+        }
+
+        if(!here) {
+          if(i === 0) data[0].data[index+2].push({value: 0, style: {font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}}, left: {style: "medium", color: {rgb: "000000"}} } }});
+          else data[0].data[index+2].push({value: 0, style: {font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}} } }});
+        }
     });
 
     if(commands.length > 0) {
-      data[0].data[index+1].push({value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""});
 
       data[0].data[index+2].push({value: parseInt(total + "€"), style: {numFmt: "0.00€", font: {sz: "14"}, fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, alignment: {horizontal: "right", vertical: "center", wrapText: true}, border: { right: {style: "medium", color: {rgb: "000000"}},  bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}},  left: {style: "medium", color: {rgb: "000000"}}} }}, {value: ""}, {value: ""}, {value: ""}, {value: ""});
     }
@@ -224,8 +230,8 @@ const AdminCommands = () => {
     setCsvData(data);
   }
 
-  const getDishList = async (id) => {
-    const d = commandsList.filter((d) => d._id === id)[0].list;
+  const getDishList = async (commandId) => {
+    const d = commandsList.filter((d) => d._id === commandId)[0].list;
     setDishList(d);
   }
 
@@ -238,19 +244,20 @@ const AdminCommands = () => {
     setPastDate(e < new Date(new Date().toDateString()).getTime());
   }
 
-  const onClickCommand = ({ _id, user, container, total, timeC, comment, paid }) => {
-    getDishList(_id);
-    setId(_id);
+  const onClickCommand = (d) => {
+    getDishList(d._id);
+    setId(d._id);
     setEmptyFields(false);
-    setCommandId(_id);
-    setName(user.name);
-    setFirstname(user.firstname);
-    setContainer(container);
-    setTotal(total);
-    setTime(timeC);
-    setComment(comment);
-    setPaid(paid);
+    setCommandId(d._id);
+    setName(d.user.name);
+    setFirstname(d.user.firstname);
+    setContainer(d.container);
+    setTotal(d.total);
+    setTime(d.timeC);
+    setComment(d.comment);
+    setPaid(d.paid);
 
+    setCurrentCommandList(d.list);
     setDishClicked(false);
     setQuantity(0);
   }
@@ -269,43 +276,53 @@ const AdminCommands = () => {
     getCommandsByDate();
     resetInput();
 
-    boxCommand.current.classList.toggle("visible");
+    boxCommand.current.style.visibility = "hidden";
+    boxCommand.current.style.opacity = 0;
   }
 
   // apparition de la box pour supprimer la commande
-  const onClickCommandDelete =  (_id) => {
-    boxCommand.current.classList.toggle("visible");
-    setCurrentDelete(_id);
+  const onClickCommandDelete =  (commandListId) => {
+    boxCommand.current.style.visibility = "visible";
+    boxCommand.current.style.opacity = 1;
+    setCurrentDelete(commandListId);
   }
 
   // suppression d'un plat d'une commande
   const handleDeleteCommandList = async () => {
+    const cl = await getCommandListById(currentDelete);
 
-    updateDishDateQtt(date, currentCommandList.dishID._id, currentCommandList.quantity);
-    deleteCommandList(currentCommandList._id);
+    await updateDishDateQtt(date, cl[0].dishID, cl[0].quantity);
+    await deleteCommandList(cl[0]._id);
 
     const remaining = commandsList.filter((c) => c._id === id)[0].list.length;
-    if (remaining === 1) await deleteCommand(id);
-    
+    remaining === 1 && await deleteCommand(id);
+
     getCommandsByDate();
     resetInput();
 
-    boxCommandList.current.classList.toggle("visible");
+    boxCommandList.current.style.visibility = "hidden";
+    boxCommandList.current.style.opacity = 0;
   }
 
   // apparition de la box pour supprimer un plat d'une commande
   const onClickCommandListDelete =  (_id) => {
     if(!pastDate) {
-      boxCommandList.current.classList.toggle("visible");
+      boxCommandList.current.style.visibility = "visible";
+      boxCommandList.current.style.opacity = 1;
       setCurrentDelete(_id);
     }
     else toast.error("Le contenu de la commande ne peut être modifié.")
-
   }
 
   // bouton annuler sur la box
-  const removeBoxCommand = () => boxCommand.current.classList.toggle("visible")
-  const removeBoxCommandList = () => boxCommandList.current.classList.toggle("visible")
+  const removeBoxCommand = () => {
+    boxCommand.current.style.visibility = "hidden";
+    boxCommand.current.style.opacity = 0;
+  }
+  const removeBoxCommandList = () => {
+    boxCommandList.current.style.visibility = "hidden";
+    boxCommandList.current.style.opacity = 0;
+  }
 
   const onCommandSubmit = async (e) => {
     e.preventDefault();
@@ -369,9 +386,7 @@ const AdminCommands = () => {
 
   // HANDLE
 
-  const handleQuantityChange = (e) => {
-    if(Number(e.target.value) || e.target.value === "") setQuantity(e.target.value);
-  }
+  const handleQuantityChange = (e) => (Number(e.target.value) || e.target.value === "") && setQuantity(e.target.value)
 
   const handleCommentChange = (e) => setComment(e.target.value)
 

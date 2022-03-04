@@ -20,6 +20,7 @@ import { createCommandList } from "../../services/commandsListService";
 const PassCommand = () => {
     const summary = useRef(null);
     const input = useRef(null);
+    const form = useRef(null);
 
     const { date } = useParams();
     const history = useHistory();
@@ -146,6 +147,7 @@ const PassCommand = () => {
 
   const onOrderSubmit = async (e) => {
     e.preventDefault();
+    input.current.blur();
 
     let wrongCommand = false;
     let commandList = [];
@@ -193,7 +195,6 @@ const PassCommand = () => {
     else toast.error("La commande n'a pu être réalisée, vérifiez les champs.", { autoClose: 10000}); // autoClose = le temps du toast     
   }
 
-  const onClickSubmit = () => { input.current.blur(); }
 
   // HANDLE ------------------------------------------------
 
@@ -206,7 +207,7 @@ const PassCommand = () => {
   const handleTimeChange = (e) => setTimeC(e.target.value);
 
   return (
-    <form className="make-order" onSubmit={onOrderSubmit}>
+    <form className="make-order" onSubmit={onOrderSubmit} ref={form}>
       <Summary
         onClickConfirmation={onClickConfirmation}
         sumRef={summary}
@@ -223,7 +224,7 @@ const PassCommand = () => {
           {dateComment !== "" && <p>{dateComment}</p>}
         </div>
         <div className="container__name">
-          <p className="fixed-text name">{name} {firstname}</p>
+          <p className="fixed-text name">{firstname} {name}</p>
         </div>
         <OrderTable data={data} setData={setData}/>
         <div className="container__comm-others">
@@ -263,13 +264,13 @@ const PassCommand = () => {
                 <p>Heure de retrait : </p>
                 <p>({time.min} - {time.max})</p>
               </div>
-              <input type="time" min={time.min} max={time.max} value={timeC} onChange={handleTimeChange} ref={input} required/>
+              <input type="time" min={time.min} max={time.max} value={timeC} onChange={handleTimeChange} ref={input} required />
             </div>
           </div>
         </div>
         <div className="container__mess-btn">
           <div className="input-btn" >
-              <input type="submit" value="Commander" onClick={onClickSubmit}/>
+              <input type="submit" value="Commander" />
           </div>
         </div>
       </div>

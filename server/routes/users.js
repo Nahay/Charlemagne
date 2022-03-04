@@ -4,13 +4,14 @@ const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
 const { User } = require('../models/Command');
 
+
 // FUNCTIONS ------------------------------------------------------------------------------------------------------------------------------
 
 const getRequestingAdmin = async(req, res) => {
     try {
      // on récupère le token, et on vérifie l'admin qui fait la requête est bien la seule et unique personne la faisant
      const token = req.headers["x-access-token"];
-     const decoded = jwt.verify(token, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
+     const decoded = jwt.verify(token, process.env.JWT_TOKEN);
      const adminId = decoded._id;
      const adminRequesting = await Admin.findById({ _id: adminId });
      // on retourne cette administrateur
@@ -90,6 +91,21 @@ router.get("/user/:username", async (req, res) => {
       const userFound = await User.findOne({username: req.params.username});
   
       if (userFound) return res.json({ success: true, message: "Valid token", adminRequesting: adminRequesting._id, userFound });
+      return res.json({success: false, message: "No User was founded"});
+
+    } catch (err) {
+      console.log(err);
+      res.json({ error: err.message, success: false });
+    }
+});
+
+// Firstname by username
+router.get("/firstname/:username", async (req, res) => {
+    try {
+
+      const userFound = await User.findOne({username: req.params.username});
+  
+      if (userFound) return res.json({ success: true, message: "Valid token", userFound: { "firstname": userFound.firstname } });
       return res.json({success: false, message: "No User was founded"});
 
     } catch (err) {
@@ -184,7 +200,7 @@ router.post("/signin", async (req, res) => {
       // Teste si le mot de passe vaut celui qui est hashé
       if (!user.validPassword(password)) return res.json({ success: false, message: "Error: Invalid password while testing" });
       // ajoute les valeurs assignées dans le token
-      const token = jwt.sign({ _id: user._id,  username, name: user.name, firstname: user.firstname, name: user.name, auth: true }, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
+      const token = jwt.sign({ _id: user._id,  username, name: user.name, firstname: user.firstname, name: user.name, auth: true }, process.env.JWT_TOKEN);
       res.json({ success: true, message: "Valid sign in", token });
     } catch (err) {
       console.log(err);

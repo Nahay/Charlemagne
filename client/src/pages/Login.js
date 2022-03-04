@@ -6,7 +6,7 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons';
 
 import LoginForm from '../components/LoginForm';
 
-import { userSignIn } from '../services/usersService';
+import { getFirstNameByUsername, userSignIn } from '../services/usersService';
 
 
 const Login = () => {
@@ -28,7 +28,9 @@ const Login = () => {
           // si il y est, on l'ajoute au local storage
           localStorage.setItem('userToken', si.token);
           history.push("/commander");
-          toast.success("Bienvenue " + username +" !");          
+          const user = await getFirstNameByUsername(username);
+          console.log(user);
+          toast.success("Bienvenue " + user.userFound.firstname +" !");          
         }
         else toast.error("Le nom d'utilisateur ou le mot de passe est incorrect.");
     }

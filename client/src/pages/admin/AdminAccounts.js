@@ -152,12 +152,14 @@ const AdminAccounts = () => {
     }
 
     const onClickDeleteAccount = (id) => {        
-        box.current.classList.toggle("visible");
+        box.current.style.visibility = "visible";
+        box.current.style.opacity = 1;
         setId(id);
     }
 
     const onClickConfirmation = () => {
-        box.current.classList.toggle("visible");
+        box.current.style.visibility = "hidden";
+        box.current.style.opacity = 0;
     }
 
     const onClickDelete = async () => {
@@ -183,7 +185,8 @@ const AdminAccounts = () => {
         setId("");
         setCreate(true);
 
-        box.current.classList.toggle("visible");
+        box.current.style.visibility = "hidden";
+        box.current.style.opacity = 0;
         
     }
 

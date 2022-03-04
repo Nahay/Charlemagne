@@ -39,10 +39,14 @@ const History = () => {
 
     const onClickDish = (dish) => {
         setDishClicked(dish);
-        dishBox.current.classList.toggle("visible");
+        dishBox.current.style.visibility = "visible";
+        dishBox.current.style.opacity = 1;
     }
 
-    const onClickConfirmation = () => { dishBox.current.classList.toggle("visible") }
+    const onClickConfirmation = () => {
+        dishBox.current.style.visibility = "hidden";
+        dishBox.current.style.opacity = 0;
+    }
 
     // HANDLE ------------------------------------------------------------
 

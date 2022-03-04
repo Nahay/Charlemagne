@@ -10,8 +10,8 @@ const DishCommandList = ({ dishList, onClickDish, onClickDelete }) => {
     <div className="list__container">
     {dishList.map((d) => {
           return (
-            <div className="list__container__box" key={d._id} onClick={() => onClickDish(d)}>      
-              <div className="infos-dish">
+            <div className="list__container__box" key={d._id}> 
+              <div className="infos-dish"  onClick={() => onClickDish(d)}>
                 <p>{d.dishID.name}</p>
                 <div className="dish__quantity">
                   <p>Quantité : {d.quantity}</p>

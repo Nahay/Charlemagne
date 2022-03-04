@@ -23,6 +23,16 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Get dates and nbRemaining (for List component)
+router.get("/date", async (req, res) => {
+  try {
+    const dish = await DishDate.find().populate('idDish').sort('dateC');
+    res.json(dish);
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+});
+
 // Get dish by date
 router.get("/date/:date", async (req, res) => {
   try {

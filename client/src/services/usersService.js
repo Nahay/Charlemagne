@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import API_URL from '../app-config';
+ 
+const API_URL = process.env.REACT_APP_API_URL;
 
 
 const config = (token) => {
@@ -30,6 +31,15 @@ const getVisibleUsers = async(token) => {
 const getUserByUsername = async (username, token) => {
     try {
         const { data } = await axios.get(API_URL + "/users/user/" + username, config(token));
+        return data;
+    } catch(err) {
+        toast.error(err.message);
+    }
+}
+
+const getFirstNameByUsername = async (username) => {
+    try {
+        const { data } = await axios.get(API_URL + "/users/firstname/" + username);
         return data;
     } catch(err) {
         toast.error(err.message);
@@ -122,6 +132,7 @@ const userSignIn = async (username, password) => {
 export {
     userSignIn,
     getUserByUsername,
+    getFirstNameByUsername,
     getUserById,
     getUsers,
     getVisibleUsers,

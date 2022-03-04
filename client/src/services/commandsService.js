@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import API_URL from '../app-config';
+ 
+const API_URL = process.env.REACT_APP_API_URL;
 
 
 const createCommand = async (user, dateC, timeC, paid, container, comment, total) => {
@@ -59,12 +60,11 @@ const getCommandByUser = async (user) => {
 const getNbOfDishByDay = async (dateC) => {
     try {
         const { data } = await axios.get(API_URL + "/commands/" +dateC);
+        
         let nbDish = [];
-        let total = 0;
+
         data.forEach(d => {
             d.list.forEach(l => {
-                
-                console.log(total);
                 if(nbDish.length === 0) nbDish.push({_id: l.dishID._id, nb: l.quantity});
                 else {
                     let isHere = false;

@@ -171,8 +171,7 @@ const AdminDates = () => {
         else updateDate(date, visibility, comment, timeMin, timeMax);
     }
 
-
-    const deleteAndSetDate = async (e) => {
+    const deleteAndSetDate = async () => {
         let haveCommand = false;
         dishByDateList.forEach(d => {
             if (d.numberKitchen !== d.numberRemaining) haveCommand = true;
@@ -186,7 +185,8 @@ const AdminDates = () => {
         }
         else toast.error("Il y a une commande à cette date, vous ne pouvez pas la supprimer.");
 
-        box.current.classList.toggle("visible");
+        box.current.style.visibility = "hidden";
+        box.current.style.opacity = 0;
     }
 
     const onDateSubmit = async (e) => {
@@ -249,13 +249,15 @@ const AdminDates = () => {
             await deleteDishDate(currentCommandList._id);
             getDishByDateList(date);
         }
-        else toast.error("Ce plat a déjà été commandé, vous ne pouvez pas le supprimer.");        
-        box.current.classList.toggle("visible");
-        
+        else toast.error("Ce plat a déjà été commandé, vous ne pouvez pas le supprimer.");
+
+        box.current.style.visibility = "hidden";
+        box.current.style.opacity = 0;
     }
 
     const onClickConfirmation = () => {
-        box.current.classList.toggle("visible");
+        box.current.style.visibility = "hidden";
+        box.current.style.opacity = 0;
     }
 
     const onClickDeleteIcon = (e) => {
@@ -265,7 +267,8 @@ const AdminDates = () => {
         }
         else setDeletedDate(true);
 
-        box.current.classList.toggle("visible");
+        box.current.style.visibility = "visible";
+        box.current.style.opacity = 1;
     }
 
 

@@ -3,16 +3,16 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
 
+
 // FUNCTIONS ------------------------------------------------------------------------------------------------------------------------------
 
 const getRequestingAdmin = async(req, res) => {
     try {
-     // récupère le token du header de la requête
+     // récupère le token du header de la requête 
      const token = req.headers["x-access-token"];
      // vérifie l'admin qui fait la requête est bien la seule et unique personne la faisant
-     const decoded = jwt.verify(token, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
+     const decoded = jwt.verify(token, process.env.JWT_TOKEN);
      const adminId = decoded._id;
-
      const adminRequesting = await Admin.findById({ _id: adminId });
      // retourne cette administrateur
      return adminRequesting;
@@ -144,7 +144,7 @@ router.post("/signin", async (req, res) => {
       // Compare le mot de passe entré avec le hash
       if (!admin.validPassword(password)) return res.json({ success: false, message: "Error: Invalid password while testing" });
       // ajoute les valeurs assignées dans le token
-      const token = jwt.sign({ _id: admin._id, auth: true }, "3NgAMe1R4Hco2xMZ8q9PnzT7v8fF2wL56");
+      const token = jwt.sign({ _id: admin._id, auth: true }, process.env.JWT_TOKEN);
       res.json({ success: true, message: "Valid sign in", token });
     } catch (err) {
       console.log(err);

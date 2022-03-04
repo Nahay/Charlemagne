@@ -290,8 +290,14 @@ input[type="time"] {
     justify-content: center;
     align-items: center;
 
-    width: fit-content;
-    height: fit-content;    
+    width: 550px;
+    height: 250px;
+
+    transition: all 0.3s linear;
+    background: var(--color-black);
+    border-radius: 15px;
+    color: white;
+
 
     .confirmation-box__content {
       position: relative;
@@ -299,11 +305,12 @@ input[type="time"] {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-evenly;
-
-      width: 550px;
-      height: 250px;
+      justify-content: center;
       
+      width: 85%;
+      height: 80%;
+
+      transition: all 0.3s linear;
      
       background: var(--color-black);
       border-radius: 15px;
@@ -314,9 +321,12 @@ input[type="time"] {
         display: flex;
         justify-content: space-evenly;
 
-        width: 90%;
+        width: 100%;
 
+        transition: all 0.3s linear;
+        margin-top: 10%;
         .input-btn {
+          transition: all 0.3s linear;
           &:after {
             content: none;
           }
@@ -338,6 +348,78 @@ input[type="time"] {
 
     background:rgba(43, 43, 43, 0.8);
     backdrop-filter: blur(10px);    
+  }
+
+  @media (max-width: 580px) {
+      .confirmation-box__container {
+        width: 450px;
+        .confirmation-box__content {
+          .content__buttons {
+            flex-direction: column;
+            align-items: center;
+
+            margin-top: 10px;
+            .input-btn {
+              width: 100%;
+
+              margin-top: 10px;
+
+              input { width: 100% }
+            }
+          }
+
+        }
+      }
+  }
+
+  @media (max-width: 450px) {
+    .confirmation-box__container {
+      width: 350px;
+
+      .confirmation-box__content {
+        p { white-space: nowrap; font-size: 14px }
+
+        .content__buttons {
+          width: 80%;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 350px) {
+    .confirmation-box__container {
+      width: 250px;
+
+      .confirmation-box__content {
+        p { 
+          font-size: 14px;
+          white-space: normal;
+          text-align: center;
+        }
+
+        .content__buttons {
+          width: 80%;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 300px) {
+    .confirmation-box__container {
+      width: 200px;
+
+      .confirmation-box__content {
+        p { 
+          font-size: 12px;
+          white-space: normal;
+          text-align: center;
+        }
+
+        .content__buttons {
+          width: 70%;
+        }
+      }
+    }
   }
 }
 
@@ -367,7 +449,7 @@ input[type="time"] {
     justify-content: center;
 
     width: 700px;
-    height: 530px;
+    height: 550px;
 
     background: var(--color-black);
     border-radius: 15px;
@@ -375,20 +457,25 @@ input[type="time"] {
     .summary-items {
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
 
       width: 75%;
       height: 90%;
+      
+      transition: all .3s ease;
 
       .summary-title {
-        margin: 20px 0 30px 0;
+        margin: 0px 0 30px 0;
         font-size: 30px;
+        transition: all .3s ease;
       }
 
       .summary-name {
         align-self: flex-start;
         
         margin-bottom: 20px;
+        transition: all .3s ease;
       }
 
       .summary-list {
@@ -397,6 +484,7 @@ input[type="time"] {
 
         overflow-y: scroll;
         background: var(--input-bg);
+        transition: all .3s ease;
 
         .list---box {
           display: flex;
@@ -428,6 +516,8 @@ input[type="time"] {
             justify-content: center;
 
             width: 50px;
+
+            transition: all .3s ease;
           }
           
         }
@@ -435,18 +525,21 @@ input[type="time"] {
 
       .summary-confirmation {
         align-self: flex-start;
+
         margin-top: 10px;
+        transition: all .3s ease;
       }
 
       .summary-total {
         align-self: flex-end;
         margin-top: 20px;
+        transition: all .3s ease;
       }
 
       .input-btn {
         justify-self: flex-end;
         margin-top: 20px;
-
+        
         input {
           color: white;
           background: $color-primary;
@@ -465,6 +558,65 @@ input[type="time"] {
     transition: all 0.5s;
     background:rgba(43, 43, 43, 0.8);
     backdrop-filter: blur(10px);
+  }
+
+  @media(max-width: 740px){
+    .summary-content {
+      margin: 0 50px 0 50px;
+
+      height: 520px;
+      .summary-items {
+        .summary-title {
+          font-size: 26px;
+        }
+
+        .summary-name,
+        .summary-confirmation,
+        .summary-total {
+          font-size: 14px;
+        }
+      }
+    }   
+  }
+
+  @media(max-width: 580px){
+    .summary-content {
+
+      height: 520px;
+      .summary-items {
+        .summary-title {
+          font-size: 22px;
+        }
+
+        .summary-name,
+        .summary-confirmation,
+        .summary-total {
+          font-size: 13px;
+        }
+        .summary-list {
+          height: 150px;
+        }
+      }
+    }   
+  }
+
+  @media(max-width: 580px){
+    .summary-content {
+      .summary-items {
+        .summary-title {
+          font-size: 18px;
+        }
+
+        .summary-name,
+        .summary-confirmation,
+        .summary-total {
+          font-size: 12px;
+        }
+        .summary-list {
+          height: 150px;
+        }
+      }
+    }   
   }
 }
 

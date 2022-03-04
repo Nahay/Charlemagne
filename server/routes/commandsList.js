@@ -13,6 +13,18 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Get command list by id
+router.get('/:id', async (req, res) => {
+    try {
+        const commandList = await CommandList.find(
+                { _id: req.params.id }
+            );
+        res.json(commandList);
+    } catch(err) {
+        res.json({error: err.message});
+    }
+});
+
 // Get command list by command
 router.get('/command/:commandID', async (req, res) => {
     try {
