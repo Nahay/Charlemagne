@@ -15,9 +15,7 @@ import PageNotFound from '../pages/PageNotFound';
 
 
 const AdminTemp = () => {
-  // match.url prend le chemin par défaut = /admin
-  // path={ match.url + '/userlist' }
-
+  
   return (
     <>
       <SideNavbar admin={true}/>

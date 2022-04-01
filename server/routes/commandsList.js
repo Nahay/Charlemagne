@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const { getRequestingAdmin, getRequestingUser } = require('./auth');
 
 const { Command, CommandList } = require('../models/Command');
 
 // Get all commands list
 router.get('/', async (req, res) => {
     try {
+        await getRequestingAdmin(req, res);
+
         const commandsList = await CommandList.find();
         res.json(commandsList);
     } catch(err) {
@@ -16,6 +19,8 @@ router.get('/', async (req, res) => {
 // Get command list by id
 router.get('/:id', async (req, res) => {
     try {
+        await getRequestingAdmin(req, res);
+
         const commandList = await CommandList.find(
                 { _id: req.params.id }
             );
@@ -39,6 +44,8 @@ router.get('/command/:commandID', async (req, res) => {
 
 router.get('/commandAndDish/:commandID', async (req, res) => {
     try {
+        await getRequestingUser(req, res);
+
         const commandList = await CommandList.find({ command: req.params.commandID }).populate('dishID');
         res.json(commandList);
 
@@ -50,6 +57,8 @@ router.get('/commandAndDish/:commandID', async (req, res) => {
 // Get one command list by dish
 router.get('/dish/:dishID', async (req, res) => {
     try {
+        await getRequestingAdmin(req, res);
+
         const commandList = await CommandList.findOne(
                 { dishID: req.params.dishID }
             );
@@ -62,6 +71,8 @@ router.get('/dish/:dishID', async (req, res) => {
 // Get one command list by date command
 router.get('/date/:date', async (req, res) => {
     try {
+        await getRequestingAdmin(req, res);
+
         const commandList = await CommandList.find().populate({ path: 'command', match: { dateC: req.params.date }});
 
         const currentCommands = commandList.map(c => c.command).filter(c => c);
@@ -87,6 +98,8 @@ router.post('/', async (req, res) => {
     });   
 
     try {
+        await getRequestingUser(req, res);
+        
         const savedCommandList = await commandList.save();
         const currentCommand = await Command.findById(command);
         currentCommand.list.push(savedCommandList);
@@ -101,6 +114,8 @@ router.post('/', async (req, res) => {
 router.patch('/:id', async (req, res) => {
     const { quantity } = req.body;
     try {
+        await getRequestingAdmin(req, res);
+
         const commandToUpdate = await CommandList.updateOne(
             { _id: req.params.id },
             {
@@ -116,6 +131,8 @@ router.patch('/:id', async (req, res) => {
 // Delete a command
 router.delete("/:id", async (req, res) => {
     try {
+        await getRequestingAdmin(req, res);
+
         const commandToDelete = await CommandList.findByIdAndDelete(req.params.id);
         res.json(commandToDelete);
     } catch(err) {
@@ -126,6 +143,8 @@ router.delete("/:id", async (req, res) => {
 // Delete a command by command
 router.delete("/command/:commandID", async (req, res) => {
     try {
+        await getRequestingAdmin(req, res);
+
         const commandToDelete = await CommandList.findOneAndDelete(
                 { command: req.params.commandID },
             );
@@ -138,6 +157,8 @@ router.delete("/command/:commandID", async (req, res) => {
 // Delete all commands from a command list
 router.delete("/commands/:commandID", async (req, res) => {
     try {
+        await getRequestingAdmin(req, res);
+
         const commandListToDelete = await CommandList.deleteMany({command: req.params.commandID});
         res.json(commandListToDelete);
     } catch(err) {

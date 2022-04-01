@@ -20,16 +20,22 @@ const Order = () => {
   const [tableActive, setTableActive] = useState(true);
   const [date, setDate] = useState(new Date(new Date().toDateString()).getTime());
 
+  const previousDate = !isNaN(Date.parse(localStorage.getItem('date'))) && isNaN((localStorage.getItem('date'))) ? localStorage.getItem('date') : new Date(new Date().toDateString());
+  
   useEffect(() => {
+    const previousDate = !isNaN(Date.parse(localStorage.getItem('date'))) && isNaN((localStorage.getItem('date'))) ? localStorage.getItem('date') : new Date(new Date().toDateString());
 
-    async function getSetDates() {
+    async function getSetDates() {      
       const dates = await getDatesByVisibility();
       setDatesList(dates);
 
       const datesWithNb = await getDatesAndNb();
       setDatesAndNb(datesWithNb);
-
-      await getDishByDateList(date);
+      
+      if(previousDate !== null) {
+        await getDishByDateList(typeof previousDate === "string" ? new Date(previousDate).getTime() : previousDate.getTime());
+      }
+      else await getDishByDateList(date);
     }
 
     getSetDates();
@@ -52,9 +58,9 @@ const Order = () => {
   }
 
   const onDateChange = async (dateC) => {
-
+    
     setDate(dateC);
-
+    localStorage.setItem('date', new Date(dateC));
     await getDishByDateList(dateC);
 
   }
@@ -75,7 +81,7 @@ const Order = () => {
           </div>
 
           { tableActive ?
-            <ACalendar rightRef={ref} dateList={dateList} onDateChange={onDateChange} />
+            <ACalendar rightRef={ref} dateList={dateList} onDateChange={onDateChange} date={typeof previousDate === "string" ? new Date(previousDate) : previousDate}/>
           : 
             <List rightRef={ref} dateList={datesAndNb} onDateChange={onDateChange} />
           }
@@ -83,7 +89,7 @@ const Order = () => {
         </div>
       </div>
       <div className="order__right" ref={ref}>
-          <DayDetails date={date} dishByDateList = {dishByDateList} />
+          <DayDetails date={previousDate !== null ? new Date(previousDate).getTime() : date} dishByDateList = {dishByDateList} />
       </div>
     </div>
   );

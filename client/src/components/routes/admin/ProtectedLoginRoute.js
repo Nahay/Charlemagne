@@ -1,17 +1,36 @@
 import React from "react";
-import { Redirect, Route } from "react-router-dom";
+import { Route, useHistory } from "react-router-dom";
+
 import { decodeToken } from "react-jwt";
+
+import { getAdminById } from "../../../services/adminsService";
 
 
 function ProtectedLoginRoute({ component: Component, ...restOfProps }) {
-  
-  const decodedToken = decodeToken(localStorage.getItem("adminToken"));
-  
+
+  const history = useHistory();
+
+  const getAdmin = async () => {
+    
+    const token = localStorage.getItem("adminToken");
+    const decodedToken = decodeToken(token);
+    
+    if (decodedToken !== null) {
+      const admin = await getAdminById(decodedToken._id, token);
+      if (admin.success) {
+        history.push('/admin/accueil');
+        return true;
+      }
+    }
+    localStorage.removeItem('adminToken')
+    return false;
+  }
+
   return (
     <Route
       {...restOfProps}
       render={(props) =>
-        !decodedToken ? <Component {...props} /> : <Redirect to="/admin/accueil"/>
+        getAdmin() && <Component {...props} />
       }
     />
   );

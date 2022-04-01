@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 import { faMoon, faLightbulb } from '@fortawesome/free-solid-svg-icons';
@@ -9,6 +9,8 @@ import SocialMediaList from '../SocialMediaList';
 
 
 const HeaderFooter = ({admin, toggle}) => {  
+
+    const theme = useRef(null);
     
     useEffect(() => {
 
@@ -20,24 +22,37 @@ const HeaderFooter = ({admin, toggle}) => {
           document.documentElement.setAttribute('data-theme', 'dark');
         }
         else document.documentElement.setAttribute('data-theme', 'light');
+
+        if (document.documentElement.getAttribute('data-theme') === 'light') {
+            theme.current.children[0].style.color = "rgb(255, 97, 79)";
+        }
+        else theme.current.children[2].style.color = "rgb(255, 97, 79)";
         
     }, []);
     
     
     const switchTheme = (newTheme) => {
     
-    localStorage.setItem('theme', newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
+        localStorage.setItem('theme', newTheme);
+        document.documentElement.setAttribute("data-theme", newTheme);
 
-    newTheme === 'light' && toast.success('Thème clair appliqué !')
-    newTheme === 'dark' && toast.success('Thème sombre appliqué !')
+        if (newTheme === 'light') {
+            theme.current.children[2].style.color = "black";
+            theme.current.children[0].style.color = "rgb(255, 97, 79)";
+            toast.success('Thème clair appliqué !');
+        }
+        else {
+            theme.current.children[0].style.color = "white";
+            theme.current.children[2].style.color = "rgb(255, 97, 79)";
+            toast.success('Thème sombre appliqué !');
+        }
     }
 
 
     return (    
         <div className = "header__footer">
 
-            <div className="theme-icons">
+            <div ref={theme} className="theme-icons">
                 <FontAwesomeIcon icon={faLightbulb} size="lg" onClick={() => switchTheme('light')} />
                 <p className='light__message'>Thème clair</p>
                 <FontAwesomeIcon icon={faMoon} size="lg" onClick={() => switchTheme('dark')} />

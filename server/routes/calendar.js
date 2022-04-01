@@ -1,8 +1,9 @@
 const express = require('express');
-const { rawListeners } = require('../models/Date');
 const router = express.Router();
+const { getRequestingAdmin } = require("./auth");
 
 const Date = require('../models/Date');
+
 
 // Get all calendar dates
 router.get('/', async (req, res) => {
@@ -50,6 +51,8 @@ router.post('/', async (req, res) => {
     });
 
     try {
+        await getRequestingAdmin(req, res);
+        
         const savedDate = await date.save();
         res.json(savedDate);
     } catch(err) {
@@ -61,6 +64,8 @@ router.post('/', async (req, res) => {
 // Delete a date
 router.delete("/:date", async (req, res) => {
     try {
+        await getRequestingAdmin(req, res);
+
         const dateToDelete = await Date.findOneAndDelete({dateC: req.params.date});
         res.json(dateToDelete);
     } catch(err) {
@@ -72,6 +77,8 @@ router.delete("/:date", async (req, res) => {
 router.patch('/:calendarDate', async (req, res) => {
     const { visibility, comment, timeMin, timeMax } = req.body;
     try {
+        await getRequestingAdmin(req, res);
+        
         const dateToUpdate = await Date.updateOne(
             { dateC: req.params.calendarDate },
             { visibility: visibility, comment:comment, timeMin: timeMin, timeMax: timeMax }

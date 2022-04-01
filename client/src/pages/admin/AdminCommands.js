@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import moment from "moment";
 import "moment/locale/fr";
-import ReactExport from 'react-data-export';
 
 import InputText from "../../components/generic/InputText";
 import TextArea from "../../components/generic/TextArea";
@@ -13,22 +12,22 @@ import Box from "../../components/generic/Box";
 import CommandsList from "../../components/admin/CommandsList";
 import DishCommandList from "../../components/admin/DishCommandList";
 
-import { getDates } from "../../services/calendarService";
-import { hideCommand, deleteCommand, getCommandByDate, updateCommand, getNbOfDishByDay } from "../../services/commandsService";
+import { getDateByDate, getDates } from "../../services/calendarService";
+import { deleteCommand, getCommandByDate, updateCommand, downloadReport} from "../../services/commandsService";
 import { deleteCommandList, updateQuantity, getCommandListById } from "../../services/commandsListService";
 import { updateDishDateQtt, getDishByDateAndDish, getDishById, updateDishDate, getDishByDate } from "../../services/dishesService";
 
 
 const AdminCommands = () => {
 
+  const token = localStorage.getItem("adminToken");
+
   const ref = useRef(null);
   const boxCommand = useRef(null);
   const boxCommandList = useRef(null);
-  
-  const ExcelFile = ReactExport.ExcelFile;
-  const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
   const [date, setDate] = useState(new Date(new Date().toDateString()).getTime());
+  const [dateComment, setDateComment] = useState("");
 
   const [id, setId] = useState("");
   const [commandId, setCommandId] = useState("");
@@ -49,22 +48,29 @@ const AdminCommands = () => {
   const [dishList, setDishList] = useState([]);
   const [dateList, setDatesList] = useState([]);
   const [commandsList, setCommandsList] = useState([]);
-  const [visibleCommandsList, setVisibleCommandsList] = useState([]);
   const [pastDate, setPastDate] = useState(false);
 
-  const [csvData, setCsvData] = useState([]);
-
   useEffect(() => {
+    const token = localStorage.getItem("adminToken");
     async function getCommandsByDate() {
-      const commands = await getCommandByDate(date);
+      const commands = await getCommandByDate(date, token);
       setCommandsList(commands);
-      const visibleCommands = commands.filter((c) => c.visible);
-      setVisibleCommandsList(visibleCommands);
     };
 
+    async function getDateComment() {
+      const d = await getDateByDate(date);
+      d && setDateComment(d.comment);
+    }
+
+    getDateComment();
     getDateList();
     getCommandsByDate();
   }, [date]);
+
+  const getDateComment = async (e) => {
+    const d = await getDateByDate(e);
+    d && setDateComment(d.comment);
+  }
 
   const getDateList = async () => {
     const dates = await getDates();
@@ -72,163 +78,9 @@ const AdminCommands = () => {
   }
 
   const getCommandsByDate = async () => {
-    const commands = await getCommandByDate(date);
+    const commands = await getCommandByDate(date, token);
     setCommandsList(commands);
-
-    const visibleCommands = commands.filter((c) => c.visible);
-    setVisibleCommandsList(visibleCommands);
   };
-
-  const formatCsvData = async (e) => { 
-    const dishes = await getDishByDate(e);
-    const nbDishes = await getNbOfDishByDay(e);
-    const commands = await getCommandByDate(e);
-    
-    let data = [ { columns: [], data: [] }];
-
-    data[0].columns.push(
-      {title: "#", width: {wpx: 40}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center"}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } },
-      {title: "Nom", width: {wpx: 100}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center"}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } }
-    );
-
-    dishes.forEach(d => {
-      data[0].columns.push({title: `${d.idDish.name}        (${d.idDish.price}€)`, width: {wpx: 100}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} }});
-    });
-
-    data[0].columns.push(
-      {title: "Montant        (en €)", width: {wpx: 75}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } }, 
-    
-      {title: "CB", width: {wpx: 55}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } },
-      
-      {title: "Espèce", width: {wpx: 55}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, alignment:  {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } }, 
-
-      {title: "Chèque", width: {wpx: 55}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, alignment:  {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } }, 
-
-      {title: "Boite perso", width: {wpx: 75}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold:   true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb:  "D4D4D4"}}} } }, 
-
-      {title: "Heure", width: {wpx: 75}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true},  alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb:  "D4D4D4"}}} } },
-
-      {title: "Commentaires", width: {wpx: 200}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold:   true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "thin", color: {rgb: "D4D4D4"}}} } }, 
-    
-      {title: "Pmt", width: {wpx: 40}, style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: {right: {style: "medium", color: {rgb: "000000"}}, top: {style: "medium", color: {rgb: "000000"}} } } }
-    );
-    
-    let index = 0;
-    let total = 0;
-
-    commands.forEach((command, i) => {
-      total += command.total;
-      index = i;
-
-      if((i+1) === commands.length) {
-        data[0].data.push([
-          {value: i+1,  style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}, right: { style: "thin", color: {rgb: "D4D4D4"} }, top: { style: "thin", color: {rgb: "D4D4D4"}}} }},
-
-          {value: command.user.name,  style: {alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}} }}
-      ]);
-
-        dishes.forEach(dish => {
-          let here = false;
-          for(let j = 0; j < command.list.length; j++) {
-            if(command.list[j].dishID._id === dish.idDish._id){
-              data[0].data[i].push({value: command.list[j].quantity,  style: {alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}}  }});
-              here = true;
-              break;
-            }
-          }
-          !here && data[0].data[i].push({value: 0,  style: {alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}}  }});
-        });
-
-        data[0].data[i].push(
-          {value: parseInt(command.total + "€"), style: {numFmt: "0.00€", alignment: {horizontal: "right", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}}  }},
-            
-          {value: "", style: {border: { bottom: {style: "medium", color: {rgb: "000000"}}} }},
-          {value: "", style: {border: { bottom: {style: "medium", color: {rgb: "000000"}}} }},
-          {value: "", style: {border: { bottom: {style: "medium", color: {rgb: "000000"}}} }}
-        );
-
-        command.container ? 
-          data[0].data[i].push({value: "✔", style: {alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}}  }})
-        : 
-          data[0].data[i].push({value: "❌", style: {alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}} }});
-        
-        data[0].data[i].push(
-          {value: command.timeC,  style: {alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}} }},
-
-          {value: command.comment,  style: {font: {sz: "8"}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}}} }},
-
-          {value: "", style: {border: { right: { style: "medium", color: {rbg: "000000"}}, bottom: {style: "medium", color: {rgb: "000000"}}} }},
-        );
-      }
-      else {
-        data[0].data.push([
-          {value: i+1,  style: {fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText:true}, border: { right: { style: "thin", color: {rgb: "D4D4D4"} }, top: { style: "thin", color: {rgb: "D4D4D4"}}} }},
-
-          {value: command.user.name,  style: {alignment: {horizontal: "center", vertical: "center", wrapText:true}}}
-        ]);
-
-        dishes.forEach(dish => {
-          let here = false;
-          for(let j = 0; j < command.list.length; j++) {
-            if(command.list[j].dishID._id === dish.idDish._id){
-              data[0].data[i].push({value: command.list[j].quantity,  style: {alignment: {horizontal: "center", vertical: "center", wrapText: true} }});
-              here = true;
-              break;
-            }
-          }
-          !here && data[0].data[i].push({value: 0,  style: {alignment: {horizontal: "center", vertical: "center", wrapText: true} }});
-        });
-
-        data[0].data[i].push(
-          {value: parseInt(command.total + "€"), style: {numFmt: "0.00€", alignment: {horizontal: "right", vertical: "center", wrapText: true} }},
-            
-          {value: ""},
-          {value: ""},        
-          {value: ""}
-        );
-
-        command.container ? 
-          data[0].data[i].push({value: "✔", style: {alignment: {horizontal: "center", vertical: "center", wrapText: true} }})
-        : 
-          data[0].data[i].push({value: "❌", style: {alignment: {horizontal: "center", vertical: "center", wrapText: true} }});
-        
-        data[0].data[i].push(
-          {value: command.timeC,  style: {alignment: {horizontal: "center", vertical: "center", wrapText: true} }},
-
-          {value: command.comment,  style: {font: {sz: "8"}, alignment: {horizontal: "center", vertical: "center", wrapText: true} }},
-
-          {value: "", style: { border: { right: {style: "medium", color: {rgb: "000000"}}} }},
-        );
-      }
-    });
-    
-    data[0].data.push([{value:""}]);
-    data[0].data.push([{value:""}, {value:""}]);
-
-      dishes.forEach((dish, i) => {
-        let here = false;
-        for(let j = 0; j < nbDishes.length; j++) {
-          if(nbDishes[j]._id === dish.idDish._id) {
-            if(i === 0) data[0].data[index+2].push({value: nbDishes[j].nb, style: {font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}}, left: {style: "medium", color: {rgb: "000000"}} } }});
-            else data[0].data[index+2].push({value: nbDishes[j].nb, style: {font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}} } }});
-            here = true;
-            break;
-          }
-        }
-
-        if(!here) {
-          if(i === 0) data[0].data[index+2].push({value: 0, style: {font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}}, left: {style: "medium", color: {rgb: "000000"}} } }});
-          else data[0].data[index+2].push({value: 0, style: {font: {bold: true}, alignment: {horizontal: "center", vertical: "center", wrapText: true}, border: { bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}} } }});
-        }
-    });
-
-    if(commands.length > 0) {
-
-      data[0].data[index+2].push({value: parseInt(total + "€"), style: {numFmt: "0.00€", font: {sz: "14"}, fill: {patternType: "solid", fgColor: {rgb: "FFCCEEFF"}}, alignment: {horizontal: "right", vertical: "center", wrapText: true}, border: { right: {style: "medium", color: {rgb: "000000"}},  bottom: {style: "medium", color: {rgb: "000000"}},  top: {style: "medium", color: {rgb: "000000"}},  left: {style: "medium", color: {rgb: "000000"}}} }}, {value: ""}, {value: ""}, {value: ""}, {value: ""});
-    }
-
-    setCsvData(data);
-  }
 
   const getDishList = async (commandId) => {
     const d = commandsList.filter((d) => d._id === commandId)[0].list;
@@ -237,11 +89,18 @@ const AdminCommands = () => {
 
   const onChangeDate = async (e) => {
     setDate(e);
+    getDateComment(e);
     resetInput();
     getCommandsByDate();
-    formatCsvData(e);
     setDishClicked(false);
-    setPastDate(e < new Date(new Date().toDateString()).getTime());
+
+    // déclaration de la date actuelle
+    let todayMinusOne = new Date(new Date().toDateString());
+    // transformation de la date en jour - 1
+    todayMinusOne.setDate(todayMinusOne.getDate() - 1);
+    // déclare une nouvelle date sous le format int
+    todayMinusOne = todayMinusOne.getTime();
+    setPastDate(e < todayMinusOne);
   }
 
   const onClickCommand = (d) => {
@@ -268,10 +127,16 @@ const AdminCommands = () => {
     setDishClicked(true);
   }
 
-  // suppression de la commande (invisible)
-  const handleHideCommand = async () => {
-
-    await hideCommand(currentDelete);
+  // suppression de la commande
+  const handleDeleteCommand = async () => {
+    console.log(currentDelete);
+    await deleteCommand(currentDelete, token);
+    console.log(date);
+    
+    for (const c of commandsList[0].list) {
+      await updateDishDateQtt(date, c.dishID._id, c.quantity, token);
+      await deleteCommandList(c._id, token);
+    }
     
     getCommandsByDate();
     resetInput();
@@ -289,13 +154,13 @@ const AdminCommands = () => {
 
   // suppression d'un plat d'une commande
   const handleDeleteCommandList = async () => {
-    const cl = await getCommandListById(currentDelete);
+    const cl = await getCommandListById(currentDelete, token);
 
-    await updateDishDateQtt(date, cl[0].dishID, cl[0].quantity);
-    await deleteCommandList(cl[0]._id);
+    await updateDishDateQtt(date, cl[0].dishID, cl[0].quantity, token);
+    await deleteCommandList(cl[0]._id, token);
 
     const remaining = commandsList.filter((c) => c._id === id)[0].list.length;
-    remaining === 1 && await deleteCommand(id);
+    remaining === 1 && await deleteCommand(id, token);
 
     getCommandsByDate();
     resetInput();
@@ -330,7 +195,7 @@ const AdminCommands = () => {
     if(emptyFields) toast.error("Veuillez sélectioner une commande avant de pouvoir enregistrer.");
 
     else {
-      await updateCommand(commandId, time, paid, container, comment, total);
+      await updateCommand(commandId, time, paid, container, comment, total, token);
 
       getCommandsByDate();
       resetInput();
@@ -364,7 +229,7 @@ const AdminCommands = () => {
       await updateDishDate(dishDate._id, dishDate.numberKitchen, numberRemaining);
 
       // update la quantité dans la command list
-      await updateQuantity(currentCommandList._id, quantity);
+      await updateQuantity(currentCommandList._id, quantity, token);
 
       setDishClicked(false);
       setQuantity("");
@@ -409,12 +274,18 @@ const AdminCommands = () => {
   }
 
 
+  const onClickDownload = async () => {
+    const dishes = await getDishByDate(date);
+    const commands = await getCommandByDate(date, token);
+    await downloadReport(dishes, commands, moment(date).format("DD/MM/YYYY"), moment(date).format("DD-MM-YYYY"), dateComment);    
+  }
+
   // RENDER ----------------------------------------------------------------
 
   return (
     <div className="admin-commands">
 
-      <Box onClickConfirmation={removeBoxCommand} onClickDelete={handleHideCommand} boxRef={boxCommand} message="Voulez-vous vraiment supprimer cette commande ?"/>
+      <Box onClickConfirmation={removeBoxCommand} onClickDelete={handleDeleteCommand} boxRef={boxCommand} message="Voulez-vous vraiment supprimer cette commande ?"/>
       <Box onClickConfirmation={removeBoxCommandList} onClickDelete={handleDeleteCommandList} boxRef={boxCommandList} message="Voulez-vous vraiment supprimer ce plat de cette commande ?"/>
 
       <div className="admin-commands__left">
@@ -428,9 +299,7 @@ const AdminCommands = () => {
           { commandsList.length > 0 &&
           
           <div className="csv__download">
-                <ExcelFile filename={`RAPPORT-${moment(date).format("DD-MM-YYYY")}`} element={<button>Télécharger le rapport</button>}>
-                    <ExcelSheet dataSet={csvData} name={`RAPPORT-${moment(date).format("DD-MM-YYYY")}`}/>
-                </ExcelFile>
+            <button onClick={onClickDownload}>Télécharger le rapport</button>
           </div>
           }
         </div>
@@ -442,7 +311,7 @@ const AdminCommands = () => {
         </h1>
         <div className="commands-list">
           <CommandsList
-            commandsListByDate={visibleCommandsList}
+            commandsListByDate={commandsList}
             onClickCommand={onClickCommand}
             onClickDelete={onClickCommandDelete}
           />
@@ -561,31 +430,6 @@ const AdminCommands = () => {
             <div className="input-btn---save">
               <InputButton value="Enregistrer" type="submit" />
             </div> }
-           
-
-            {/* <div className="container_radio_duo">
-              <div className="right__form__radio" onChange={handlePaidChange}>
-                <span>Payée ?</span>
-                <input
-                  type="radio"
-                  value="Non"
-                  name="paid"
-                  id="n---paid"
-                  checked={paid === false}
-                  onChange={handleCheckboxChange}
-                />
-                <label htmlFor="n---paid">Non</label>
-                <input
-                  type="radio"
-                  value="Oui"
-                  name="paid"
-                  id="y---paid"
-                  checked={paid === true}
-                  onChange={handleCheckboxChange}
-                />
-                <label htmlFor="y---paid">Oui</label>
-              </div>
-            </div> */}
             
           </form>
         </div>

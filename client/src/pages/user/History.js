@@ -12,6 +12,8 @@ import { getCommandListByCommandWithDish } from '../../services/commandsListServ
 const History = () => {
     const dishBox = useRef(null);
 
+    const token = localStorage.getItem('userToken');
+
     const [orderList, setOrderList] = useState([]);
     const [dishList, setDishList] = useState([]);
 
@@ -23,11 +25,12 @@ const History = () => {
     useEffect(() => {   
 
         async function getOrderList() {
-            const userDecoded = decodeToken(localStorage.getItem("userToken"));
+            const userDecoded = decodeToken(localStorage.getItem('userToken'));
+            const token = localStorage.getItem('userToken');
 
             if (userDecoded) {
                 const currentUser = await getUserById(userDecoded._id);
-                const orders = await getCommandByUser(currentUser.user._id);
+                const orders = await getCommandByUser(currentUser.user._id, token);
                 setUser(currentUser.user);
                 setOrderList(orders);
             }
@@ -51,7 +54,7 @@ const History = () => {
     // HANDLE ------------------------------------------------------------
 
     const handleOrderClick = async (id) => {
-        const commands = await getCommandListByCommandWithDish(id);
+        const commands = await getCommandListByCommandWithDish(id, token);
         setDishList(commands);
         setDateClicked(true);
         setDishClicked({});

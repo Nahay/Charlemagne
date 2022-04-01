@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { getRequestingAdmin } = require('./auth');
 
 const { DishDate } = require("../models/Command");
 
@@ -15,6 +16,8 @@ router.post('/', async (req, res) => {
     });
 
     try {
+        await getRequestingAdmin(req, res);
+
         const savedDishDate = await dishDate.save();
         res.json(savedDishDate);
     } catch(err) {
@@ -62,6 +65,8 @@ router.get("/dateDish/:dateC/:idDish", async (req, res) => {
 router.patch('/qtt', async (req, res) => {
   const { dateC, idDish, numberRemaining } = req.body;
   try {
+      await getRequestingAdmin(req, res);
+
       const dishToUpdate = await DishDate.updateOne(
           {
             dateC : dateC,
@@ -95,6 +100,8 @@ router.patch('/:dishId', async (req, res) => {
 // Delete all dishes from a date
 router.delete("/date/:dateC", async (req, res) => {
   try {
+      await getRequestingAdmin(req, res);
+
       const dishToDelete = await DishDate.deleteMany(
         {
           dateC: req.params.dateC
@@ -106,23 +113,11 @@ router.delete("/date/:dateC", async (req, res) => {
   }
 });
 
-// Delete all dishes from a dish
-router.delete("/dish/:idDish", async (req, res) => {
-  try {
-      const dishToDelete = await DishDate.deleteMany(
-        {
-          idDish: req.params.idDish
-        }
-      );
-      res.json(dishToDelete);
-  } catch(err) {
-      res.json({error: err.message});
-  }
-});
-
 // Delete a dish from a date
 router.delete("/id/:dishId", async (req, res) => {
   try {
+      await getRequestingAdmin(req, res);
+
       const dishToDelete = await DishDate.findByIdAndDelete(req.params.dishId);
       res.json(dishToDelete);
   } catch(err) {

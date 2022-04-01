@@ -135,7 +135,7 @@ const AdminAccounts = () => {
 
     const handleTel = (e) => {
         const val = e.target.value;
-        if (Number(val) || val === "") setTel(val);
+        if(!isNaN(val)) setTel(val);
     }
     
 

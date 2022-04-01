@@ -35,6 +35,10 @@ const UserSchema = new Schema({
         type: Boolean,
         required: false,
         default: true
+    },
+    firstConnection: {
+        type: Boolean,
+        default:true
     }
 });
 
@@ -121,11 +125,6 @@ const CommandSchema = new Schema({
     total: {
         type: Number,
         required: true
-    },
-    visible: {
-        type: Boolean,
-        required: false,
-        default: true
     },
     list: [{ 
         type: Schema.Types.ObjectId,

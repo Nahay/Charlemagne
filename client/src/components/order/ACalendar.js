@@ -2,7 +2,7 @@ import React from "react";
 import Calendar from "react-calendar";
 
 
-const ACalendar = ({dateList, onDateChange, rightRef}) => {
+const ACalendar = ({dateList, onDateChange, rightRef, date}) => {
 
     const executeScroll = () => {
         rightRef.current.scrollIntoView({ 
@@ -23,6 +23,7 @@ const ACalendar = ({dateList, onDateChange, rightRef}) => {
             onChange={(e) => onDateChange(e.getTime())}
             tileClassName={tileClassName}
             onClickDay={executeScroll}
+            defaultValue={date}
         />
      );
 }

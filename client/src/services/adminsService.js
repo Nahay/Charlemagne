@@ -1,18 +1,14 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
- 
+import { adminConfig } from './config';
+
 const API_URL = process.env.REACT_APP_API_URL;
-
-
-const config = (token) => {
-    return { headers: {'x-access-token': token}};
-}
 
 // CREATE ---------------------------------------------------------------------------------------------------------------------------------------
 
 const createAdmin = async (username, password, token) => {
     try {
-        await axios.post(API_URL + "/admins", { username, password }, config(token));
+        await axios.post(API_URL + "/admins", { username, password }, adminConfig(token));
         toast.success("L'administrateur a été crée !");
     } catch(err) {
         toast.error(err.message);
@@ -23,7 +19,7 @@ const createAdmin = async (username, password, token) => {
 
 const getAdmins = async (token) => {
     try {
-        const { data } = await axios.get(API_URL + "/admins", config(token));
+        const { data } = await axios.get(API_URL + "/admins", adminConfig(token));
         return data;
     } catch(err) {
         toast.error(err.message);
@@ -32,7 +28,7 @@ const getAdmins = async (token) => {
 
 const getAdminByUsername = async (username, token) => {
     try {
-        const { data } = await axios.get(API_URL + "/admins/admin/" +username, config(token));
+        const { data } = await axios.get(API_URL + "/admins/admin/" +username, adminConfig(token));
         return data;
     } catch(err) {
         toast.error(err.message);
@@ -41,7 +37,7 @@ const getAdminByUsername = async (username, token) => {
 
 const getAdminById = async (id, token) => {
     try {
-        const { data } = await axios.get(API_URL + "/admins/" +id, config(token));
+        const { data } = await axios.get(API_URL + "/admins/" +id, adminConfig(token));
         return data;
     } catch(err) {
         toast.error(err.message);
@@ -52,7 +48,7 @@ const getAdminById = async (id, token) => {
 
 const updateAdmin = async (id, password, token) => {
     try {
-        await axios.patch(API_URL + "/admins/" +id, { password }, config(token));
+        await axios.patch(API_URL + "/admins/" +id, { password }, adminConfig(token));
         toast.success("L'administrateur a été mis à jour !");
     } catch(err) {
         toast.error(err.message);
@@ -61,7 +57,7 @@ const updateAdmin = async (id, password, token) => {
 
 const deleteAdmin = async (id, token) => {
     try {
-        await axios.delete(API_URL + "/admins/" +id, config(token));
+        await axios.delete(API_URL + "/admins/" +id, adminConfig(token));
         toast.success("L'administrateur a été supprimé !");
     } catch(err) {
         console.log(err);
@@ -71,7 +67,7 @@ const deleteAdmin = async (id, token) => {
 
 const deleteAdminByUsername = async (username, token) => {
     try {
-        await axios.delete(API_URL + "/admins/admin/" +username, config(token));
+        await axios.delete(API_URL + "/admins/admin/" +username, adminConfig(token));
         toast.success("L'administrateur a été supprimé !");
     } catch(err) {
         console.log(err);

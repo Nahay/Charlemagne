@@ -15,6 +15,8 @@ import { getDishes, updateDish, createDish, hideDish, getInvisibleDishes, unhide
 
 const AdminDishes = () => {
 
+    const token = localStorage.getItem("adminToken");
+
     const box = useRef(null);
     const e = useRef(null);
     const p = useRef(null);
@@ -178,7 +180,7 @@ const AdminDishes = () => {
         box.current.style.visibility = "hidden";
         box.current.style.opacity = 0;
 
-        const fType = await hideDish(id);
+        const fType = await hideDish(id, token);
 
         onClickNewDish();
 
@@ -199,7 +201,7 @@ const AdminDishes = () => {
 
     
     const onClickInvisible = async (hiddenId) => {
-        const fType = await unhideDish(hiddenId);
+        const fType = await unhideDish(hiddenId, token);
         getDishList(fType);
     }
 
@@ -213,7 +215,7 @@ const AdminDishes = () => {
             if (create) {
                 const count = await getDishByName(name);
                 if (!count) {
-                    await createDish(name, price, desc, type);
+                    await createDish(name, price, desc, type, token);
                     onClickNewDish();
                     getDishList(type);
                 }
@@ -226,7 +228,7 @@ const AdminDishes = () => {
                 if (name !== previousName) {
                     const count = await getDishByName(name);
                     if (!count) {
-                        await updateDish(id, name, price, desc, type);
+                        await updateDish(id, name, price, desc, type, token);
                         setPreviousName(name);
                         getDishList(type);
                     }
@@ -234,7 +236,7 @@ const AdminDishes = () => {
                     else toast.error("Ce nom existe déjà.");
                 }
                 else {
-                    await updateDish(id, name, price, desc, type);
+                    await updateDish(id, name, price, desc, type, token);
                     setPreviousName(name);
                     getDishList(type);
                 }

@@ -18,6 +18,8 @@ import { createCommandList } from "../../services/commandsListService";
 
 
 const PassCommand = () => {
+    const token = localStorage.getItem('userToken');
+
     const summary = useRef(null);
     const input = useRef(null);
     const form = useRef(null);
@@ -172,11 +174,11 @@ const PassCommand = () => {
 
     if(!wrongCommand && total > 0) {
       // Créer la commande si aucun des champs entrés est faux
-      const command = await createCommand(userId, parseInt(date), timeC, false, container, comment, total);
+      const command = await createCommand(userId, parseInt(date), timeC, false, container, comment, total, token);
       // Parcours de la liste des commandes et créer chacune d'entre elle
       commandList.forEach(async (d) => {
        
-        await createCommandList(command._id, d._id, parseInt(d.nbC));
+        await createCommandList(command._id, d._id, parseInt(d.nbC), token);
         const dishDate = await getDishByDateAndDish(date, d._id);
         await updateDishDate(dishDate._id, dishDate.numberKitchen, dishDate.numberRemaining - parseInt(d.nbC));
       });

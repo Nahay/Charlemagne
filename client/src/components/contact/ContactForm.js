@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+
 import { toast } from 'react-toastify';
+import { decodeToken } from "react-jwt";
 // import emailjs from 'emailjs-com';
 
 import InputText from '../generic/InputText';
@@ -10,12 +12,17 @@ import InputNumber from '../generic/InputNumber';
 
 
 const ContactForm = () => {
+
     const form = useRef(null);
+
+    const token = localStorage.getItem("userToken");
+    const decodedToken = decodeToken(token);
+
     const nameReg = /^[ a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'-]+$/;
     const emailReg = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
     
-    const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
+    const [email, setEmail] = useState(decodedToken ? decodedToken.email : "");
+    const [name, setName] = useState(decodedToken ? decodedToken.firstname + " " + decodedToken.name : "");
     const [subject, setSubject] = useState("");
     const [message, setMessage] = useState("");
     const [captcha, setCaptcha] = useState([]);

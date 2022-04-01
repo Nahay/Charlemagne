@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
-import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
+
+import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
+import { decodeToken } from 'react-jwt';
 
 import LoginForm from '../components/LoginForm';
 
-import { getFirstNameByUsername, userSignIn } from '../services/usersService';
+import { userSignIn } from '../services/usersService';
 
 
 const Login = () => {
@@ -25,12 +27,16 @@ const Login = () => {
         const si = await userSignIn(username, password);
         // test si le token est présent dans la promesse qui a été configurée dans le server
         if (si.token) {
-          // si il y est, on l'ajoute au local storage
-          localStorage.setItem('userToken', si.token);
-          history.push("/commander");
-          const user = await getFirstNameByUsername(username);
-          console.log(user);
-          toast.success("Bienvenue " + user.userFound.firstname +" !");          
+            // si il y est, on l'ajoute au local storage
+            localStorage.setItem('userToken', si.token);
+
+            const token = localStorage.getItem("userToken");
+            const decodedToken = decodeToken(token);
+
+            if (decodedToken.firstConnection) history.push('/changer-mdp');
+            else history.goBack();
+
+            toast.success("Bienvenue " + decodedToken.firstname +" !");          
         }
         else toast.error("Le nom d'utilisateur ou le mot de passe est incorrect.");
     }

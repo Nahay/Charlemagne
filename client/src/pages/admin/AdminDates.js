@@ -16,6 +16,8 @@ import {getDishes, createDishDate, getDishByDate, deleteAllDishesDate, deleteDis
 
 const AdminDates = () => {
 
+    const token = localStorage.getItem("adminToken");
+
     const ref = useRef(null);
     const box = useRef(null);
 
@@ -38,8 +40,9 @@ const AdminDates = () => {
     const [currentCommandList, setCurrentCommandList] = useState({});
     const [deletedDate, setDeletedDate] = useState(true);
 
-    const [select, setSelect] = useState("0");
+    const [select, setSelect] = useState("");
     const [dishList, setDishList] = useState([]);
+    const [idSearch, setIdSearch] = useState("");
 
 
     useEffect(() => {
@@ -55,7 +58,7 @@ const AdminDates = () => {
                 setComment(foundDate.comment);
                 setTimeMin(foundDate.timeMin);
                 setTimeMax(foundDate.timeMax);
-                setSelect("0");
+                setSelect("");
                 setNb("");
 
                 getDishByDateList(foundDate.dateC);
@@ -93,7 +96,7 @@ const AdminDates = () => {
         setDateExists(false);
         setVisibility(true);
         setComment("");
-        setSelect("0");
+        setSelect("");
         setNb("");
         setTimeMin("12:00");
         setTimeMax("16:00");
@@ -106,7 +109,7 @@ const AdminDates = () => {
         setComment(foundDate.comment);
         setTimeMin(foundDate.timeMin);
         setTimeMax(foundDate.timeMax);
-        setSelect("0");
+        setSelect("");
         setNb(""); 
         getDishByDateList(foundDate.dateC);
     }
@@ -125,7 +128,7 @@ const AdminDates = () => {
         setUpD(true);
 
         setIdD(_id);
-        setSelect(idDish._id);
+        setSelect(idDish.name);
         setNb(numberKitchen);
         setNbC(numberKitchen);
         setNbR(numberRemaining);
@@ -142,11 +145,26 @@ const AdminDates = () => {
     const handleCommentChange = (e) => setComment(e.target.value);
 
     const handleSelectChange = (e) => {
-        setSelect(e.target.value);
+        const val = e.target.value;
+        setSelect(val);
 
-        const dish = dishByDateList.filter(d => d.idDish._id === e.target.value);
+        const dish = dishByDateList.filter(d => d.idDish.name.toLowerCase() === val.toLowerCase());
+
         if(dish.length > 0) onClickDish(dish[0]);
-        else setUpD(false);
+        else {
+            setUpD(false);
+
+            let found = false;
+
+            dishList.forEach((d) => {
+                if (d.name.toLowerCase() === val.toLowerCase()) {
+                    setIdSearch(d._id);
+                    found = true;
+                }
+            })
+
+            if (!found) setIdSearch("");
+        }
     }
 
     const handleNbChange = (e) => {
@@ -164,11 +182,11 @@ const AdminDates = () => {
     const saveDate = async () => {
 
         if (!dateExists) {
-            createDate(date, visibility, comment, timeMin, timeMax);
+            createDate(date, visibility, comment, timeMin, timeMax, token);
             setDateExists(true);
             getDateList();
         }
-        else updateDate(date, visibility, comment, timeMin, timeMax);
+        else updateDate(date, visibility, comment, timeMin, timeMax, token);
     }
 
     const deleteAndSetDate = async () => {
@@ -178,8 +196,8 @@ const AdminDates = () => {
         });
 
         if (!haveCommand) {
-            await deleteDate(date);
-            await deleteAllDishesDate(date);
+            await deleteDate(date, token);
+            await deleteAllDishesDate(date, token);
             await getDateList();
             onChangeDate(new Date(new Date().toDateString()).getTime());
         }
@@ -197,17 +215,17 @@ const AdminDates = () => {
     const onDishSubmit = async (e) => {
         e.preventDefault();        
         // si on a sélectionné qqe chose :
-        if (select !== "0") {
+        if (select !== "" && idSearch !== "") {
             if(nb !== "") {
                 if (dateExists) {
 
                     let dishExists = false;
                     dishByDateList.forEach(d => {
-                        if (d.idDish._id === select) dishExists = true;
+                        if (d.idDish.name === select) dishExists = true;
                     });
 
                     if (!dishExists) {
-                        await createDishDate(date, select, nb);
+                        await createDishDate(date, idSearch, nb, token);
                         getDishByDateList(date);
                     }
                     else toast.error("Le plat existe déjà !");
@@ -215,15 +233,15 @@ const AdminDates = () => {
 
                 // la date n'existe pas : on la crée et on ajoute le plat
                 else {
-                    await createDate(date, visibility, comment, timeMin, timeMax);
+                    await createDate(date, visibility, comment, timeMin, timeMax, token);
                     setDateExists(true);
-                    await createDishDate(date, select, nb);
+                    await createDishDate(date, idSearch, nb, token);
                     getDishByDateList(date);
                     getDateList();
                 }
 
                 setNb("");
-                setSelect("0");
+                setSelect("");
             }
             else toast.error("Veuillez entrer un nombre cuisine.");
         }
@@ -246,7 +264,7 @@ const AdminDates = () => {
 
     const onClickDelete = async () => {
         if (currentCommandList.numberKitchen === currentCommandList.numberRemaining) {
-            await deleteDishDate(currentCommandList._id);
+            await deleteDishDate(currentCommandList._id, token);
             getDishByDateList(date);
         }
         else toast.error("Ce plat a déjà été commandé, vous ne pouvez pas le supprimer.");
@@ -327,29 +345,17 @@ const AdminDates = () => {
                         </div>
 
                         <div className="select-container">
-                            <select value={select} id="dish-select" className="dish-select" onChange={handleSelectChange}>
-                                <option value="0" id="0">Liste des plats</option>
-                                <optgroup label="Entrées">
-                                    {dishList.filter(d => d.type === 'e').map((d) => {
-                                        return <option value={d._id} key={d._id}>{d.name}</option>
-                                    })}
-                                </optgroup>
-                                <optgroup label="Plats">
-                                    {dishList.filter(d => d.type === 'p').map((d) => {
-                                        return <option value={d._id} key={d._id}>{d.name}</option>
-                                    })}
-                                </optgroup>
-                                <optgroup label="Desserts">
-                                    {dishList.filter(d => d.type === 'de').map((d) => {
-                                        return <option value={d._id} key={d._id}>{d.name}</option>
-                                    })}
-                                </optgroup>
-                                <optgroup label="Divers">
-                                    {dishList.filter(d => d.type === 'di').map((d) => {
-                                        return <option value={d._id} key={d._id}>{d.name}</option>
-                                    })}
-                                </optgroup>
-                            </select>
+                            <input value={select} placeholder="Chercher un plat..." className="dish-select" type="text" list="list" onChange={handleSelectChange} />
+                            <datalist id="list">
+                                {
+                                    dishList.map((d) => {
+                                        return (
+                                            <option key={d._id}>{d.name}</option>
+                                        );
+                                    })
+                                }
+                            </datalist>
+
                             <div className="input-duo">
                                 <InputText
                                     value={nb}

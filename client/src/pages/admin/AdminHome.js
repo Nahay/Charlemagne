@@ -3,13 +3,15 @@ import React, {useState, useEffect} from 'react';
 import InputButton from '../../components/generic/InputButton';
 import TextArea from '../../components/generic/TextArea';
 
-import {getParam, updateParam} from '../../services/paramsService';
+import { getParam, updateParam } from '../../services/paramsService';
 
 
 const AdminHome = () => {
 
     const [welcomeMess, setWelcomeMess] = useState("");
     const [orderInfo, setOrderInfo] = useState("");
+
+    const token = localStorage.getItem("adminToken");
 
     
     useEffect(() => {
@@ -30,25 +32,21 @@ const AdminHome = () => {
 
     // HANDLE ---------------------------------------------------------------
 
-    const handleWelcomeMessage = (e) => {
-        setWelcomeMess(e.target.value);
-    }
+    const handleWelcomeMessage = (e) => setWelcomeMess(e.target.value)
 
-    const handleOrderInfo = (e) => {
-        setOrderInfo(e.target.value);
-    }
+    const handleOrderInfo = (e) => setOrderInfo(e.target.value)
 
 
     // DB -------------------------------------------------------------------
 
     const onWelcomeMessageSubmit = (e) => {
         e.preventDefault();
-        updateParam("welcome",welcomeMess);
+        updateParam("welcome",welcomeMess, token);
     }
 
     const onOrderInfoSubmit = (e) => {
         e.preventDefault();
-        updateParam("order",orderInfo);
+        updateParam("order",orderInfo, token);
     }
 
 

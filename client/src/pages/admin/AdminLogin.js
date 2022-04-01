@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
+
+import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsersCog } from '@fortawesome/free-solid-svg-icons';
 

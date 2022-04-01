@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const { getRequestingAdmin } = require('./auth');
 
 const { Dish } = require("../models/Command");
-const { Date } = require("../models/Date");
 
 
 // Get all dishes
@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
     const dishes = await Dish.find().sort('name');
     res.json(dishes);
   } catch (err) {
-    res.json({ error: err.message });
+    res.json({ err });
   }
 });
 
@@ -21,7 +21,7 @@ router.get("/visible", async (req, res) => {
     const dishes = await Dish.find({visible: true}).sort('name');
     res.json(dishes);
   } catch (err) {
-    res.json({ error: err.message });
+    res.json({ err });
   }
 });
 
@@ -31,7 +31,7 @@ router.get("/invisible", async (req, res) => {
     const dishes = await Dish.find({visible: false}).sort('name');
     res.json(dishes);
   } catch (err) {
-    res.json({ error: err.message });
+    res.json({ err });
   }
 });
 
@@ -42,7 +42,7 @@ router.get("/:dishId", async (req, res) => {
     const dish = await Dish.findById(req.params.dishId);
     res.json(dish);
   } catch (err) {
-    res.json({ error: err.message });
+    res.json({ err });
   }
 });
 
@@ -87,6 +87,8 @@ router.post('/', async (req, res) => {
     });
 
     try {
+        await getRequestingAdmin(req, res);
+
         const savedDish = await dish.save();
         res.json(savedDish);
     } catch(err) {
@@ -98,6 +100,7 @@ router.post('/', async (req, res) => {
 router.patch('/:dishId', async (req, res) => {
   const { name, price, description, type } = req.body;
   try {
+      await getRequestingAdmin(req, res);
 
       const dishToUpdate = await Dish.updateOne(
           { _id: req.params.dishId }, 
@@ -118,6 +121,8 @@ router.patch('/:dishId', async (req, res) => {
 // Hide a dish
 router.patch("/hide/:dishId", async (req, res) => {
   try {
+      await getRequestingAdmin(req, res);
+
       const dishToDelete = await Dish.findOneAndUpdate(
         {_id: req.params.dishId },
         {
@@ -133,6 +138,8 @@ router.patch("/hide/:dishId", async (req, res) => {
 // Unhide a dish
 router.patch("/unhide/:dishId", async (req, res) => {
   try {
+      await getRequestingAdmin(req, res);
+
       const dishToUnhide = await Dish.findOneAndUpdate(
         {_id: req.params.dishId },
         {
@@ -140,16 +147,6 @@ router.patch("/unhide/:dishId", async (req, res) => {
         }
         );
       res.json(dishToUnhide);
-  } catch(err) {
-      res.json({error: err.message});
-  }
-});
-
-// Delete a dish
-router.delete("/:dishId", async (req, res) => {
-  try {
-      const dishToDelete = await Dish.findByIdAndDelete(req.params.dishId);
-      res.json(dishToDelete);
   } catch(err) {
       res.json({error: err.message});
   }

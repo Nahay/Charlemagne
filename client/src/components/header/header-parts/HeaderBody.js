@@ -54,7 +54,7 @@ const HeaderBody = ({ toggle }) => {
                 { isLogged() && 
 
                 <NavLink
-                    exact to="/history"
+                    exact to="/historique"
                     activeClassName="active-link"
                     onClick={toggle}>
                         Historique

@@ -60,6 +60,28 @@
   }
 }
 
+
+// --------------- INPUT PASSWORD -------------------------------
+
+.input-password input {
+  position : relative;
+
+  & + svg {
+    position : absolute;
+    top:15px;
+    right:20px;
+    
+    color:white;
+    cursor:pointer;
+    transition: color 0.5s;
+
+    &:hover {
+      color:$color-primary;
+    }
+  }
+}
+
+
 // -------------- INPUT TEXT & TEXTAREA -----------------------------------
 
 .input,
@@ -483,7 +505,7 @@ input[type="time"] {
         height: 200px;
 
         overflow-y: scroll;
-        background: var(--input-bg);
+        background: var(--history-bg);
         transition: all .3s ease;
 
         .list---box {
@@ -686,7 +708,7 @@ input[type="time"] {
         width: calc(100% - 40px);
         height: calc(40% - 20px);
         padding: 10px 20px;
-        background: var(--header-bg);
+        background: var(--history-bg);
         color:var(--svg-color);
       }
 
